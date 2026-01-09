@@ -1,102 +1,85 @@
 import { useContext } from "react";
 import { AccessibilityContext } from "../context/AccessibilityContext";
+import TopNav from "../components/TopNav";
+import "./HomePage.css";
 
 export default function HomePage() {
-  const {
-    font,
-    setFont,
-    fontSize,
-    setFontSize,
-    spacing,
-    setSpacing,
-    contrast,
-    setContrast,
-    background,
-    setBackground
-  } = useContext(AccessibilityContext);
-
-  // Estilos dinámicos para la página
-  const styles = {
-    fontFamily: font,
-    fontSize: `${fontSize}px`,
-    lineHeight: spacing,
-    backgroundColor:
-      background === "sepia"
-        ? "#f4ecd8"
-        : background === "cream"
-        ? "#fff8e7"
-        : "#ffffff",
-    color: contrast ? "#000000" : "#333333",
-    minHeight: "100vh",
-    padding: "2rem"
-  };
-
   return (
-    <main style={styles} tabIndex="0" className="accessible-text">
-      <h1>IVI – Plataforma de Apoyo y Tamizaje Disléxico</h1>
-      <p>
-        IVI ayuda a personas con dislexia, familiares y profesionales con información confiable,
-        juegos interactivos y herramientas de lectura accesibles.
-      </p>
+    <>
+      <TopNav />
+      <main className="home-page accessible-text" role="main">
+        <div className="container">
+          <section className="hero">
+            <h1>IVI – Plataforma de Apoyo y Tamizaje Disléxico</h1>
+            <p className="lead">
+              IVI ayuda a personas con dislexia, familiares y profesionales con información 
+              confiable, juegos interactivos y herramientas de lectura accesibles.
+            </p>
+          </section>
 
-      <h2>Opciones de accesibilidad</h2>
+          <section className="features">
+            <h2>¿Qué es IVI?</h2>
+            <div className="features-grid">
+              <div className="feature-card">
+                <h3>Información Confiable</h3>
+                <p>
+                  Accede a recursos basados en evidencia sobre dislexia, sus características 
+                  y estrategias de apoyo.
+                </p>
+              </div>
 
-      {/* Selector de fuente */}
-      <label>
-        Fuente:{" "}
-        <select value={font} onChange={(e) => setFont(e.target.value)}>
-          <option value="Lexend">Lexend</option>
-          <option value="OpenDyslexic">OpenDyslexic</option>
-          <option value="Atkinson">Atkinson Hyperlegible</option>
-        </select>
-      </label>
+              <div className="feature-card">
+                <h3>Herramientas Accesibles</h3>
+                <p>
+                  Diseñadas específicamente para personas con dislexia, con opciones 
+                  personalizables de fuente, contraste y espaciado.
+                </p>
+              </div>
 
-      {/* Selector de tamaño */}
-      <label style={{ marginLeft: "1rem" }}>
-        Tamaño de letra:{" "}
-        <input
-          type="number"
-          min="12"
-          max="48"
-          value={fontSize}
-          onChange={(e) => setFontSize(Number(e.target.value))}
-        />{" "}
-        px
-      </label>
+              <div className="feature-card">
+                <h3>Juegos Interactivos</h3>
+                <p>
+                  Aprende mientras te diviertes con actividades diseñadas para mejorar 
+                  habilidades de lectura y procesamiento.
+                </p>
+              </div>
 
-      {/* Selector de espaciado */}
-      <label style={{ marginLeft: "1rem" }}>
-        Espaciado (interlineado):{" "}
-        <input
-          type="number"
-          min="1"
-          max="3"
-          step="0.1"
-          value={spacing}
-          onChange={(e) => setSpacing(Number(e.target.value))}
-        />
-      </label>
+              <div className="feature-card">
+                <h3>Tamizaje Temprano</h3>
+                <p>
+                  Herramientas para identificar posibles indicadores de dislexia de forma 
+                  temprana en niños.
+                </p>
+              </div>
+            </div>
+          </section>
 
-      {/* Selector de fondo */}
-      <label style={{ marginLeft: "1rem" }}>
-        Fondo:{" "}
-        <select value={background} onChange={(e) => setBackground(e.target.value)}>
-          <option value="white">Blanco</option>
-          <option value="cream">Crema</option>
-          <option value="sepia">Sepia</option>
-        </select>
-      </label>
+          <section className="accessibility-tips">
+            <h2>Personaliza tu Experiencia</h2>
+            <p>
+              Utiliza los controles en la barra superior para ajustar la presentación según 
+              tus necesidades:
+            </p>
+            <ul>
+              <li><strong>Fuente:</strong> Elige entre Lexend, OpenDyslexic y Atkinson Hyperlegible</li>
+              <li><strong>Tamaño:</strong> Ajusta el tamaño del texto con los botones + y -</li>
+              <li><strong>Espaciado:</strong> Modifica el interlineado para mayor comodidad de lectura</li>
+              <li><strong>Fondo:</strong> Selecciona entre blanco, crema o sepia</li>
+              <li><strong>Contraste:</strong> Activa el contraste alto para mejor legibilidad</li>
+            </ul>
+          </section>
 
-      {/* Contraste alto */}
-      <label style={{ marginLeft: "1rem" }}>
-        Contraste alto:{" "}
-        <input
-          type="checkbox"
-          checked={contrast}
-          onChange={(e) => setContrast(e.target.checked)}
-        />
-      </label>
-    </main>
+          <section className="cta">
+            <h2>¿Listo para comenzar?</h2>
+            <p>Explora nuestras herramientas y recursos diseñados para ti.</p>
+            <div className="button-group">
+              <button className="btn btn-primary">Comenzar Evaluación</button>
+              <button className="btn btn-secondary">Ver Recursos</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
   );
 }
 
