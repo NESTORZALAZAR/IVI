@@ -25,25 +25,11 @@ export function AccessibilityProvider({ children }) {
   }, []);
 
   // Guardar valores en localStorage cuando cambien
-  useEffect(() => {
-    localStorage.setItem("ivi_font", font);
-  }, [font]);
-
-  useEffect(() => {
-    localStorage.setItem("ivi_fontSize", String(fontSize));
-  }, [fontSize]);
-
-  useEffect(() => {
-    localStorage.setItem("ivi_spacing", String(spacing));
-  }, [spacing]);
-
-  useEffect(() => {
-    localStorage.setItem("ivi_contrast", JSON.stringify(contrast));
-  }, [contrast]);
-
-  useEffect(() => {
-    localStorage.setItem("ivi_background", background);
-  }, [background]);
+  useEffect(() => { localStorage.setItem("ivi_font", font); }, [font]);
+  useEffect(() => { localStorage.setItem("ivi_fontSize", String(fontSize)); }, [fontSize]);
+  useEffect(() => { localStorage.setItem("ivi_spacing", String(spacing)); }, [spacing]);
+  useEffect(() => { localStorage.setItem("ivi_contrast", JSON.stringify(contrast)); }, [contrast]);
+  useEffect(() => { localStorage.setItem("ivi_background", background); }, [background]);
 
   return (
     <AccessibilityContext.Provider value={{
@@ -57,4 +43,3 @@ export function AccessibilityProvider({ children }) {
     </AccessibilityContext.Provider>
   );
 }
-

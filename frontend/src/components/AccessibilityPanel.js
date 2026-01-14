@@ -4,52 +4,29 @@ import "./AccessibilityPanel.css";
 
 export default function AccessibilityPanel() {
   const {
-    font,
-    setFont,
-    fontSize,
-    setFontSize,
-    spacing,
-    setSpacing,
-    contrast,
-    setContrast,
-    background,
-    setBackground
+    font, setFont,
+    fontSize, setFontSize,
+    spacing, setSpacing,
+    contrast, setContrast,
+    background, setBackground
   } = useContext(AccessibilityContext);
 
   const [isOpen, setIsOpen] = useState(false);
-
-  const togglePanel = () => {
-    setIsOpen(!isOpen);
-  };
+  const togglePanel = () => setIsOpen(!isOpen);
 
   return (
     <>
       {/* Botón flotante */}
-      <button
-        className="accessibility-button"
-        onClick={togglePanel}
-        aria-label="Abrir panel de accesibilidad"
-        aria-expanded={isOpen}
-      >
+      <button className="accessibility-button" onClick={togglePanel} aria-label="Abrir panel de accesibilidad" aria-expanded={isOpen}>
         <span className="button-icon">⚙️</span>
         <span className="button-text">Accesibilidad</span>
       </button>
 
       {/* Panel lateral */}
-      <aside
-        className={`accessibility-panel ${isOpen ? "open" : ""}`}
-        role="complementary"
-        aria-label="Panel de controles de accesibilidad"
-      >
+      <aside className={`accessibility-panel ${isOpen ? "open" : ""}`} role="complementary" aria-label="Panel de controles de accesibilidad">
         <div className="panel-header">
           <h2>Personalizar Vista</h2>
-          <button
-            className="close-button"
-            onClick={togglePanel}
-            aria-label="Cerrar panel"
-          >
-            ✕
-          </button>
+          <button className="close-button" onClick={togglePanel} aria-label="Cerrar panel">✕</button>
         </div>
 
         <div className="panel-content">
@@ -58,13 +35,7 @@ export default function AccessibilityPanel() {
             <label htmlFor="panel-font-select">
               <span className="control-title">Fuente Tipográfica</span>
             </label>
-            <select
-              id="panel-font-select"
-              value={font}
-              onChange={(e) => setFont(e.target.value)}
-              className="panel-select"
-              aria-label="Seleccionar fuente"
-            >
+            <select id="panel-font-select" value={font} onChange={(e) => setFont(e.target.value)} className="panel-select" aria-label="Seleccionar fuente">
               <option value="Lexend">Lexend</option>
               <option value="OpenDyslexic">OpenDyslexic</option>
               <option value="Atkinson">Atkinson Hyperlegible</option>
@@ -82,7 +53,7 @@ export default function AccessibilityPanel() {
               type="range"
               min="14"
               max="28"
-              value={String(fontSize)}
+              value={fontSize}
               onChange={(e) => setFontSize(parseInt(e.target.value, 10))}
               className="panel-range"
               aria-label="Ajustar tamaño de letra"
@@ -90,10 +61,6 @@ export default function AccessibilityPanel() {
               aria-valuemin="14"
               aria-valuemax="28"
             />
-            <div className="range-labels">
-              <span>14px</span>
-              <span>28px</span>
-            </div>
           </div>
 
           {/* Espaciado */}
@@ -108,7 +75,7 @@ export default function AccessibilityPanel() {
               min="1"
               max="2.5"
               step="0.1"
-              value={String(spacing)}
+              value={spacing}
               onChange={(e) => setSpacing(parseFloat(e.target.value))}
               className="panel-range"
               aria-label="Ajustar espaciado"
@@ -116,10 +83,6 @@ export default function AccessibilityPanel() {
               aria-valuemin="1"
               aria-valuemax="2.5"
             />
-            <div className="range-labels">
-              <span>1.0</span>
-              <span>2.5</span>
-            </div>
           </div>
 
           {/* Fondo */}
@@ -127,13 +90,7 @@ export default function AccessibilityPanel() {
             <label htmlFor="panel-background">
               <span className="control-title">Color de Fondo</span>
             </label>
-            <select
-              id="panel-background"
-              value={background}
-              onChange={(e) => setBackground(e.target.value)}
-              className="panel-select"
-              aria-label="Seleccionar color de fondo"
-            >
+            <select id="panel-background" value={background} onChange={(e) => setBackground(e.target.value)} className="panel-select" aria-label="Seleccionar color de fondo">
               <option value="white">Blanco</option>
               <option value="cream">Crema</option>
               <option value="sepia">Sepia</option>
@@ -143,33 +100,15 @@ export default function AccessibilityPanel() {
           {/* Contraste */}
           <div className="panel-control-group checkbox-group">
             <label htmlFor="panel-contrast" className="checkbox-label">
-              <input
-                id="panel-contrast"
-                type="checkbox"
-                checked={contrast}
-                onChange={(e) => setContrast(e.target.checked)}
-                aria-label="Activar contraste alto"
-              />
+              <input id="panel-contrast" type="checkbox" checked={contrast} onChange={(e) => setContrast(e.target.checked)} aria-label="Activar contraste alto" />
               <span className="control-title">Contraste Alto</span>
             </label>
           </div>
         </div>
-
-        <div className="panel-footer">
-          <p className="accessibility-note">
-            Los cambios se aplican automáticamente a toda la página.
-          </p>
-        </div>
       </aside>
 
       {/* Overlay */}
-      {isOpen && (
-        <div
-          className="accessibility-overlay"
-          onClick={togglePanel}
-          aria-hidden="true"
-        />
-      )}
+      {isOpen && <div className="accessibility-overlay" onClick={togglePanel} aria-hidden="true" />}
     </>
   );
 }

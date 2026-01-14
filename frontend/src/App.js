@@ -1,14 +1,19 @@
 import HomePage from "./pages/HomePage";
 import { AccessibilityProvider } from "./context/AccessibilityContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AccessibilityContext } from "./context/AccessibilityContext";
 
 function AppContent() {
-  const { fontSize, spacing, contrast, background, font } = useContext(AccessibilityContext);
+  const { fontSize, spacing, contrast, background, font } =
+    useContext(AccessibilityContext);
+
+  // Aplica el tamaño de letra globalmente
+  useEffect(() => {
+    document.documentElement.style.fontSize = `${fontSize}px`;
+  }, [fontSize]);
 
   const appStyles = {
     fontFamily: font,
-    fontSize: `${fontSize}px`,
     lineHeight: spacing,
     backgroundColor:
       background === "sepia"
@@ -17,11 +22,11 @@ function AppContent() {
         ? "#fff8e7"
         : "#ffffff",
     color: contrast ? "#000000" : "#333333",
-    transition: "all 0.3s ease"
+    transition: "font-size 0.2s ease, line-height 0.2s ease"
   };
 
   return (
-    <div style={appStyles} className="app-container">
+    <div style={appStyles} className="app-container accessible-text">
       <HomePage />
     </div>
   );
@@ -36,4 +41,3 @@ function App() {
 }
 
 export default App;
-
