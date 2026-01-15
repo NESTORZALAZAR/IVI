@@ -1,49 +1,54 @@
+/* =========================
+   RESET GLOBAL
+========================= */
+
+html,
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  font-family: inherit;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Forzar herencia global */
+* {
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+/* Código */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-/* -------------------------
-   Fuentes para usuarios disléxicos
----------------------------*/
+
+/* =========================
+   FUENTES ACCESIBLES
+========================= */
 
 /* OpenDyslexic */
 @font-face {
-  font-family: 'OpenDyslexic';
-  src: url('../public/fonts/OpenDyslexic-Regular.otf') format('opentype');
+  font-family: "OpenDyslexic";
+  src: url("../public/fonts/OpenDyslexic-Regular.otf")
+    format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
-/* Lexend (todos los pesos) */
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-Thin.ttf') format('truetype'); font-weight: 100; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-ExtraLight.ttf') format('truetype'); font-weight: 200; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-Light.ttf') format('truetype'); font-weight: 300; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-Regular.ttf') format('truetype'); font-weight: 400; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-Medium.ttf') format('truetype'); font-weight: 500; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-SemiBold.ttf') format('truetype'); font-weight: 600; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-Bold.ttf') format('truetype'); font-weight: 700; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-ExtraBold.ttf') format('truetype'); font-weight: 800; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-Black.ttf') format('truetype'); font-weight: 900; }
-@font-face { font-family: 'Lexend'; src: url('../public/fonts/Lexend-VariableFont_wght.ttf') format('truetype'); font-weight: 400; }
+/* Lexend */
+@font-face {
+  font-family: "Lexend";
+  src: url("../public/fonts/Lexend-Regular.ttf")
+    format("truetype");
+  font-weight: 400;
+}
 
-/* Atkinson Hyperlegible Next (todos los pesos) */
-@font-face { font-family: 'Atkinson'; src: url('../public/fonts/AtkinsonHyperlegibleNext-Regular.otf') format('opentype'); font-weight: 400; }
-@font-face { font-family: 'Atkinson'; src: url('../public/fonts/AtkinsonHyperlegibleNext-Bold.otf') format('opentype'); font-weight: 700; }
-@font-face { font-family: 'Atkinson'; src: url('../public/fonts/AtkinsonHyperlegibleNext-ExtraBold.otf') format('opentype'); font-weight: 800; }
-@font-face { font-family: 'Atkinson'; src: url('../public/fonts/AtkinsonHyperlegibleNext-Light.otf') format('opentype'); font-weight: 300; }
-@font-face { font-family: 'Atkinson'; src: url('../public/fonts/AtkinsonHyperlegibleNext-Medium.otf') format('opentype'); font-weight: 500; }
-@font-face { font-family: 'Atkinson'; src: url('../public/fonts/AtkinsonHyperlegibleNext-SemiBold.otf') format('opentype'); font-weight: 600; }
-
-/* Clase general para aplicar la fuente accesible */
-.accessible-text {
-  font-family: 'Lexend', 'OpenDyslexic', 'Atkinson', sans-serif;
+/* Atkinson Hyperlegible */
+@font-face {
+  font-family: "Atkinson";
+  src: url("../public/fonts/AtkinsonHyperlegibleNext-Regular.otf")
+    format("opentype");
+  font-weight: 400;
 }

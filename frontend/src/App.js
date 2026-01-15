@@ -7,13 +7,18 @@ function AppContent() {
   const { fontSize, spacing, contrast, background, font } =
     useContext(AccessibilityContext);
 
-  // Aplica el tamaño de letra globalmente
+  // Tamaño de letra GLOBAL
   useEffect(() => {
     document.documentElement.style.fontSize = `${fontSize}px`;
   }, [fontSize]);
 
+  // Fuente GLOBAL
+  useEffect(() => {
+    document.documentElement.style.fontFamily = font;
+    document.body.style.fontFamily = font;
+  }, [font]);
+
   const appStyles = {
-    fontFamily: font,
     lineHeight: spacing,
     backgroundColor:
       background === "sepia"
@@ -22,11 +27,11 @@ function AppContent() {
         ? "#fff8e7"
         : "#ffffff",
     color: contrast ? "#000000" : "#333333",
-    transition: "font-size 0.2s ease, line-height 0.2s ease"
+    transition: "all 0.25s ease"
   };
 
   return (
-    <div style={appStyles} className="app-container accessible-text">
+    <div className="app-container" style={appStyles}>
       <HomePage />
     </div>
   );
