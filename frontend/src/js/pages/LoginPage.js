@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../css/pages/LoginPage.css";
+import { useNavigate, Link } from "react-router-dom";
+import "../../css/pages/LoginPage.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function LoginPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       setError("Error al conectar con el servidor");
       console.error(err);
@@ -81,8 +81,16 @@ export default function LoginPage() {
         </form>
 
         <p className="footer-text">
-          ¿No tienes cuenta? <a href="#signup">Regístrate aquí</a>
+          ¿No tienes cuenta? <Link to="/signup">Regístrate aquí</Link>
         </p>
+
+        <button 
+          type="button"
+          onClick={() => navigate("/")}
+          className="btn-home"
+        >
+          ← Volver al Inicio
+        </button>
       </div>
     </div>
   );

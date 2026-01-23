@@ -1,6 +1,18 @@
-import "../css/pages/HomePage.css";
+import { Link, useNavigate } from "react-router-dom";
+import "../../css/pages/HomePage.css";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  const handleBeginTests = () => {
+    if (isLoggedIn) {
+      navigate("/pruebas");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <main className="home-page">
       <section className="hero">
@@ -10,6 +22,9 @@ export default function HomePage() {
           <p className="hero-description">
             Herramientas de accesibilidad diseñadas para apoyar a personas con dislexia
           </p>
+          <button className="btn-comenza" onClick={handleBeginTests}>
+            Comenzar Pruebas
+          </button>
         </div>
       </section>
 
