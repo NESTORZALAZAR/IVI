@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { AccessibilityContext } from "../../../context/AccessibilityContext";
 import "./TopNav.css";
 
@@ -16,12 +17,40 @@ export default function TopNav() {
     setBackground
   } = useContext(AccessibilityContext);
 
+  const location = useLocation();
+  const isHome = location.pathname === "/home";
+  const isAbout = location.pathname === "/about";
+
   return (
-    <nav className="topnav" role="navigation" aria-label="Controles de accesibilidad">
+    <nav className="topnav" role="navigation" aria-label="Navegación principal">
       <div className="topnav-container">
         <div className="topnav-brand">
-          <h1>IVI</h1>
-          <p>Plataforma de Apoyo y Tamizaje Disléxico</p>
+          <Link to="/home" className="brand-link">
+            <h1>IVI</h1>
+            <p>Plataforma de Apoyo y Tamizaje Dislexia</p>
+          </Link>
+        </div>
+
+        <div className="topnav-menu">
+          <Link 
+            to="/home" 
+            className={`nav-link ${isHome ? 'active' : ''}`}
+          >
+            Inicio
+          </Link>
+          <Link 
+            to="/about" 
+            className={`nav-link ${isAbout ? 'active' : ''}`}
+          >
+            Acerca de
+          </Link>
+          <button className="nav-link logout-btn" onClick={() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "/";
+          }}>
+            Salir
+          </button>
         </div>
 
         <div className="topnav-controls">
@@ -32,14 +61,15 @@ export default function TopNav() {
             </label>
             <select
               id="font-select"
-              value={font}
+              value={font || "Lato"}
               onChange={(e) => setFont(e.target.value)}
               className="control-select"
               aria-label="Seleccionar fuente tipográfica"
             >
+              <option value="Lato">Lato</option>
               <option value="Lexend">Lexend</option>
-              <option value="OpenDyslexic">OpenDyslexic</option>
-              <option value="Atkinson">Atkinson Hyperlegible</option>
+              <option value="Arial">Arial</option>
+              <option value="Georgia">Georgia</option>
             </select>
           </div>
 

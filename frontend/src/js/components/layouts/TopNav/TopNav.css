@@ -292,3 +292,49 @@
     font-size: 0.85rem;
   }
 }
+
+/* Navigation Menu */
+.topnav-menu {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: #ecf0f1;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.nav-link.active {
+  background-color: #3498db;
+  color: #ffffff;
+}
+
+.nav-link.logout-btn {
+  background-color: #e74c3c;
+}
+
+.nav-link.logout-btn:hover {
+  background-color: #c0392b;
+}
+
+.brand-link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  cursor: pointer;
+}

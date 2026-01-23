@@ -1,7 +1,13 @@
-import HomePage from "./pages/HomePage";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AccessibilityProvider } from "./context/AccessibilityContext";
 import { useContext, useEffect } from "react";
 import { AccessibilityContext } from "./context/AccessibilityContext";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/NewHomePage";
+import AboutPage from "./pages/AboutPage";
+import TopNav from "./components/layouts/TopNav/TopNav";
+import AccessibilityPanel from "./components/common/AccessibilityPanel/AccessibilityPanel";
+import "../css/App.css";
 
 // Mapeo de fuentes
 const FONT_MAP = {
@@ -11,7 +17,12 @@ const FONT_MAP = {
   "Georgia": "Georgia, serif"
 };
 
-function AppContent() {
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/" />;
+}
+
+function AppLayout({ children }) {
   const { fontSize, spacing, contrast, background, font } =
     useContext(AccessibilityContext);
 
@@ -63,8 +74,50 @@ function AppContent() {
 
   return (
     <div className="app-container" style={appStyles}>
-      <HomePage />
+      {children}
     </div>
+  );
+}
+
+function AppContent() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <TopNav />
+                <HomePage />
+                <AccessibilityPanel />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <TopNav />
+                <AboutPage />
+                <AccessibilityPanel />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
+  );
+}
+
+export default function App() {
+  return (
+    <AccessibilityProvider>
+      <AppContent />
+    </AccessibilityProvider>
   );
 }
 
