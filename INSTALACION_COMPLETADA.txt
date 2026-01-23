@@ -1,0 +1,101 @@
+===============================================
+        IVI - INSTALACIÓN COMPLETADA
+===============================================
+
+✅ INSTALACIONES EXITOSAS:
+
+1. Node.js v25.4.0
+   Ubicación: C:\Program Files\nodejs
+   
+2. Python 3.12.10
+   Ubicación: C:\Users\nesto\AppData\Local\Programs\Python\Python312
+
+3. Frontend Dependencies (npm)
+   ✓ React 19.2.3
+   ✓ React DOM 19.2.3
+   ✓ Testing Library
+   ✓ Todas las dependencias en: frontend/node_modules/
+
+4. Backend Dependencies (pip)
+   ✓ Django 4.2.0
+   ✓ Django REST Framework 3.14.0
+   ✓ Django CORS Headers 4.0.0
+   ✓ Python Decouple 3.8
+   ✓ Pillow 9.5.0
+
+===============================================
+        PARA EJECUTAR LA APLICACIÓN:
+===============================================
+
+OPCIÓN 1: Script Batch
+   Ejecuta: run.bat
+
+OPCIÓN 2: PowerShell
+   Ejecuta: run_new.ps1
+
+OPCIÓN 3: Manual
+   Terminal 1 (Backend):
+      cd backend
+      python manage.py runserver
+
+   Terminal 2 (Frontend):
+      cd frontend
+      npm start
+
+===============================================
+        ACCESO A LAS APLICACIONES:
+===============================================
+
+Frontend:  http://localhost:3000
+Backend:   http://localhost:8000
+
+===============================================
+        ESTRUCTURA DEL PROYECTO:
+===============================================
+
+frontend/
+  ├── src/
+  │   ├── js/          (Componentes, hooks, servicios)
+  │   ├── css/         (Estilos)
+  │   ├── html/        (Templates)
+  │   ├── icons/       (Iconos)
+  │   ├── images/      (Imágenes)
+  │   └── json/        (Archivos JSON)
+  ├── public/
+  │   ├── fonts/       (Fuentes personalizadas)
+  │   └── readme/      (Archivos auxiliares)
+  └── node_modules/    (Dependencias instaladas)
+
+backend/
+  ├── archivos/        (App de gestión de archivos)
+  ├── lector/          (App de lectura)
+  ├── tamizaje/        (App de tamizaje)
+  ├── usuarios/        (App de usuarios)
+  ├── backend/         (Configuración principal)
+  ├── manage.py        (Comando de gestión Django)
+  ├── db.sqlite3       (Base de datos)
+  └── requirements.txt (Dependencias Python)
+
+docs/                  (Documentación del proyecto)
+  ├── ARCHITECTURE.md
+  ├── COMPONENTS.md
+  ├── CONTRIBUTING.md
+  ├── FOLDER_STRUCTURE.md
+  └── más...
+
+===============================================
+        NOTAS IMPORTANTES:
+===============================================
+
+1. Las dependencias npm tienen 11 vulnerabilidades menores
+   Para arreglar: npm audit fix
+
+2. El proyecto usa Context API para estado global de accesibilidad
+   Incluyendo: fuente, tamaño, espaciado, contraste, fondo
+
+3. Configuración en: backend/backend/settings.py
+   Variables de entorno: .env (copiar desde .env.example)
+
+4. Primera ejecución iniciará migrations Django automáticamente
+
+===============================================

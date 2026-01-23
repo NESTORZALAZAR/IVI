@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AccessibilityContext } from "../context/AccessibilityContext";
-import TopNav from "../components/TopNav";
-import "./HomePage.css";
+import TopNav from "../components/layouts/TopNav";
+import "../css/HomePage.css";
 
 export default function HomePage() {
   return (

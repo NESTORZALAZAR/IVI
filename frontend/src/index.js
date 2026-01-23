@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import { AccessibilityProvider } from "./context/AccessibilityContext";
-import "./index.css";
+import App from "./js/App";
+import { AccessibilityProvider } from "./js/context/AccessibilityContext";
+import "./css/index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
