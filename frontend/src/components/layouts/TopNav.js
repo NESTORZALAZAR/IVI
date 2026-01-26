@@ -37,9 +37,13 @@ export default function TopNav() {
               className="control-select"
               aria-label="Seleccionar fuente tipográfica"
             >
-              <option value="Lexend">Lexend</option>
-              <option value="OpenDyslexic">OpenDyslexic</option>
-              <option value="Atkinson">Atkinson Hyperlegible</option>
+              <option value="Lato">Lato (Estándar)</option>
+              <option value="Lexend">Lexend (Google)</option>
+              <option value="Arial">Arial (Sans-serif)</option>
+              <option value="Georgia">Georgia (Serif)</option>
+              <option value="LexendLocal">Lexend (Local - Dislexia)</option>
+              <option value="AtkinsonLocal">Atkinson Hyperlegible (Local)</option>
+              <option value="OpenDyslexicLocal">OpenDyslexic (Local - Dislexia)</option>
             </select>
           </div>
 

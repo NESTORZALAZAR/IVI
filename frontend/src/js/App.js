@@ -20,7 +20,10 @@ const FONT_MAP = {
   "Lato": "'Lato', sans-serif",
   "Lexend": "'Lexend', sans-serif",
   "Arial": "Arial, sans-serif",
-  "Georgia": "Georgia, serif"
+  "Georgia": "Georgia, serif",
+  "LexendLocal": "'Lexend-Local', sans-serif",
+  "AtkinsonLocal": "'Atkinson-Local', sans-serif",
+  "OpenDyslexicLocal": "'OpenDyslexic-Local', sans-serif"
 };
 
 function ProtectedRoute({ children }) {

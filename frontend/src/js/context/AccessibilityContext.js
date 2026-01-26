@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from "react";
 export const AccessibilityContext = createContext();
 
 // Valores válidos
-const VALID_FONTS = ["Lato", "Lexend", "Arial", "Georgia"];
+const VALID_FONTS = ["Lato", "Lexend", "Arial", "Georgia", "LexendLocal", "AtkinsonLocal", "OpenDyslexicLocal"];
 const VALID_BACKGROUNDS = ["white", "cream", "sepia"];
 
 export function AccessibilityProvider({ children }) {

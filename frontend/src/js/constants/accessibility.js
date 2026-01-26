@@ -2,9 +2,12 @@
 
 export const FONT_OPTIONS = [
   { value: 'Lato', label: 'Lato (Estándar)' },
-  { value: 'Lexend', label: 'Lexend (Dislexia)' },
+  { value: 'Lexend', label: 'Lexend (Google)' },
   { value: 'Arial', label: 'Arial (Sans-serif)' },
-  { value: 'Georgia', label: 'Georgia (Serif)' }
+  { value: 'Georgia', label: 'Georgia (Serif)' },
+  { value: 'LexendLocal', label: 'Lexend (Local - Dislexia)' },
+  { value: 'AtkinsonLocal', label: 'Atkinson Hyperlegible (Local)' },
+  { value: 'OpenDyslexicLocal', label: 'OpenDyslexic (Local - Dislexia)' }
 ];
 
 export const FONT_SIZE_RANGE = {

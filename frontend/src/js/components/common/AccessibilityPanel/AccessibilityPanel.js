@@ -56,9 +56,12 @@ export default function AccessibilityPanel() {
               }}
             >
               <option value="Lato">Lato (Estándar)</option>
-              <option value="Lexend">Lexend (Dislexia)</option>
+              <option value="Lexend">Lexend (Google)</option>
               <option value="Arial">Arial (Sans-serif)</option>
               <option value="Georgia">Georgia (Serif)</option>
+              <option value="LexendLocal">Lexend (Local - Dislexia)</option>
+              <option value="AtkinsonLocal">Atkinson Hyperlegible (Local)</option>
+              <option value="OpenDyslexicLocal">OpenDyslexic (Local - Dislexia)</option>
             </select>
           </div>
 

@@ -5,6 +5,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Lato:wght@400;600;700&family=Georgia:wght@400;600;700&display=swap');
 
 /* =========================
+   LOCAL FONTS IMPORT
+========================= */
+
+/* Lexend - Fuente para Dislexia */
+@font-face {
+  font-family: 'Lexend-Local';
+  src: url('../../public/fonts/Lexend-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Lexend-Local';
+  src: url('../../public/fonts/Lexend-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+/* Atkinson Hyperlegible Next */
+@font-face {
+  font-family: 'Atkinson-Local';
+  src: url('../../public/fonts/AtkinsonHyperlegibleNext-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Atkinson-Local';
+  src: url('../../public/fonts/AtkinsonHyperlegibleNext-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
+/* OpenDyslexic */
+@font-face {
+  font-family: 'OpenDyslexic-Local';
+  src: url('../../public/fonts/OpenDyslexic-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+
+/* =========================
    RESET GLOBAL
 ========================= */
 
