@@ -10,8 +10,8 @@ export default function AccessibilityPanel() {
     setFontSize,
     spacing,
     setSpacing,
-    contrast,
-    setContrast,
+    darkMode,
+    setDarkMode,
     background,
     setBackground
   } = useContext(AccessibilityContext);
@@ -83,14 +83,14 @@ export default function AccessibilityPanel() {
           </select>
         </label>
 
-        {/* Contraste */}
+        {/* Modo Oscuro */}
         <label>
           <input
             type="checkbox"
-            checked={contrast}
-            onChange={(e) => setContrast(e.target.checked)}
+            checked={darkMode}
+            onChange={(e) => setDarkMode(e.target.checked)}
           />
-          Contraste alto
+          Modo Oscuro (Dislexia)
         </label>
       </aside>
     </>

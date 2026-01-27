@@ -32,7 +32,7 @@ function ProtectedRoute({ children }) {
 }
 
 function AppLayout({ children }) {
-  const { fontSize, spacing, contrast, background, font } =
+  const { fontSize, spacing, darkMode, background, font } =
     useContext(AccessibilityContext);
 
   // Aplicar estilos globales
@@ -53,28 +53,50 @@ function AppLayout({ children }) {
     if (oldStyle) oldStyle.remove();
     
     let contrastStyles = "";
-    if (contrast) {
+    if (darkMode) {
+      // Tonalidades especiales para dislexia en modo oscuro
+      // Fondo cálido oscuro (no puro negro) + colores de texto suave
       contrastStyles = `
         * {
-          background-color: #000000 !important;
-          color: #FFFF00 !important;
-          border-color: #FFFF00 !important;
+          background-color: #1a1a1a !important;
+          color: #e8d4b8 !important;
+          border-color: #c4a080 !important;
         }
         a {
-          color: #00FFFF !important;
+          color: #d4a574 !important;
+        }
+        a:visited {
+          color: #b89068 !important;
         }
         button {
-          background-color: #333333 !important;
-          color: #FFFF00 !important;
-          border-color: #FFFF00 !important;
+          background-color: #2a2a2a !important;
+          color: #e8d4b8 !important;
+          border-color: #c4a080 !important;
         }
         input, select, textarea {
-          background-color: #1a1a1a !important;
-          color: #FFFF00 !important;
-          border-color: #FFFF00 !important;
+          background-color: #262626 !important;
+          color: #e8d4b8 !important;
+          border-color: #c4a080 !important;
         }
-        input::placeholder {
-          color: #CCCC00 !important;
+        input::placeholder, textarea::placeholder {
+          color: #a89080 !important;
+        }
+        h1, h2, h3, h4, h5, h6 {
+          color: #f0e0d0 !important;
+        }
+        .accessibility-panel {
+          background-color: #1a1a1a !important;
+          color: #e8d4b8 !important;
+        }
+        .accessibility-panel * {
+          background-color: #1a1a1a !important;
+          color: #e8d4b8 !important;
+          border-color: #c4a080 !important;
+        }
+        .accessibility-panel input, .accessibility-panel select, .accessibility-panel textarea {
+          background-color: #262626 !important;
+          color: #e8d4b8 !important;
+          border-color: #c4a080 !important;
         }
       `;
     }
@@ -90,22 +112,21 @@ function AppLayout({ children }) {
       ${contrastStyles}
     `;
     document.head.appendChild(style);
-  }, [font, fontSize, spacing, contrast]);
+  }, [font, fontSize, spacing, darkMode]);
 
   const appStyles = {
     fontFamily: FONT_MAP[font] || FONT_MAP["Lato"],
     fontSize: `${fontSize}px`,
     lineHeight: spacing,
-    backgroundColor: contrast
-      ? "#000000"
+    backgroundColor: darkMode
+      ? "#1a1a1a"
       : background === "sepia"
       ? "#f4ecd8"
       : background === "cream"
       ? "#fff8e7"
       : "#ffffff",
-    color: contrast ? "#FFFF00" : "#333333",
+    color: darkMode ? "#e8d4b8" : "#333333",
     transition: "all 0.25s ease",
-    filter: contrast ? "contrast(1.3)" : "none",
     minHeight: "100vh"
   };
 

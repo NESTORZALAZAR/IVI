@@ -43,7 +43,7 @@ export default function AboutPage() {
           <ul>
             <li>Tamaño de letra ajustable (14px - 28px)</li>
             <li>Control de interlineado (espaciado entre líneas)</li>
-            <li>Modos de contraste (normal y alto contraste)</li>
+            <li>Modo oscuro con tonalidades para dislexia</li>
             <li>Temas de fondo (blanco, crema, sepia)</li>
           </ul>
         </section>

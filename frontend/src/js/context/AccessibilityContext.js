@@ -10,7 +10,7 @@ export function AccessibilityProvider({ children }) {
   const [font, setFont] = useState("Lato");
   const [fontSize, setFontSize] = useState(18);
   const [spacing, setSpacing] = useState(1.6);
-  const [contrast, setContrast] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [background, setBackground] = useState("white");
 
   // Limpiar localStorage al iniciar si tiene valores inválidos
@@ -30,7 +30,7 @@ export function AccessibilityProvider({ children }) {
       const savedFont = localStorage.getItem("ivi_font");
       const savedFontSize = localStorage.getItem("ivi_fontSize");
       const savedSpacing = localStorage.getItem("ivi_spacing");
-      const savedContrast = localStorage.getItem("ivi_contrast");
+      const savedDarkMode = localStorage.getItem("ivi_darkMode");
       const savedBackground = localStorage.getItem("ivi_background");
 
       if (savedFont && VALID_FONTS.includes(savedFont)) {
@@ -44,7 +44,7 @@ export function AccessibilityProvider({ children }) {
         const space = Number(savedSpacing);
         if (space >= 1 && space <= 2.5) setSpacing(space);
       }
-      if (savedContrast) setContrast(JSON.parse(savedContrast));
+      if (savedDarkMode) setDarkMode(JSON.parse(savedDarkMode));
       if (savedBackground && VALID_BACKGROUNDS.includes(savedBackground)) {
         setBackground(savedBackground);
       }
@@ -68,8 +68,8 @@ export function AccessibilityProvider({ children }) {
   }, [spacing]);
 
   useEffect(() => {
-    localStorage.setItem("ivi_contrast", JSON.stringify(contrast));
-  }, [contrast]);
+    localStorage.setItem("ivi_darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   useEffect(() => {
     localStorage.setItem("ivi_background", background);
@@ -84,8 +84,8 @@ export function AccessibilityProvider({ children }) {
         setFontSize,
         spacing,
         setSpacing,
-        contrast,
-        setContrast,
+        darkMode,
+        setDarkMode,
         background,
         setBackground
       }}

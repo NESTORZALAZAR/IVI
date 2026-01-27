@@ -93,7 +93,7 @@ export default function HomePage() {
               <li><strong>Tamaño:</strong> Ajusta el tamaño del texto con los botones + y -</li>
               <li><strong>Espaciado:</strong> Modifica el interlineado para mayor comodidad de lectura</li>
               <li><strong>Fondo:</strong> Selecciona entre blanco, crema o sepia</li>
-              <li><strong>Contraste:</strong> Activa el contraste alto para mejor legibilidad</li>
+              <li><strong>Modo Oscuro:</strong> Activa el modo oscuro con tonalidades especiales para dislexia</li>
             </ul>
           </section>
 

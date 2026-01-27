@@ -13,8 +13,8 @@ export default function TopNav() {
     setFontSize,
     spacing,
     setSpacing,
-    contrast,
-    setContrast,
+    darkMode,
+    setDarkMode,
     background,
     setBackground
   } = useContext(AccessibilityContext);
@@ -183,15 +183,15 @@ export default function TopNav() {
                   </select>
                 </div>
 
-                {/* Contraste */}
+                {/* Modo Oscuro */}
                 <div className="modal-control-group checkbox-modal">
                   <label className="checkbox-label-modal">
                     <input
                       type="checkbox"
-                      checked={contrast}
-                      onChange={(e) => setContrast(e.target.checked)}
+                      checked={darkMode}
+                      onChange={(e) => setDarkMode(e.target.checked)}
                     />
-                    Contraste Alto
+                    Modo Oscuro (Dislexia)
                   </label>
                 </div>
               </div>

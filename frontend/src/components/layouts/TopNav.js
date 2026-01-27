@@ -10,8 +10,8 @@ export default function TopNav() {
     setFontSize,
     spacing,
     setSpacing,
-    contrast,
-    setContrast,
+    darkMode,
+    setDarkMode,
     background,
     setBackground
   } = useContext(AccessibilityContext);
@@ -122,17 +122,17 @@ export default function TopNav() {
             </select>
           </div>
 
-          {/* Contraste alto */}
+          {/* Modo Oscuro */}
           <div className="control-group checkbox-group">
-            <label htmlFor="contrast-toggle" className="checkbox-label">
+            <label htmlFor="darkmode-toggle" className="checkbox-label">
               <input
-                id="contrast-toggle"
+                id="darkmode-toggle"
                 type="checkbox"
-                checked={contrast}
-                onChange={(e) => setContrast(e.target.checked)}
-                aria-label="Activar contraste alto"
+                checked={darkMode}
+                onChange={(e) => setDarkMode(e.target.checked)}
+                aria-label="Activar modo oscuro para dislexia"
               />
-              <span className="control-label">Contraste Alto</span>
+              <span className="control-label">Modo Oscuro (Dislexia)</span>
             </label>
           </div>
         </div>
