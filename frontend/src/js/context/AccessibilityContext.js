@@ -3,91 +3,83 @@ import { createContext, useState, useEffect } from "react";
 export const AccessibilityContext = createContext();
 
 // Valores válidos
-const VALID_FONTS = ["Lato", "Lexend", "Arial", "Georgia", "LexendLocal", "AtkinsonLocal", "OpenDyslexicLocal"];
-const VALID_BACKGROUNDS = ["white", "cream", "sepia"];
+const VALID_FONTS = [
+  "Lato",
+  "Lexend",
+  "Arial",
+  "Georgia",
+  "LexendLocal",
+  "AtkinsonLocal",
+  "OpenDyslexicLocal"
+];
+
+// Temas unificados: incluyen fondo y color de texto
+const VALID_THEMES = ["white", "sepia", "cream", "dark"];
+
+const DEFAULT_SETTINGS = {
+  font: "Lexend",       // mejor para dislexia
+  fontSize: 18,
+  spacing: 1.7,
+  theme: "white"        // Incluye fondos y modo oscuro unificados
+};
 
 export function AccessibilityProvider({ children }) {
-  const [font, setFont] = useState("Lato");
-  const [fontSize, setFontSize] = useState(18);
-  const [spacing, setSpacing] = useState(1.6);
-  const [darkMode, setDarkMode] = useState(false);
-  const [background, setBackground] = useState("white");
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
-  // Limpiar localStorage al iniciar si tiene valores inválidos
-  useEffect(() => {
-    const savedFont = localStorage.getItem("ivi_font");
-    
-    // Si la fuente guardada no es válida, limpiar todo
-    if (savedFont && !VALID_FONTS.includes(savedFont)) {
-      console.log("Limpiando localStorage por fuente inválida:", savedFont);
-      localStorage.clear();
-    }
-  }, []);
-
-  // Cargar desde localStorage al iniciar
+  // 🔹 Cargar configuración desde localStorage
   useEffect(() => {
     try {
-      const savedFont = localStorage.getItem("ivi_font");
-      const savedFontSize = localStorage.getItem("ivi_fontSize");
-      const savedSpacing = localStorage.getItem("ivi_spacing");
-      const savedDarkMode = localStorage.getItem("ivi_darkMode");
-      const savedBackground = localStorage.getItem("ivi_background");
+      const saved = JSON.parse(localStorage.getItem("ivi_accessibility"));
 
-      if (savedFont && VALID_FONTS.includes(savedFont)) {
-        setFont(savedFont);
+      if (saved) {
+        setSettings(prev => ({
+          ...prev,
+          font: VALID_FONTS.includes(saved.font) ? saved.font : prev.font,
+          fontSize:
+            saved.fontSize >= 14 && saved.fontSize <= 32
+              ? saved.fontSize
+              : prev.fontSize,
+          spacing:
+            saved.spacing >= 1.2 && saved.spacing <= 2.5
+              ? saved.spacing
+              : prev.spacing,
+          theme: VALID_THEMES.includes(saved.theme)
+            ? saved.theme
+            : prev.theme
+        }));
       }
-      if (savedFontSize) {
-        const size = Number(savedFontSize);
-        if (size >= 14 && size <= 28) setFontSize(size);
-      }
-      if (savedSpacing) {
-        const space = Number(savedSpacing);
-        if (space >= 1 && space <= 2.5) setSpacing(space);
-      }
-      if (savedDarkMode) setDarkMode(JSON.parse(savedDarkMode));
-      if (savedBackground && VALID_BACKGROUNDS.includes(savedBackground)) {
-        setBackground(savedBackground);
-      }
-    } catch (error) {
-      console.error("Error loading accessibility settings:", error);
-      localStorage.clear();
+    } catch (e) {
+      console.error("Error loading accessibility settings:", e);
+      localStorage.removeItem("ivi_accessibility");
     }
   }, []);
 
-  // Guardar en localStorage
+  // 🔹 Guardar configuración
   useEffect(() => {
-    localStorage.setItem("ivi_font", font);
-  }, [font]);
+    localStorage.setItem("ivi_accessibility", JSON.stringify(settings));
+  }, [settings]);
 
-  useEffect(() => {
-    localStorage.setItem("ivi_fontSize", String(fontSize));
-  }, [fontSize]);
+  // 🔹 Métodos para actualizar configuración
+  const setFont = font =>
+    setSettings(s => ({ ...s, font }));
 
-  useEffect(() => {
-    localStorage.setItem("ivi_spacing", String(spacing));
-  }, [spacing]);
+  const setFontSize = fontSize =>
+    setSettings(s => ({ ...s, fontSize }));
 
-  useEffect(() => {
-    localStorage.setItem("ivi_darkMode", JSON.stringify(darkMode));
-  }, [darkMode]);
+  const setSpacing = spacing =>
+    setSettings(s => ({ ...s, spacing }));
 
-  useEffect(() => {
-    localStorage.setItem("ivi_background", background);
-  }, [background]);
+  const setTheme = theme =>
+    setSettings(s => ({ ...s, theme }));
 
   return (
     <AccessibilityContext.Provider
       value={{
-        font,
+        ...settings,
         setFont,
-        fontSize,
         setFontSize,
-        spacing,
         setSpacing,
-        darkMode,
-        setDarkMode,
-        background,
-        setBackground
+        setTheme
       }}
     >
       {children}

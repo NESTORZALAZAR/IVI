@@ -10,10 +10,8 @@ export default function AccessibilityPanel() {
     setFontSize,
     spacing,
     setSpacing,
-    darkMode,
-    setDarkMode,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -96,31 +94,19 @@ export default function AccessibilityPanel() {
             />
           </div>
 
-          {/* Fondo */}
+          {/* Temas */}
           <div className="panel-control-group">
-            <label className="control-title">Fondo</label>
+            <label className="control-title">Temas</label>
             <select
               className="panel-select"
-              value={background}
-              onChange={(e) => setBackground(e.target.value)}
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
             >
               <option value="white">Blanco</option>
-              <option value="cream">Crema</option>
               <option value="sepia">Sepia</option>
+              <option value="cream">Crema</option>
+              <option value="dark">Oscuro (Dislexia)</option>
             </select>
-          </div>
-
-          {/* Contraste */}
-          <div className="panel-control-group">
-            <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
-              <input
-                type="checkbox"
-                checked={darkMode}
-                onChange={(e) => setDarkMode(e.target.checked)}
-                style={{ cursor: "pointer", width: "18px", height: "18px" }}
-              />
-              <span className="control-title" style={{ margin: 0 }}>Modo Oscuro (Dislexia)</span>
-            </label>
           </div>
 
           {/* Botón de Reset */}
@@ -130,8 +116,7 @@ export default function AccessibilityPanel() {
               setFont("Lato");
               setFontSize(18);
               setSpacing(1.6);
-              setDarkMode(false);
-              setBackground("white");
+              setTheme('white');
               window.location.reload();
             }}
             style={{

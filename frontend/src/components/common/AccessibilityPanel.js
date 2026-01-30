@@ -10,10 +10,8 @@ export default function AccessibilityPanel() {
     setFontSize,
     spacing,
     setSpacing,
-    darkMode,
-    setDarkMode,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -70,27 +68,15 @@ export default function AccessibilityPanel() {
           />
         </label>
 
-        {/* Fondo */}
+        {/* Temas */}
         <label>
-          Fondo
-          <select
-            value={background}
-            onChange={(e) => setBackground(e.target.value)}
-          >
+          Temas
+          <select value={theme} onChange={(e) => setTheme(e.target.value)}>
             <option value="white">Blanco</option>
-            <option value="cream">Crema</option>
             <option value="sepia">Sepia</option>
+            <option value="cream">Crema</option>
+            <option value="dark">Oscuro (Dislexia)</option>
           </select>
-        </label>
-
-        {/* Modo Oscuro */}
-        <label>
-          <input
-            type="checkbox"
-            checked={darkMode}
-            onChange={(e) => setDarkMode(e.target.checked)}
-          />
-          Modo Oscuro (Dislexia)
         </label>
       </aside>
     </>

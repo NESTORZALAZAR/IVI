@@ -13,10 +13,8 @@ export default function TopNav() {
     setFontSize,
     spacing,
     setSpacing,
-    darkMode,
-    setDarkMode,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   const location = useLocation();
@@ -55,6 +53,12 @@ export default function TopNav() {
             className={`nav-link ${isAbout ? 'active' : ''}`}
           >
             Acerca de
+          </Link>
+          <Link 
+            to="/lector-documentos" 
+            className="nav-link"
+          >
+            Lector de Documentos
           </Link>
           
           {/* Mostrar Resultados solo si está logeado */}
@@ -169,30 +173,19 @@ export default function TopNav() {
                   />
                 </div>
 
-                {/* Fondo */}
+                {/* Temas */}
                 <div className="modal-control-group">
-                  <label className="control-label-modal">Fondo</label>
+                  <label className="control-label-modal">Temas</label>
                   <select
-                    value={background}
-                    onChange={(e) => setBackground(e.target.value)}
+                    value={theme}
+                    onChange={(e) => setTheme(e.target.value)}
                     className="modal-select"
                   >
                     <option value="white">Blanco</option>
                     <option value="sepia">Sepia</option>
                     <option value="cream">Crema</option>
+                    <option value="dark">Oscuro (Dislexia)</option>
                   </select>
-                </div>
-
-                {/* Modo Oscuro */}
-                <div className="modal-control-group checkbox-modal">
-                  <label className="checkbox-label-modal">
-                    <input
-                      type="checkbox"
-                      checked={darkMode}
-                      onChange={(e) => setDarkMode(e.target.checked)}
-                    />
-                    Modo Oscuro (Dislexia)
-                  </label>
                 </div>
               </div>
             </div>

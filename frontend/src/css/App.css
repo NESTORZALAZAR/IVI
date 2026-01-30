@@ -1,10 +1,73 @@
-.App {
-  text-align: center;
+/* =========================
+   🎨 SISTEMA DE TEMAS ACCESIBLES
+   ========================= */
+
+/* 🌞 Tema claro (dislexia-friendly) */
+:root {
+  --bg: #f7f3e9;
+  --text: #2b2b2b;
+  --primary: #3a6ea5;
+  --border: #d0c8b8;
+  --card: #ffffff;
 }
+
+/* 🌙 Tema oscuro accesible */
+[data-theme="dark"] {
+  --bg: #1e1e1e;
+  --text: #f2e6d8;
+  --primary: #82aaff;
+  --border: #444444;
+  --card: #262626;
+}
+
+/* 🟤 Sepia */
+[data-theme="sepia"] {
+  --bg: #f4ecd8;
+  --text: #5b4636;
+  --primary: #8a5a3c;
+  --border: #d8c3a5;
+  --card: #fff7e6;
+}
+
+/* 🍦 Cream */
+[data-theme="cream"] {
+  --bg: #fff8e7;
+  --text: #3a2f2f;
+  --primary: #a86f3c;
+  --border: #e6d5c3;
+  --card: #ffffff;
+}
+
+/* =========================
+   🌍 ESTILOS GLOBALES
+   ========================= */
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
+  word-spacing: 0.12em;
+  line-height: 1.7;
+}
+
+/* Contenedor principal */
+.app-container,
+.App {
+  min-height: 100vh;
+  text-align: center;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* =========================
+   ⚛️ ESTILOS DE REACT (ADAPTADOS)
+   ========================= */
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  filter: brightness(0.9);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -14,19 +77,63 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--card); /* antes #282c34 */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--text); /* antes white */
+  border: 1px solid var(--border);
 }
 
 .App-link {
-  color: #61dafb;
+  color: var(--primary); /* antes #61dafb */
 }
+
+/* =========================
+   🧩 COMPONENTES BÁSICOS
+   ========================= */
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button,
+input,
+textarea,
+select {
+  background-color: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Tarjetas / paneles */
+.card,
+.box,
+.panel {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+/* =========================
+   🎞️ ANIMACIÓN LOGO
+   ========================= */
 
 @keyframes App-logo-spin {
   from {

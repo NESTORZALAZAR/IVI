@@ -10,10 +10,8 @@ export default function TopNav() {
     setFontSize,
     spacing,
     setSpacing,
-    darkMode,
-    setDarkMode,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   return (
@@ -104,36 +102,23 @@ export default function TopNav() {
             />
           </div>
 
-          {/* Fondo */}
+          {/* Temas */}
           <div className="control-group">
-            <label htmlFor="background-select">
-              <span className="control-label">Fondo</span>
+            <label htmlFor="theme-select">
+              <span className="control-label">Temas</span>
             </label>
             <select
-              id="background-select"
-              value={background}
-              onChange={(e) => setBackground(e.target.value)}
+              id="theme-select"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
               className="control-select"
-              aria-label="Seleccionar color de fondo"
+              aria-label="Seleccionar tema"
             >
               <option value="white">Blanco</option>
               <option value="sepia">Sepia</option>
               <option value="cream">Crema</option>
+              <option value="dark">Oscuro (Dislexia)</option>
             </select>
-          </div>
-
-          {/* Modo Oscuro */}
-          <div className="control-group checkbox-group">
-            <label htmlFor="darkmode-toggle" className="checkbox-label">
-              <input
-                id="darkmode-toggle"
-                type="checkbox"
-                checked={darkMode}
-                onChange={(e) => setDarkMode(e.target.checked)}
-                aria-label="Activar modo oscuro para dislexia"
-              />
-              <span className="control-label">Modo Oscuro (Dislexia)</span>
-            </label>
           </div>
         </div>
       </div>

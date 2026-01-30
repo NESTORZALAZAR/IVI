@@ -2,28 +2,31 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { AccessibilityProvider } from "./context/AccessibilityContext";
 import { useContext, useEffect } from "react";
 import { AccessibilityContext } from "./context/AccessibilityContext";
+
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import HomePage from "./pages/NewHomePage";
 import AboutPage from "./pages/AboutPage";
+import DocumentReaderPage from "./pages/DocumentReaderPage";
 import ResultadosPage from "./pages/ResultadosPage";
 import PruebasPage from "./pages/PruebasPage";
 import PruebaLecturaPage from "./pages/PruebaLecturaPage";
 import PruebaVelocidadPage from "./pages/PruebaVelocidadPage";
 import PruebaComprensionPage from "./pages/PruebaComprensionPage";
 import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
+
 import TopNav from "./components/layouts/TopNav/TopNav";
 import "../css/App.css";
 
-// Mapeo de fuentes
+// 🧠 Mapeo de fuentes accesibles
 const FONT_MAP = {
-  "Lato": "'Lato', sans-serif",
-  "Lexend": "'Lexend', sans-serif",
-  "Arial": "Arial, sans-serif",
-  "Georgia": "Georgia, serif",
-  "LexendLocal": "'Lexend-Local', sans-serif",
-  "AtkinsonLocal": "'Atkinson-Local', sans-serif",
-  "OpenDyslexicLocal": "'OpenDyslexic-Local', sans-serif"
+  Lato: "'Lato', sans-serif",
+  Lexend: "'Lexend', sans-serif",
+  Arial: "Arial, sans-serif",
+  Georgia: "Georgia, serif",
+  LexendLocal: "'Lexend-Local', sans-serif",
+  AtkinsonLocal: "'Atkinson-Local', sans-serif",
+  OpenDyslexicLocal: "'OpenDyslexic-Local', sans-serif"
 };
 
 function ProtectedRoute({ children }) {
@@ -32,213 +35,128 @@ function ProtectedRoute({ children }) {
 }
 
 function AppLayout({ children }) {
-  const { fontSize, spacing, darkMode, background, font } =
-    useContext(AccessibilityContext);
+  const { fontSize, spacing, theme, font } = useContext(AccessibilityContext);
 
-  // Aplicar estilos globales
   useEffect(() => {
-    const fontFamily = FONT_MAP[font] || FONT_MAP["Lato"];
-    
-    // Aplicar al documento
+    const fontFamily = FONT_MAP[font] || FONT_MAP.Lexend;
+
+    // 🔤 Tipografía global - Aplicar a múltiples elementos
     document.documentElement.style.fontFamily = fontFamily;
-    document.body.style.fontFamily = fontFamily;
     document.documentElement.style.fontSize = `${fontSize}px`;
+    document.body.style.fontFamily = fontFamily;
     document.body.style.fontSize = `${fontSize}px`;
     document.body.style.lineHeight = spacing;
+
+    // 🎨 Aplicar tema (fondo + colores)
+    let bgColor = "#ffffff";
+    let textColor = "#000000";
     
-    // Aplicar a todos los elementos
-    const style = document.createElement("style");
-    style.id = "accessibility-style";
-    const oldStyle = document.getElementById("accessibility-style");
-    if (oldStyle) oldStyle.remove();
-    
-    let contrastStyles = "";
-    if (darkMode) {
-      // Tonalidades especiales para dislexia en modo oscuro
-      // Fondo cálido oscuro (no puro negro) + colores de texto suave
-      contrastStyles = `
-        * {
-          background-color: #1a1a1a !important;
-          color: #e8d4b8 !important;
-          border-color: #c4a080 !important;
-        }
-        a {
-          color: #d4a574 !important;
-        }
-        a:visited {
-          color: #b89068 !important;
-        }
-        button {
-          background-color: #2a2a2a !important;
-          color: #e8d4b8 !important;
-          border-color: #c4a080 !important;
-        }
-        input, select, textarea {
-          background-color: #262626 !important;
-          color: #e8d4b8 !important;
-          border-color: #c4a080 !important;
-        }
-        input::placeholder, textarea::placeholder {
-          color: #a89080 !important;
-        }
-        h1, h2, h3, h4, h5, h6 {
-          color: #f0e0d0 !important;
-        }
-        .accessibility-panel {
-          background-color: #1a1a1a !important;
-          color: #e8d4b8 !important;
-        }
-        .accessibility-panel * {
-          background-color: #1a1a1a !important;
-          color: #e8d4b8 !important;
-          border-color: #c4a080 !important;
-        }
-        .accessibility-panel input, .accessibility-panel select, .accessibility-panel textarea {
-          background-color: #262626 !important;
-          color: #e8d4b8 !important;
-          border-color: #c4a080 !important;
-        }
-      `;
+    if (theme === "sepia") {
+      bgColor = "#f4ecd8";
+      textColor = "#5c4a3a";
+    } else if (theme === "cream") {
+      bgColor = "#fff8e7";
+      textColor = "#4a4a4a";
+    } else if (theme === "dark") {
+      bgColor = "#1a1a1a";
+      textColor = "#e8d4b8";
     }
     
-    style.innerHTML = `
-      * { 
+    document.body.style.backgroundColor = bgColor;
+    document.body.style.color = textColor;
+
+    // Aplicar a todos los elementos de texto
+    const style = document.getElementById("accessibility-fonts");
+    if (style) style.remove();
+    
+    const newStyle = document.createElement("style");
+    newStyle.id = "accessibility-fonts";
+    newStyle.innerHTML = `
+      * {
         font-family: ${fontFamily} !important;
+        font-size: ${fontSize}px !important;
         line-height: ${spacing} !important;
       }
-      html, body {
-        font-size: ${fontSize}px !important;
-      }
-      ${contrastStyles}
     `;
-    document.head.appendChild(style);
-  }, [font, fontSize, spacing, darkMode]);
+    document.head.appendChild(newStyle);
 
-  const appStyles = {
-    fontFamily: FONT_MAP[font] || FONT_MAP["Lato"],
-    fontSize: `${fontSize}px`,
-    lineHeight: spacing,
-    backgroundColor: darkMode
-      ? "#1a1a1a"
-      : background === "sepia"
-      ? "#f4ecd8"
-      : background === "cream"
-      ? "#fff8e7"
-      : "#ffffff",
-    color: darkMode ? "#e8d4b8" : "#333333",
-    transition: "all 0.25s ease",
-    minHeight: "100vh"
-  };
+    // 🎨 Tema global
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [font, fontSize, spacing, theme]);
 
-  return (
-    <div className="app-container" style={appStyles}>
-      {children}
-    </div>
-  );
+  return <div className="app-container">{children}</div>;
 }
 
 function AppContent() {
   return (
     <Router>
-      <Routes>
-        {/* Página principal sin login */}
-        <Route
-          path="/"
-          element={
-            <AppLayout>
-              <TopNav />
-              <HomePage />
-            </AppLayout>
-          }
-        />
-        
-        {/* Rutas públicas */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route
-          path="/about"
-          element={
-            <AppLayout>
-              <TopNav />
-              <AboutPage />
-            </AppLayout>
-          }
-        />
-        
-        {/* Rutas protegidas */}
-        <Route
-          path="/resultados"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <TopNav />
+      <AppLayout>
+        <TopNav />
+
+        <Routes>
+          {/* Públicas */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/lector-documentos" element={<DocumentReaderPage />} />
+
+          {/* Protegidas */}
+          <Route
+            path="/resultados"
+            element={
+              <ProtectedRoute>
                 <ResultadosPage />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Rutas de Pruebas */}
-        <Route
-          path="/pruebas"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <TopNav />
+          <Route
+            path="/pruebas"
+            element={
+              <ProtectedRoute>
                 <PruebasPage />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/pruebas/lectura"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <TopNav />
+          <Route
+            path="/pruebas/lectura"
+            element={
+              <ProtectedRoute>
                 <PruebaLecturaPage />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/pruebas/velocidad"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <TopNav />
+          <Route
+            path="/pruebas/velocidad"
+            element={
+              <ProtectedRoute>
                 <PruebaVelocidadPage />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/pruebas/comprension"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <TopNav />
+          <Route
+            path="/pruebas/comprension"
+            element={
+              <ProtectedRoute>
                 <PruebaComprensionPage />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/pruebas/ortografia"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <TopNav />
+          <Route
+            path="/pruebas/ortografia"
+            element={
+              <ProtectedRoute>
                 <PruebaOrtografiaPage />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AppLayout>
     </Router>
   );
 }
@@ -250,4 +168,3 @@ export default function App() {
     </AccessibilityProvider>
   );
 }
-
