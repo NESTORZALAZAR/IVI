@@ -1,0 +1,90 @@
+.image-file-uploader {
+  width: 100%;
+}
+
+.upload-area {
+  border: 3px dashed #b8a080;
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  background-color: #262626;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.upload-area:hover {
+  border-color: #c4a574;
+  background-color: #2a2a2a;
+}
+
+.upload-area.active {
+  border-color: #c4a574;
+  background-color: #2d2d2d;
+  transform: scale(1.02);
+}
+
+.upload-content {
+  pointer-events: none;
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.upload-area h3 {
+  color: #f0e0d0;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+.upload-area p {
+  color: #e8d4b8;
+  margin: 0.5rem 0;
+}
+
+.file-types {
+  font-size: 0.9rem;
+  color: #a89080;
+  margin-top: 1rem;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+}
+
+.spinner {
+  border: 4px solid #2a2a2a;
+  border-top: 4px solid #c4a574;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading p {
+  color: #e8d4b8;
+}

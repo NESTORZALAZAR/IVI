@@ -54,12 +54,31 @@ export default function TopNav() {
           >
             Acerca de
           </Link>
-          <Link 
-            to="/lector-documentos" 
-            className="nav-link"
-          >
-            Lector de Documentos
-          </Link>
+          <div className="nav-dropdown">
+            <button className="nav-link dropdown-btn">
+              📖 Lectores
+            </button>
+            <div className="dropdown-menu">
+              <Link 
+                to="/lector-documentos" 
+                className="dropdown-link"
+              >
+                📄 Documentos (Completo)
+              </Link>
+              <Link 
+                to="/lector-textos" 
+                className="dropdown-link"
+              >
+                📄 Solo Textos (PDF, DOCX, TXT)
+              </Link>
+              <Link 
+                to="/lector-imagenes" 
+                className="dropdown-link"
+              >
+                🖼️ Solo Imágenes (OCR)
+              </Link>
+            </div>
+          </div>
           
           {/* Mostrar Resultados solo si está logeado */}
           {isLoggedIn && (

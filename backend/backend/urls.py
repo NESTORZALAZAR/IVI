@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/status/', api_status),
     path('api/', include('usuarios.urls')),
     path('api/archivos/', include('archivos.urls')),
+    path('api/lector/', include('lector.urls')),
 ]

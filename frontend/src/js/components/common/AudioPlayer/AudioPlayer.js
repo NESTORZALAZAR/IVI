@@ -15,15 +15,21 @@ export default function AudioPlayer({ audioUrl, texto, caracteres }) {
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
     const handleEnded = () => setIsPlaying(false);
+    const handleError = (e) => {
+      console.error("Error al cargar el audio:", e);
+      setIsPlaying(false);
+    };
 
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", updateDuration);
     audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("error", handleError);
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("loadedmetadata", updateDuration);
       audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("error", handleError);
     };
   }, []);
 

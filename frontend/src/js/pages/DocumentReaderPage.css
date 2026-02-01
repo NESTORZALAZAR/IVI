@@ -105,3 +105,32 @@
     padding: 1.5rem;
   }
 }
+.reader-link-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #c4a080;
+  color: #1a1a1a;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid #c4a080;
+}
+
+.reader-link-btn:hover {
+  background-color: #d4a574;
+  border-color: #d4a574;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(196, 160, 128, 0.3);
+}
+
+.reader-info h4 {
+  color: #f0e0d0;
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.reader-info p {
+  color: #e8d4b8;
+  margin: 0.5rem 0;
+}

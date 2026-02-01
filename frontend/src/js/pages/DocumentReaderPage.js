@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import FileUploader from "../components/common/FileUploader/FileUploader";
 import AudioPlayer from "../components/common/AudioPlayer/AudioPlayer";
 import "./DocumentReaderPage.css";
@@ -18,7 +19,7 @@ export default function DocumentReaderPage() {
         <div className="reader-header">
           <h1>📖 Lector de Documentos</h1>
           <p>
-            Carga un documento PDF, DOCX o TXT y escúchalo leído en voz alta
+            Carga un documento (PDF, DOCX, TXT) o una imagen con texto y escúchalo leído en voz alta
           </p>
         </div>
 
@@ -52,7 +53,10 @@ export default function DocumentReaderPage() {
           <h3>ℹ️ Información</h3>
           <ul>
             <li>
-              <strong>Formatos soportados:</strong> PDF, DOCX, TXT
+              <strong>Formatos soportados:</strong> PDF, DOCX, TXT, JPG, PNG, GIF, BMP
+            </li>
+            <li>
+              <strong>OCR en imágenes:</strong> Detecta y lee texto en imágenes
             </li>
             <li>
               <strong>Velocidad ajustable:</strong> De 0.5x a 2x
@@ -64,6 +68,17 @@ export default function DocumentReaderPage() {
               <strong>Privado:</strong> Los documentos se procesan localmente
             </li>
           </ul>
+          <hr style={{ margin: "1.5rem 0", opacity: 0.3 }} />
+          <h4>💡 Vistas Especializadas</h4>
+          <p style={{ margin: "0.5rem 0" }}>Si prefieres una experiencia más enfocada, usa las vistas específicas:</p>
+          <div style={{ display: "flex", gap: "1rem", marginTop: "1rem", flexWrap: "wrap" }}>
+            <Link to="/lector-textos" className="reader-link-btn">
+              📄 Solo Textos
+            </Link>
+            <Link to="/lector-imagenes" className="reader-link-btn">
+              🖼️ Solo Imágenes
+            </Link>
+          </div>
         </div>
       </div>
     </div>

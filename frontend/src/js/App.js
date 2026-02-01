@@ -8,6 +8,8 @@ import SignupPage from "./pages/SignupPage";
 import HomePage from "./pages/NewHomePage";
 import AboutPage from "./pages/AboutPage";
 import DocumentReaderPage from "./pages/DocumentReaderPage";
+import TextReaderPage from "./pages/TextReaderPage";
+import ImageReaderPage from "./pages/ImageReaderPage";
 import ResultadosPage from "./pages/ResultadosPage";
 import PruebasPage from "./pages/PruebasPage";
 import PruebaLecturaPage from "./pages/PruebaLecturaPage";
@@ -100,6 +102,8 @@ function AppContent() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/lector-documentos" element={<DocumentReaderPage />} />
+          <Route path="/lector-textos" element={<TextReaderPage />} />
+          <Route path="/lector-imagenes" element={<ImageReaderPage />} />
 
           {/* Protegidas */}
           <Route

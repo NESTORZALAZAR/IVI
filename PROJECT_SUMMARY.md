@@ -103,13 +103,35 @@ python manage.py runserver
 ## ✨ Características Destacadas
 
 - 📦 **Profesional** - Estructura lista para escalar
-- 📚 **Documentado** - 7 archivos de documentación
+- 📚 **Documentado** - Documentación completa
 - 🎨 **Accesible** - Soporte completo para dislexia
+- 📖 **Lector de Documentos** - PDF, DOCX, TXT + OCR de imágenes
+- 🔍 **OCR Avanzado** - Tesseract para JPG, PNG, GIF, BMP
 - 🔒 **Seguro** - .gitignore configurado
-- 🚀 **Listo para correr** - Ambiente configurado
+- 🚀 **Listo para correr** - Ambiente completamente configurado
 
 ---
 
-**¡Tu proyecto está listo para desarrollar! 🎉**
+## 📖 Nuevas Características (OCR)
 
-Para más información, lee `SETUP.md` o `frontend/docs/INDEX.md`
+### Lector de Documentos
+- ✅ Lectura de PDF, DOCX, TXT
+- ✅ **OCR de imágenes** (JPG, PNG, GIF, BMP)
+- ✅ Texto a voz (Text-to-Speech)
+- ✅ Interfaz arrastrar-soltar
+- ✅ Optimizado para dislexia
+
+### OCR (Optical Character Recognition)
+- ✅ Tesseract OCR integrado
+- ✅ Soporta español e inglés
+- ✅ Procesamiento de imágenes en tiempo real
+- ✅ Compatible con Windows, Linux, macOS
+
+---
+
+**¡Tu proyecto está listo para desarrollar con soporte OCR! 🎉**
+
+Para más información:
+- `SETUP.md` - Instalación
+- `TESTING_OCR.md` - Pruebas de OCR
+- `CHANGELOG_OCR.md` - Cambios realizados
