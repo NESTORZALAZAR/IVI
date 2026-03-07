@@ -10,10 +10,8 @@ export default function AccessibilityPanel() {
     setFontSize,
     spacing,
     setSpacing,
-    contrast,
-    setContrast,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -56,9 +54,12 @@ export default function AccessibilityPanel() {
               }}
             >
               <option value="Lato">Lato (Estándar)</option>
-              <option value="Lexend">Lexend (Dislexia)</option>
+              <option value="Lexend">Lexend (Google)</option>
               <option value="Arial">Arial (Sans-serif)</option>
               <option value="Georgia">Georgia (Serif)</option>
+              <option value="LexendLocal">Lexend (Local - Dislexia)</option>
+              <option value="AtkinsonLocal">Atkinson Hyperlegible (Local)</option>
+              <option value="OpenDyslexicLocal">OpenDyslexic (Local - Dislexia)</option>
             </select>
           </div>
 
@@ -93,31 +94,19 @@ export default function AccessibilityPanel() {
             />
           </div>
 
-          {/* Fondo */}
+          {/* Temas */}
           <div className="panel-control-group">
-            <label className="control-title">Fondo</label>
+            <label className="control-title">Temas</label>
             <select
               className="panel-select"
-              value={background}
-              onChange={(e) => setBackground(e.target.value)}
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
             >
               <option value="white">Blanco</option>
-              <option value="cream">Crema</option>
               <option value="sepia">Sepia</option>
+              <option value="cream">Crema</option>
+              <option value="dark">Oscuro (Dislexia)</option>
             </select>
-          </div>
-
-          {/* Contraste */}
-          <div className="panel-control-group">
-            <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
-              <input
-                type="checkbox"
-                checked={contrast}
-                onChange={(e) => setContrast(e.target.checked)}
-                style={{ cursor: "pointer", width: "18px", height: "18px" }}
-              />
-              <span className="control-title" style={{ margin: 0 }}>Contraste alto</span>
-            </label>
           </div>
 
           {/* Botón de Reset */}
@@ -127,20 +116,30 @@ export default function AccessibilityPanel() {
               setFont("Lato");
               setFontSize(18);
               setSpacing(1.6);
-              setContrast(false);
-              setBackground("white");
+              setTheme('white');
               window.location.reload();
             }}
             style={{
-              padding: "10px 15px",
+              padding: "1rem 1.5rem",
               backgroundColor: "#e74c3c",
               color: "white",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "8px",
               cursor: "pointer",
-              marginTop: "10px",
-              fontSize: "14px",
-              fontWeight: "600"
+              marginTop: "1.5rem",
+              fontSize: "1rem",
+              fontWeight: "700",
+              transition: "all 0.3s ease",
+              width: "100%",
+              boxShadow: "0 2px 8px rgba(231, 76, 60, 0.3)"
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "#c0392b";
+              e.target.style.boxShadow = "0 4px 12px rgba(231, 76, 60, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "#e74c3c";
+              e.target.style.boxShadow = "0 2px 8px rgba(231, 76, 60, 0.3)";
             }}
           >
             🔄 Resetear configuración

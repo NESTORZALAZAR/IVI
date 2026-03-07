@@ -10,10 +10,8 @@ export default function AccessibilityPanel() {
     setFontSize,
     spacing,
     setSpacing,
-    contrast,
-    setContrast,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -35,9 +33,13 @@ export default function AccessibilityPanel() {
         <label>
           Fuente
           <select value={font} onChange={(e) => setFont(e.target.value)}>
-            <option value="Lexend">Lexend</option>
-            <option value="OpenDyslexic">OpenDyslexic</option>
-            <option value="Atkinson">Atkinson Hyperlegible</option>
+            <option value="Lato">Lato (Estándar)</option>
+            <option value="Lexend">Lexend (Google)</option>
+            <option value="Arial">Arial (Sans-serif)</option>
+            <option value="Georgia">Georgia (Serif)</option>
+            <option value="LexendLocal">Lexend (Local - Dislexia)</option>
+            <option value="AtkinsonLocal">Atkinson Hyperlegible (Local)</option>
+            <option value="OpenDyslexicLocal">OpenDyslexic (Local - Dislexia)</option>
           </select>
         </label>
 
@@ -66,27 +68,15 @@ export default function AccessibilityPanel() {
           />
         </label>
 
-        {/* Fondo */}
+        {/* Temas */}
         <label>
-          Fondo
-          <select
-            value={background}
-            onChange={(e) => setBackground(e.target.value)}
-          >
+          Temas
+          <select value={theme} onChange={(e) => setTheme(e.target.value)}>
             <option value="white">Blanco</option>
-            <option value="cream">Crema</option>
             <option value="sepia">Sepia</option>
+            <option value="cream">Crema</option>
+            <option value="dark">Oscuro (Dislexia)</option>
           </select>
-        </label>
-
-        {/* Contraste */}
-        <label>
-          <input
-            type="checkbox"
-            checked={contrast}
-            onChange={(e) => setContrast(e.target.checked)}
-          />
-          Contraste alto
         </label>
       </aside>
     </>

@@ -10,10 +10,8 @@ export default function TopNav() {
     setFontSize,
     spacing,
     setSpacing,
-    contrast,
-    setContrast,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   return (
@@ -37,9 +35,13 @@ export default function TopNav() {
               className="control-select"
               aria-label="Seleccionar fuente tipográfica"
             >
-              <option value="Lexend">Lexend</option>
-              <option value="OpenDyslexic">OpenDyslexic</option>
-              <option value="Atkinson">Atkinson Hyperlegible</option>
+              <option value="Lato">Lato (Estándar)</option>
+              <option value="Lexend">Lexend (Google)</option>
+              <option value="Arial">Arial (Sans-serif)</option>
+              <option value="Georgia">Georgia (Serif)</option>
+              <option value="LexendLocal">Lexend (Local - Dislexia)</option>
+              <option value="AtkinsonLocal">Atkinson Hyperlegible (Local)</option>
+              <option value="OpenDyslexicLocal">OpenDyslexic (Local - Dislexia)</option>
             </select>
           </div>
 
@@ -100,36 +102,23 @@ export default function TopNav() {
             />
           </div>
 
-          {/* Fondo */}
+          {/* Temas */}
           <div className="control-group">
-            <label htmlFor="background-select">
-              <span className="control-label">Fondo</span>
+            <label htmlFor="theme-select">
+              <span className="control-label">Temas</span>
             </label>
             <select
-              id="background-select"
-              value={background}
-              onChange={(e) => setBackground(e.target.value)}
+              id="theme-select"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
               className="control-select"
-              aria-label="Seleccionar color de fondo"
+              aria-label="Seleccionar tema"
             >
               <option value="white">Blanco</option>
               <option value="sepia">Sepia</option>
               <option value="cream">Crema</option>
+              <option value="dark">Oscuro (Dislexia)</option>
             </select>
-          </div>
-
-          {/* Contraste alto */}
-          <div className="control-group checkbox-group">
-            <label htmlFor="contrast-toggle" className="checkbox-label">
-              <input
-                id="contrast-toggle"
-                type="checkbox"
-                checked={contrast}
-                onChange={(e) => setContrast(e.target.checked)}
-                aria-label="Activar contraste alto"
-              />
-              <span className="control-label">Contraste Alto</span>
-            </label>
           </div>
         </div>
       </div>

@@ -104,8 +104,15 @@ Toda la documentación está en `frontend/docs/`:
 - ✅ Múltiples tipografías (Lexend, OpenDyslexic, Atkinson)
 - ✅ Control de tamaño de letra (14-28px)
 - ✅ Controles de contraste y espaciado
-- ✅ Modos de fondo (Blanco, Sepia, Crema)
+- ✅ Modos de fondo (Blanco, Sepia, Crema, Oscuro para Dislexia)
 - ✅ ARIA labels en componentes
+
+### Lector de Documentos 📖
+- ✅ Lectura de PDF, DOCX, TXT
+- ✅ **NUEVO:** OCR para imágenes (JPG, PNG, GIF, BMP)
+- ✅ Texto a voz (Text-to-Speech)
+- ✅ Velocidad de reproducción ajustable
+- ✅ Diseño optimizado para dislexia
 
 ### Frontend 🎨
 - ✅ React 19 - Framework moderno
@@ -116,6 +123,7 @@ Toda la documentación está en `frontend/docs/`:
 ### Backend ⚙️
 - ✅ Django REST API
 - ✅ Autenticación de usuarios
+- ✅ OCR con Tesseract (soporte multiidioma)
 - ✅ Módulos: Archivos, Lector, Tamizaje, Usuarios
 
 ## 🤖 Scripts Disponibles

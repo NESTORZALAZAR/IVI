@@ -1,0 +1,107 @@
+.text-reader-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
+  padding: 2rem;
+  color: #e8d4b8;
+}
+
+.reader-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.reader-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.reader-header h1 {
+  color: #f0e0d0;
+  font-size: 2.5rem;
+  margin: 0 0 1rem 0;
+}
+
+.reader-header p {
+  color: #c4a080;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.reader-content {
+  background-color: #262626;
+  border: 2px solid #c4a080;
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.uploader-section {
+  margin-bottom: 2rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #a89080;
+  font-size: 1.1rem;
+}
+
+.reader-info {
+  background-color: #262626;
+  border: 2px solid #c4a080;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.reader-info h3 {
+  color: #f0e0d0;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.3rem;
+}
+
+.reader-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reader-info li {
+  color: #e8d4b8;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.reader-info li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #c4a080;
+  font-weight: bold;
+}
+
+.reader-info strong {
+  color: #f0e0d0;
+}
+
+@media (max-width: 768px) {
+  .text-reader-page {
+    padding: 1rem;
+  }
+
+  .reader-header h1 {
+    font-size: 2rem;
+  }
+
+  .reader-content {
+    padding: 1.5rem;
+  }
+
+  .reader-info {
+    padding: 1.5rem;
+  }
+}

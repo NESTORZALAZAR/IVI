@@ -13,10 +13,8 @@ export default function TopNav() {
     setFontSize,
     spacing,
     setSpacing,
-    contrast,
-    setContrast,
-    background,
-    setBackground
+    theme,
+    setTheme
   } = useContext(AccessibilityContext);
 
   const location = useLocation();
@@ -56,6 +54,31 @@ export default function TopNav() {
           >
             Acerca de
           </Link>
+          <div className="nav-dropdown">
+            <button className="nav-link dropdown-btn">
+              📖 Lectores
+            </button>
+            <div className="dropdown-menu">
+              <Link 
+                to="/lector-documentos" 
+                className="dropdown-link"
+              >
+                📄 Documentos (Completo)
+              </Link>
+              <Link 
+                to="/lector-textos" 
+                className="dropdown-link"
+              >
+                📄 Solo Textos (PDF, DOCX, TXT)
+              </Link>
+              <Link 
+                to="/lector-imagenes" 
+                className="dropdown-link"
+              >
+                🖼️ Solo Imágenes (OCR)
+              </Link>
+            </div>
+          </div>
           
           {/* Mostrar Resultados solo si está logeado */}
           {isLoggedIn && (
@@ -129,9 +152,12 @@ export default function TopNav() {
                     className="modal-select"
                   >
                     <option value="Lato">Lato (Estándar)</option>
-                    <option value="Lexend">Lexend (Dislexia)</option>
+                    <option value="Lexend">Lexend (Google)</option>
                     <option value="Arial">Arial (Sans-serif)</option>
                     <option value="Georgia">Georgia (Serif)</option>
+                    <option value="LexendLocal">Lexend (Local - Dislexia)</option>
+                    <option value="AtkinsonLocal">Atkinson Hyperlegible (Local)</option>
+                    <option value="OpenDyslexicLocal">OpenDyslexic (Local - Dislexia)</option>
                   </select>
                 </div>
 
@@ -166,30 +192,19 @@ export default function TopNav() {
                   />
                 </div>
 
-                {/* Fondo */}
+                {/* Temas */}
                 <div className="modal-control-group">
-                  <label className="control-label-modal">Fondo</label>
+                  <label className="control-label-modal">Temas</label>
                   <select
-                    value={background}
-                    onChange={(e) => setBackground(e.target.value)}
+                    value={theme}
+                    onChange={(e) => setTheme(e.target.value)}
                     className="modal-select"
                   >
                     <option value="white">Blanco</option>
                     <option value="sepia">Sepia</option>
                     <option value="cream">Crema</option>
+                    <option value="dark">Oscuro (Dislexia)</option>
                   </select>
-                </div>
-
-                {/* Contraste */}
-                <div className="modal-control-group checkbox-modal">
-                  <label className="checkbox-label-modal">
-                    <input
-                      type="checkbox"
-                      checked={contrast}
-                      onChange={(e) => setContrast(e.target.checked)}
-                    />
-                    Contraste Alto
-                  </label>
                 </div>
               </div>
             </div>
