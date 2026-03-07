@@ -1,109 +1,137 @@
 import { useState } from "react";
+import { createWorker } from "tesseract.js";
 import "./ImageFileUploader.css";
 
-export default function ImageFileUploader({ onFileProcessed, isLoading: externalLoading }) {
+let tesseractWorker = null;
+let workerLoading = false;
+let workerCallbacks = [];
+
+// Limpia líneas de ruido OCR (cuadrículas, bordes, símbolos de imágenes)
+function limpiarTexto(texto) {
+  const lineas = texto.split("\n");
+  const limpias = lineas.filter((linea) => {
+    const t = linea.trim();
+    if (!t) return false;
+
+    // Contar letras vs total de caracteres
+    const letras = (t.match(/[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]/g) || []).length;
+    const ratio = letras / t.length;
+
+    // Descartar si menos del 40% son letras
+    if (ratio < 0.4) return false;
+
+    // Descartar si es solo números
+    if (/^\d+$/.test(t)) return false;
+
+    // Descartar si tiene separadores de cuadrícula
+    if (/[|=\-»«<>]{2,}/.test(t) && letras < 3) return false;
+
+    // Obtener palabras reales (>= 2 letras)
+    const palabrasReales = t.match(/[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]{2,}/g) || [];
+
+    // Descartar si no hay ninguna palabra real
+    if (palabrasReales.length === 0) return false;
+
+    // Descartar si la palabra más larga tiene menos de 4 letras (ruido: "DOI E", "e af")
+    const palabraMasLarga = Math.max(...palabrasReales.map(p => p.length));
+    if (palabraMasLarga < 4) return false;
+
+    // Descartar si todas las "palabras" son de 1 letra (ruido gráfico)
+    const palabrasTodas = t.match(/\S+/g) || [];
+    const soloCortas = palabrasTodas.every((p) => p.replace(/[^a-zA-Z]/g, "").length <= 1);
+    if (soloCortas && palabrasTodas.length > 1) return false;
+
+    // Descartar si la línea tiene menos de 3 letras en total (muy corta para ser útil)
+    if (letras < 3) return false;
+
+    return true;
+  });
+
+  // Unir palabras separadas por | o & en la misma línea
+  return limpias
+    .map((l) => l.replace(/\s*[|&]\s*/g, "  ").trim())
+    .join("\n");
+}
+
+async function getWorker() {
+  if (tesseractWorker) return tesseractWorker;
+  if (workerLoading) {
+    return new Promise((resolve) => workerCallbacks.push(resolve));
+  }
+  workerLoading = true;
+  const worker = await createWorker("spa+eng");
+  tesseractWorker = worker;
+  workerLoading = false;
+  workerCallbacks.forEach((cb) => cb(worker));
+  workerCallbacks = [];
+  return worker;
+}
+
+export default function ImageFileUploader({ onFileProcessed }) {
   const [dragActive, setDragActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [progreso, setProgreso] = useState("");
+  const [imagenPreview, setImagenPreview] = useState(null);
 
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
+    if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
+    else if (e.type === "dragleave") setDragActive(false);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer.files && e.dataTransfer.files[0])
       procesarArchivo(e.dataTransfer.files[0]);
-    }
   };
 
   const handleChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files && e.target.files[0])
       procesarArchivo(e.target.files[0]);
-    }
   };
 
   const procesarArchivo = async (archivo) => {
-    // Validar extensión solo para imágenes
-    const extensionesValidas = [".jpg", ".jpeg", ".png", ".gif", ".bmp"];
+    const extensionesValidas = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff"];
     const esValido = extensionesValidas.some((ext) =>
       archivo.name.toLowerCase().endsWith(ext)
     );
-
     if (!esValido) {
-      alert("Por favor carga una imagen: JPG, PNG, GIF o BMP");
+      alert("Por favor carga una imagen: JPG, PNG, GIF, BMP, WEBP o TIFF");
       return;
     }
 
+    // Mostrar preview
+    const previewUrl = URL.createObjectURL(archivo);
+    setImagenPreview(previewUrl);
     setIsLoading(true);
-
-    // Crear FormData para enviar archivo
-    const formData = new FormData();
-    formData.append("file", archivo);
+    setProgreso("Cargando motor OCR...");
 
     try {
-      // Intentar con localhost, sino con 127.0.0.1
-      const backendUrl = window.location.hostname === 'localhost' 
-        ? 'http://localhost:8000/api/lector/extract-and-speak/'
-        : 'http://127.0.0.1:8000/api/lector/extract-and-speak/';
+      const worker = await getWorker();
+      setProgreso("Analizando imagen...");
+      const { data } = await worker.recognize(archivo);
+      const texto = limpiarTexto(data.text.trim());
 
-      const respuesta = await fetch(backendUrl, {
-        method: "POST",
-        body: formData,
-        headers: {
-          'Accept': 'application/json',
-        }
-      });
-
-      if (!respuesta.ok) {
-        const error = await respuesta.json();
-        
-        // Si es error de Tesseract con imagen
-        if (error.error && error.error.includes("Tesseract OCR no está instalado")) {
-          throw new Error(
-            "❌ Tesseract OCR no está instalado en tu sistema.\n\n" +
-            "Para procesar imágenes, debes instalar Tesseract OCR:\n\n" +
-            "1. Ve a: https://github.com/UB-Mannheim/tesseract/wiki\n" +
-            "2. Descarga e instala tesseract-ocr-w64-setup-v5.x.x.exe\n" +
-            "3. Reinicia la aplicación"
-          );
-        }
-        
-        throw new Error(error.error || `Error ${respuesta.status}: No se pudo procesar la imagen`);
+      if (!texto) {
+        setProgreso("");
+        alert("No se encontró texto en la imagen. Intenta con una imagen más clara.");
+        setIsLoading(false);
+        return;
       }
 
-      const datos = await respuesta.json();
-      // Convertir hex a blob para el audio
-      const hexString = datos.audio;
-      const bytes = new Uint8Array(hexString.length / 2);
-      for (let i = 0; i < hexString.length; i += 2) {
-        bytes[i / 2] = parseInt(hexString.substr(i, 2), 16);
-      }
-      const blob = new Blob([bytes], { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(blob);
-      
-      onFileProcessed({
-        audio: audioUrl,
-        texto: datos.text,
-        caracteres: datos.text.length
-      });
+      setProgreso("");
+      onFileProcessed({ texto, caracteres: texto.length, archivo });
     } catch (error) {
-      console.error("Error detallado:", error);
-      alert("Error: " + error.message);
+      console.error("Error OCR:", error);
+      setProgreso("");
+      alert("Error al procesar la imagen: " + error.message);
     } finally {
       setIsLoading(false);
     }
   };
-
-  const loading = isLoading || externalLoading;
 
   return (
     <div className="image-file-uploader">
@@ -118,22 +146,28 @@ export default function ImageFileUploader({ onFileProcessed, isLoading: external
           <div className="upload-icon">🖼️</div>
           <h3>Carga tu imagen con texto</h3>
           <p>Arrastra y suelta aquí o haz clic para seleccionar</p>
-          <p className="file-types">Soportados: JPG, PNG, GIF, BMP</p>
+          <p className="file-types">Soportados: JPG, PNG, GIF, BMP, WEBP</p>
           <input
             type="file"
-            accept=".jpg,.jpeg,.png,.gif,.bmp,image/*"
+            accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.tiff,image/*"
             onChange={handleChange}
             className="file-input"
-            disabled={loading}
+            disabled={isLoading}
             aria-label="Seleccionar imagen para procesar con OCR"
           />
         </div>
       </div>
 
-      {loading && (
+      {imagenPreview && (
+        <div className="image-preview">
+          <img src={imagenPreview} alt="Vista previa" />
+        </div>
+      )}
+
+      {isLoading && (
         <div className="loading">
           <div className="spinner"></div>
-          <p>Procesando imagen con OCR...</p>
+          <p>{progreso || "Procesando..."}</p>
         </div>
       )}
     </div>

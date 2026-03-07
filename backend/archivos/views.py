@@ -9,6 +9,7 @@ import os
 import uuid
 from io import BytesIO
 import base64
+import requests as http_requests
 
 # Create your views here.
 
@@ -141,3 +142,93 @@ def procesar_archivo(request):
             {"error": f"Error al procesar el archivo: {str(e)}"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+@api_view(['POST'])
+def describe_imagen_ia(request):
+    """Describe imagen usando BLIP captioning dividiendo en secciones"""
+    if 'file' not in request.FILES:
+        return Response({'error': 'No se recibio ninguna imagen'}, status=400)
+
+    try:
+        from PIL import Image as PILImage
+        import io as _io
+        import torch
+        from transformers import BlipProcessor, BlipForConditionalGeneration
+
+        global _blip_processor, _blip_model
+        if '_blip_processor' not in globals() or _blip_processor is None:
+            _blip_processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
+            _blip_model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
+            _blip_model.eval()
+
+        archivo_bytes = request.FILES['file'].read()
+        imagen = PILImage.open(_io.BytesIO(archivo_bytes)).convert('RGB')
+        w, h = imagen.size
+
+        # Prompts que guian al modelo a describir libremente lo que ve
+        PROMPTS = [
+            "In this image I can see",
+            "This picture shows",
+            "a drawing of",
+        ]
+
+        def describir_seccion(img_region):
+            candidatos = []
+            for prompt in PROMPTS:
+                inputs = _blip_processor(img_region, text=prompt, return_tensors="pt")
+                with torch.no_grad():
+                    out = _blip_model.generate(
+                        **inputs,
+                        max_new_tokens=50,
+                        num_beams=5,
+                        min_length=8,
+                        repetition_penalty=1.3,
+                    )
+                caption = _blip_processor.decode(out[0], skip_special_tokens=True).strip()
+                if caption and len(caption) > 5:
+                    candidatos.append(caption)
+            # Devolver la descripcion mas larga y detallada
+            return max(candidatos, key=len) if candidatos else ""
+
+        descripciones = []
+
+        if w > 200 and h > 200:
+            secciones = [
+                imagen.crop((0,    0,    w//2, h//2)),
+                imagen.crop((w//2, 0,    w,    h//2)),
+                imagen.crop((0,    h//2, w//2, h)),
+                imagen.crop((w//2, h//2, w,    h)),
+            ]
+            for i, seccion in enumerate(secciones, 1):
+                desc = describir_seccion(seccion)
+                if desc:
+                    descripciones.append(f"Imagen {i}: {desc}")
+        else:
+            desc = describir_seccion(imagen)
+            if desc:
+                descripciones.append(desc)
+
+        if not descripciones:
+            return Response({'error': 'El modelo no genero descripcion'}, status=500)
+
+        descripcion_en = ". ".join(descripciones)
+
+        # Traducir al espanol via MyMemory
+        try:
+            t_resp = http_requests.get(
+                'https://api.mymemory.translated.net/get',
+                params={'q': descripcion_en, 'langpair': 'en|es'},
+                timeout=10
+            )
+            t_data = t_resp.json()
+            traduccion = t_data.get('responseData', {}).get('translatedText', '')
+            if traduccion and 'mymemory' not in traduccion.lower():
+                return Response({'descripcion': traduccion, 'original': descripcion_en})
+        except Exception:
+            pass
+
+        return Response({'descripcion': descripcion_en, 'original': descripcion_en})
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)

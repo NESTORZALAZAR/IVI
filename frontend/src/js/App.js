@@ -44,28 +44,23 @@ function AppLayout({ children }) {
   useEffect(() => {
     const fontFamily = FONT_MAP[font] || FONT_MAP.Lexend;
 
-    // 🔤 Tipografía global - Aplicar a múltiples elementos
+    // 🔤 Tipografía global
     document.documentElement.style.fontFamily = fontFamily;
     document.documentElement.style.fontSize = `${fontSize}px`;
     document.body.style.fontFamily = fontFamily;
     document.body.style.fontSize = `${fontSize}px`;
     document.body.style.lineHeight = spacing;
 
-    // 🎨 Aplicar tema (fondo + colores)
-    let bgColor = "#ffffff";
-    let textColor = "#000000";
-    
-<<<<<<< HEAD
-    // Aplicar a todos los elementos
-    const style = document.createElement("style");
-    style.id = "accessibility-style";
+    // Eliminar estilos previos
     const oldStyle = document.getElementById("accessibility-style");
     if (oldStyle) oldStyle.remove();
-    
+
+    const style = document.createElement("style");
+    style.id = "accessibility-style";
+
     let contrastStyles = "";
-    if (contrast) {
+    if (theme === "dark") {
       contrastStyles = `
-        /* Fondos oscuros para contenedores — excepto el modal de accesibilidad */
         html, body, #root,
         .app-container, main, section, article, aside, footer,
         .home-page, .container, .hero, .features, .feature-card,
@@ -74,29 +69,21 @@ function AppLayout({ children }) {
         .page-wrapper, .content, .results-container {
           background-color: #000000 !important;
         }
-        /* Color de texto para todos los elementos — excepto modal de accesibilidad */
         *:not(.accessibility-modal-overlay):not(.accessibility-modal):not(.accessibility-modal *):not(.modal-header):not(.modal-header *):not(.modal-content):not(.modal-content *):not(.modal-close) {
           color: #FFFF00 !important;
           border-color: #FFFF00 !important;
         }
-        /* El overlay solo usa transparencia, no negro sólido */
         .accessibility-modal-overlay {
           background-color: rgba(0, 0, 0, 0.6) !important;
         }
-        /* El modal de accesibilidad mantiene sus propios colores */
         .accessibility-modal,
         .accessibility-modal * {
           background-color: revert !important;
           color: revert !important;
           border-color: revert !important;
         }
-        a {
-          color: #00FFFF !important;
-          text-decoration: underline !important;
-        }
-        a:hover {
-          color: #ffffff !important;
-        }
+        a { color: #00FFFF !important; text-decoration: underline !important; }
+        a:hover { color: #ffffff !important; }
         button:not(.accessibility-modal button):not(.modal-close) {
           background-color: #222222 !important;
           color: #FFFF00 !important;
@@ -112,66 +99,42 @@ function AppLayout({ children }) {
           color: #FFFF00 !important;
           border: 2px solid #FFFF00 !important;
         }
-        input::placeholder {
-          color: #CCCC00 !important;
-        }
-        /* Imágenes: no tocar fondo */
+        input::placeholder { color: #CCCC00 !important; }
         img, svg, canvas, video {
           background-color: transparent !important;
           filter: brightness(0.9) contrast(1.1);
         }
-        /* Scrollbar */
-        ::-webkit-scrollbar-track {
-          background: #111111 !important;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #FFFF00 !important;
-        }
+        ::-webkit-scrollbar-track { background: #111111 !important; }
+        ::-webkit-scrollbar-thumb { background: #FFFF00 !important; }
       `;
-=======
-    if (theme === "sepia") {
-      bgColor = "#f4ecd8";
-      textColor = "#5c4a3a";
-    } else if (theme === "cream") {
-      bgColor = "#fff8e7";
-      textColor = "#4a4a4a";
-    } else if (theme === "dark") {
-      bgColor = "#1a1a1a";
-      textColor = "#e8d4b8";
->>>>>>> 294325eae5f1d74e9929a94714aab5b75590f67e
     }
-    
-    document.body.style.backgroundColor = bgColor;
-    document.body.style.color = textColor;
 
-    // Aplicar a todos los elementos de texto
-    const style = document.getElementById("accessibility-fonts");
-    if (style) style.remove();
-    
-    const newStyle = document.createElement("style");
-    newStyle.id = "accessibility-fonts";
-    newStyle.innerHTML = `
+    style.innerHTML = `
       * {
         font-family: ${fontFamily} !important;
         font-size: ${fontSize}px !important;
         line-height: ${spacing} !important;
       }
+      ${contrastStyles}
     `;
-    document.head.appendChild(newStyle);
+    document.head.appendChild(style);
 
-<<<<<<< HEAD
+    // 🎨 Tema global
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [font, fontSize, spacing, theme]);
+
   const appStyles = {
     fontFamily: FONT_MAP[font] || FONT_MAP["Lato"],
     fontSize: `${fontSize}px`,
     lineHeight: spacing,
-    backgroundColor: contrast
+    backgroundColor: theme === "dark"
       ? "#000000"
-      : background === "sepia"
+      : theme === "sepia"
       ? "#f4ecd8"
-      : background === "cream"
+      : theme === "cream"
       ? "#fff8e7"
       : "#ffffff",
-    color: contrast ? "#FFFF00" : "#333333",
+    color: theme === "dark" ? "#FFFF00" : "#333333",
     transition: "all 0.25s ease",
     minHeight: "100vh"
   };
@@ -183,13 +146,6 @@ function AppLayout({ children }) {
       <ImageOCRReader />
     </div>
   );
-=======
-    // 🎨 Tema global
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [font, fontSize, spacing, theme]);
-
-  return <div className="app-container">{children}</div>;
->>>>>>> 294325eae5f1d74e9929a94714aab5b75590f67e
 }
 
 function AppContent() {

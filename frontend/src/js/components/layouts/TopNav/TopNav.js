@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AccessibilityContext } from "../../../context/AccessibilityContext";
 import "./TopNav.css";
@@ -6,6 +6,19 @@ import "./TopNav.css";
 export default function TopNav() {
   const navigate = useNavigate();
   const [showAccessibility, setShowAccessibility] = useState(false);
+  const [showLectores, setShowLectores] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Cerrar dropdown al hacer clic fuera
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowLectores(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const {
     font,
     setFont,
@@ -54,30 +67,40 @@ export default function TopNav() {
           >
             Acerca de
           </Link>
-          <div className="nav-dropdown">
-            <button className="nav-link dropdown-btn">
+          <div className="nav-dropdown" ref={dropdownRef}>
+            <button
+              className={`nav-link dropdown-btn ${showLectores ? 'active' : ''}`}
+              onClick={() => setShowLectores(prev => !prev)}
+              aria-haspopup="true"
+              aria-expanded={showLectores}
+            >
               📖 Lectores
             </button>
-            <div className="dropdown-menu">
-              <Link 
-                to="/lector-documentos" 
-                className="dropdown-link"
-              >
-                📄 Documentos (Completo)
-              </Link>
-              <Link 
-                to="/lector-textos" 
-                className="dropdown-link"
-              >
-                📄 Solo Textos (PDF, DOCX, TXT)
-              </Link>
-              <Link 
-                to="/lector-imagenes" 
-                className="dropdown-link"
-              >
-                🖼️ Solo Imágenes (OCR)
-              </Link>
-            </div>
+            {showLectores && (
+              <div className="dropdown-menu">
+                <Link
+                  to="/lector-documentos"
+                  className="dropdown-link"
+                  onClick={() => setShowLectores(false)}
+                >
+                  📄 Documentos (Completo)
+                </Link>
+                <Link
+                  to="/lector-textos"
+                  className="dropdown-link"
+                  onClick={() => setShowLectores(false)}
+                >
+                  📄 Solo Textos (PDF, DOCX, TXT)
+                </Link>
+                <Link
+                  to="/lector-imagenes"
+                  className="dropdown-link"
+                  onClick={() => setShowLectores(false)}
+                >
+                  🖼️ Solo Imágenes (OCR)
+                </Link>
+              </div>
+            )}
           </div>
           
           {/* Mostrar Resultados solo si está logeado */}
