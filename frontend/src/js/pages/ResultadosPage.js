@@ -62,6 +62,23 @@ export default function ResultadosPage() {
     return `${minutos}m ${segs}s`;
   };
 
+  const formatearDetalles = (detalles) => {
+    const etiquetas = {
+      preguntas_respondidas: "Preguntas respondidas",
+      total_preguntas: "Total de preguntas",
+      correctas: "Correctas",
+      incorrectas: "Incorrectas",
+      palabras_leidas: "Palabras leídas",
+      tiempo_por_palabra: "Tiempo por palabra",
+      errores: "Errores",
+      aciertos: "Aciertos",
+    };
+    return Object.entries(detalles).map(([key, value]) => ({
+      label: etiquetas[key] || key.replace(/_/g, " "),
+      value,
+    }));
+  };
+
   const getColorPuntaje = (puntaje) => {
     if (puntaje >= 80) return "alto";
     if (puntaje >= 60) return "medio";
@@ -139,14 +156,14 @@ export default function ResultadosPage() {
                         {formatearDuracion(resultado.duracion_segundos)}
                       </span>
                     </div>
-                    {resultado.detalles && Object.keys(resultado.detalles).length > 0 && (
-                      <div className="detail-item">
-                        <span className="label">Detalles:</span>
-                        <span className="value">
-                          {JSON.stringify(resultado.detalles)}
-                        </span>
-                      </div>
-                    )}
+                    {resultado.detalles && Object.keys(resultado.detalles).length > 0 &&
+                      formatearDetalles(resultado.detalles).map(({ label, value }) => (
+                        <div className="detail-item" key={label}>
+                          <span className="label">{label}:</span>
+                          <span className="value">{value}</span>
+                        </div>
+                      ))
+                    }
                   </div>
 
                   <div className="resultado-progress">

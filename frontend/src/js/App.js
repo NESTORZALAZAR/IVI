@@ -13,6 +13,8 @@ import PruebaVelocidadPage from "./pages/PruebaVelocidadPage";
 import PruebaComprensionPage from "./pages/PruebaComprensionPage";
 import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
 import TopNav from "./components/layouts/TopNav/TopNav";
+import TextToSpeechPopup from "./components/common/TextToSpeechPopup/TextToSpeechPopup";
+import ImageOCRReader from "./components/common/ImageOCRReader/ImageOCRReader";
 import "../css/App.css";
 
 // Mapeo de fuentes
@@ -52,26 +54,67 @@ function AppLayout({ children }) {
     let contrastStyles = "";
     if (contrast) {
       contrastStyles = `
-        * {
+        /* Fondos oscuros para contenedores — excepto el modal de accesibilidad */
+        html, body, #root,
+        .app-container, main, section, article, aside, footer,
+        .home-page, .container, .hero, .features, .feature-card,
+        .accessibility-tips, .cta, .card,
+        .topnav, .topnav-container, .nav-links,
+        .page-wrapper, .content, .results-container {
           background-color: #000000 !important;
+        }
+        /* Color de texto para todos los elementos — excepto modal de accesibilidad */
+        *:not(.accessibility-modal-overlay):not(.accessibility-modal):not(.accessibility-modal *):not(.modal-header):not(.modal-header *):not(.modal-content):not(.modal-content *):not(.modal-close) {
           color: #FFFF00 !important;
           border-color: #FFFF00 !important;
+        }
+        /* El overlay solo usa transparencia, no negro sólido */
+        .accessibility-modal-overlay {
+          background-color: rgba(0, 0, 0, 0.6) !important;
+        }
+        /* El modal de accesibilidad mantiene sus propios colores */
+        .accessibility-modal,
+        .accessibility-modal * {
+          background-color: revert !important;
+          color: revert !important;
+          border-color: revert !important;
         }
         a {
           color: #00FFFF !important;
+          text-decoration: underline !important;
         }
-        button {
+        a:hover {
+          color: #ffffff !important;
+        }
+        button:not(.accessibility-modal button):not(.modal-close) {
+          background-color: #222222 !important;
+          color: #FFFF00 !important;
+          border: 2px solid #FFFF00 !important;
+        }
+        button:not(.accessibility-modal button):not(.modal-close):hover {
           background-color: #333333 !important;
-          color: #FFFF00 !important;
-          border-color: #FFFF00 !important;
         }
-        input, select, textarea {
-          background-color: #1a1a1a !important;
+        input:not(.accessibility-modal input),
+        select:not(.accessibility-modal select),
+        textarea:not(.accessibility-modal textarea) {
+          background-color: #111111 !important;
           color: #FFFF00 !important;
-          border-color: #FFFF00 !important;
+          border: 2px solid #FFFF00 !important;
         }
         input::placeholder {
           color: #CCCC00 !important;
+        }
+        /* Imágenes: no tocar fondo */
+        img, svg, canvas, video {
+          background-color: transparent !important;
+          filter: brightness(0.9) contrast(1.1);
+        }
+        /* Scrollbar */
+        ::-webkit-scrollbar-track {
+          background: #111111 !important;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #FFFF00 !important;
         }
       `;
     }
@@ -102,13 +145,14 @@ function AppLayout({ children }) {
       : "#ffffff",
     color: contrast ? "#FFFF00" : "#333333",
     transition: "all 0.25s ease",
-    filter: contrast ? "contrast(1.3)" : "none",
     minHeight: "100vh"
   };
 
   return (
     <div className="app-container" style={appStyles}>
       {children}
+      <TextToSpeechPopup />
+      <ImageOCRReader />
     </div>
   );
 }

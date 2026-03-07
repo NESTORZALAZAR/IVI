@@ -1,0 +1,140 @@
+/* ===========================
+   Text-to-Speech Popup
+   =========================== */
+
+.tts-popup {
+  position: absolute;
+  transform: translateX(-50%) translateY(-100%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 6px 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: tts-appear 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  pointer-events: all;
+  white-space: nowrap;
+}
+
+/* Flecha apuntando hacia abajo */
+.tts-popup::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px 7px 0 7px;
+  border-style: solid;
+  border-color: #1e293b transparent transparent transparent;
+}
+
+@keyframes tts-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(calc(-100% + 8px)) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-100%) scale(1);
+  }
+}
+
+/* Botón principal */
+.tts-main-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #f1f5f9;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.tts-main-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.04);
+}
+
+.tts-main-btn:active {
+  transform: scale(0.97);
+}
+
+.tts-main-btn:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* Estado "hablando" — animación de pulso */
+.tts-main-btn.tts-speaking .tts-icon {
+  display: inline-block;
+  animation: tts-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes tts-pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.25); }
+}
+
+.tts-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.tts-label {
+  font-size: 0.8rem;
+}
+
+/* Botón de detener */
+.tts-stop-btn {
+  background: transparent;
+  border: none;
+  color: #f87171;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: background 0.15s ease, transform 0.1s ease;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  margin-left: 2px;
+  padding-left: 10px;
+}
+
+.tts-stop-btn:hover {
+  background: rgba(248, 113, 113, 0.15);
+  transform: scale(1.1);
+}
+
+.tts-stop-btn:active {
+  transform: scale(0.95);
+}
+
+.tts-stop-btn:focus {
+  outline: 2px solid #f87171;
+  outline-offset: 2px;
+}
+
+/* Mobile: ocultar etiqueta, solo ícono */
+@media (max-width: 480px) {
+  .tts-label {
+    display: none;
+  }
+
+  .tts-popup {
+    padding: 5px 8px;
+  }
+
+  .tts-main-btn {
+    font-size: 1rem;
+    padding: 3px 6px;
+  }
+}
