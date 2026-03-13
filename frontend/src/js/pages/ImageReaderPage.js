@@ -191,8 +191,6 @@ export default function ImageReaderPage() {
               </div>
             </>
           )}
-
-          {!resultado && (
             <div className="empty-state">
               <p>Carga una imagen para extraer texto o describirla con IA</p>
             </div>
