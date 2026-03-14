@@ -59,55 +59,6 @@ function AppLayout({ children }) {
     style.id = "accessibility-style";
 
     let contrastStyles = "";
-    if (theme === "dark") {
-      contrastStyles = `
-        html, body, #root,
-        .app-container, main, section, article, aside, footer,
-        .home-page, .container, .hero, .features, .feature-card,
-        .accessibility-tips, .cta, .card,
-        .topnav, .topnav-container, .nav-links,
-        .page-wrapper, .content, .results-container {
-          background-color: #000000 !important;
-        }
-        *:not(.accessibility-modal-overlay):not(.accessibility-modal):not(.accessibility-modal *):not(.modal-header):not(.modal-header *):not(.modal-content):not(.modal-content *):not(.modal-close) {
-          color: #FFFF00 !important;
-          border-color: #FFFF00 !important;
-        }
-        .accessibility-modal-overlay {
-          background-color: rgba(0, 0, 0, 0.6) !important;
-        }
-        .accessibility-modal,
-        .accessibility-modal * {
-          background-color: revert !important;
-          color: revert !important;
-          border-color: revert !important;
-        }
-        a { color: #00FFFF !important; text-decoration: underline !important; }
-        a:hover { color: #ffffff !important; }
-        button:not(.accessibility-modal button):not(.modal-close) {
-          background-color: #222222 !important;
-          color: #FFFF00 !important;
-          border: 2px solid #FFFF00 !important;
-        }
-        button:not(.accessibility-modal button):not(.modal-close):hover {
-          background-color: #333333 !important;
-        }
-        input:not(.accessibility-modal input),
-        select:not(.accessibility-modal select),
-        textarea:not(.accessibility-modal textarea) {
-          background-color: #111111 !important;
-          color: #FFFF00 !important;
-          border: 2px solid #FFFF00 !important;
-        }
-        input::placeholder { color: #CCCC00 !important; }
-        img, svg, canvas, video {
-          background-color: transparent !important;
-          filter: brightness(0.9) contrast(1.1);
-        }
-        ::-webkit-scrollbar-track { background: #111111 !important; }
-        ::-webkit-scrollbar-thumb { background: #FFFF00 !important; }
-      `;
-    }
 
     style.innerHTML = `
       * {
@@ -128,13 +79,13 @@ function AppLayout({ children }) {
     fontSize: `${fontSize}px`,
     lineHeight: spacing,
     backgroundColor: theme === "dark"
-      ? "#000000"
+      ? "#1a1a2e"
       : theme === "sepia"
       ? "#f4ecd8"
       : theme === "cream"
       ? "#fff8e7"
-      : "#ffffff",
-    color: theme === "dark" ? "#FFFF00" : "#333333",
+      : "#f7f3e9",
+    color: theme === "dark" ? "#e8dcc8" : "#333333",
     transition: "all 0.25s ease",
     minHeight: "100vh"
   };

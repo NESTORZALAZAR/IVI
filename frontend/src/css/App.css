@@ -13,8 +13,8 @@
 
 /* 🌙 Tema oscuro accesible */
 [data-theme="dark"] {
-  --bg: #1e1e1e;
-  --text: #f2e6d8;
+  --bg: #1a1a2e;
+  --text: #e8dcc8;
   --primary: #82aaff;
   --border: #444444;
   --card: #262626;
@@ -24,7 +24,7 @@
 [data-theme="sepia"] {
   --bg: #f4ecd8;
   --text: #5b4636;
-  --primary: #8a5a3c;
+  --primary: #2e6b9e;
   --border: #d8c3a5;
   --card: #fff7e6;
 }
@@ -33,7 +33,7 @@
 [data-theme="cream"] {
   --bg: #fff8e7;
   --text: #3a2f2f;
-  --primary: #a86f3c;
+  --primary: #7a4200;
   --border: #e6d5c3;
   --card: #ffffff;
 }
