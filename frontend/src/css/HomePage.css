@@ -21,7 +21,7 @@
 
 /* Features */
 .features h2, .accessibility-tips h2, .cta h2 { font-size: 2rem; font-weight: bold; margin-bottom: 1.5rem; text-align: center; }
-.feature-card { padding: 1.5rem; border-radius: 8px; border: 2px solid #ddd; background-color: rgba(255, 255, 255, 0.5); transition: font-size 0.2s ease, line-height 0.2s ease; }
+.feature-card { padding: 1.5rem; border-radius: 8px; border: 2px solid #dddd; background-color: rgba(255, 255, 255, 0.5); transition: font-size 0.2s ease, line-height 0.2s ease; }
 .feature-card h3 { font-size: 1.3rem; font-weight: bold; margin-bottom: 0.75rem; color: #2c3e50; }
 .feature-card p { font-size: 0.95rem; line-height: 1.6; }
 
