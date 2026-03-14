@@ -36,11 +36,11 @@
 }
 
 .prueba-card {
-  background: white;
+  background: var(--card);
   border-radius: 12px;
   padding: 2rem;
   text-decoration: none;
-  color: #333;
+  color: var(--text);
   transition: all 0.3s ease;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -96,26 +96,26 @@
 .prueba-content h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--primary);
 }
 
 .prueba-descripcion {
   margin: 0;
-  color: #666;
+  color: var(--text);
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
 .prueba-duracion {
   margin: 0.5rem 0 0 0;
-  color: #999;
+  color: var(--text);
   font-size: 0.9rem;
   font-weight: 500;
 }
 
 .prueba-arrow {
   font-size: 1.5rem;
-  color: #667eea;
+  color: var(--primary);
   transition: transform 0.3s ease;
   align-self: flex-end;
 }
@@ -129,7 +129,7 @@
 }
 
 .info-card {
-  background: white;
+  background: var(--card);
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -137,7 +137,7 @@
 
 .info-card h3 {
   margin: 0 0 1rem 0;
-  color: #333;
+  color: var(--text);
   font-size: 1.3rem;
 }
 
@@ -152,7 +152,7 @@
 .info-card li {
   padding-left: 2rem;
   position: relative;
-  color: #666;
+  color: var(--text);
   line-height: 1.6;
 }
 
@@ -160,7 +160,7 @@
   content: '✓';
   position: absolute;
   left: 0;
-  color: #4caf50;
+  color: var(--primary);
   font-weight: bold;
   font-size: 1.2rem;
 }

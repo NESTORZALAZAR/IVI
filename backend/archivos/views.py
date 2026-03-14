@@ -180,9 +180,9 @@ def describe_imagen_ia(request):
                 with torch.no_grad():
                     out = _blip_model.generate(
                         **inputs,
-                        max_new_tokens=50,
-                        num_beams=5,
-                        min_length=8,
+                        max_new_tokens=30,
+                        num_beams=3,
+                        min_length=5,
                         repetition_penalty=1.3,
                     )
                 caption = _blip_processor.decode(out[0], skip_special_tokens=True).strip()
@@ -213,6 +213,10 @@ def describe_imagen_ia(request):
             return Response({'error': 'El modelo no genero descripcion'}, status=500)
 
         descripcion_en = ". ".join(descripciones)
+
+        # Limitar a 490 caracteres para estar dentro del límite de MyMemory
+        if len(descripcion_en) > 490:
+            descripcion_en = descripcion_en[:490] + "..."
 
         # Traducir al espanol via MyMemory
         try:
