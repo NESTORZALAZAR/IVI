@@ -41,6 +41,7 @@ async function describirConIA(archivo, onProgreso) {
 
 export default function ImageReaderPage() {
   const [resultado, setResultado] = useState(null);
+  const [imagenPreview, setImagenPreview] = useState(null);
   const [hablando, setHablando] = useState(false);
   const [pausado, setPausado] = useState(false);
   const [velocidad, setVelocidad] = useState(1);
@@ -57,6 +58,13 @@ export default function ImageReaderPage() {
     setPausado(false);
     setDescripcion("");
     setResultado(data);
+    
+    // Crear preview de la imagen
+    if (data.archivo) {
+      const reader = new FileReader();
+      reader.onload = (e) => setImagenPreview(e.target.result);
+      reader.readAsDataURL(data.archivo);
+    }
   };
 
   const leer = (texto, lang = "es-ES") => {
@@ -110,89 +118,131 @@ export default function ImageReaderPage() {
         </div>
 
         <div className="reader-content">
-          <div className="uploader-section">
-            <ImageFileUploader onFileProcessed={handleFileProcessed} />
+          {/* ── TARJETA RECTANGULAR: Carga de Imagen ── */}
+          <div className="tarjeta-carga">
+            {imagenPreview ? (
+              <div className="imagen-preview-contenedor">
+                <img src={imagenPreview} alt="Imagen cargada" className="imagen-preview" />
+                <button 
+                  className="btn-cambiar-imagen"
+                  onClick={() => {
+                    setImagenPreview(null);
+                    setResultado(null);
+                    setDescripcion("");
+                  }}
+                >
+                  📸 Cambiar imagen
+                </button>
+              </div>
+            ) : (
+              <ImageFileUploader onFileProcessed={handleFileProcessed} />
+            )}
           </div>
 
+          {/* ── DOS TARJETAS RECTANGULARES: Resultados ── */}
           {resultado && (
-            <>
-              {/* ── Sección OCR ── */}
-              {resultado.texto ? (
-                <div className="ocr-resultado">
-                  <h3>📝 Texto extraído ({resultado.caracteres} caracteres)</h3>
-                  <div className="texto-extraido">{resultado.texto}</div>
+            <div className="resultados-contenedor">
+              {/* ── TARJETA IZQUIERDA: Lectura de Texto OCR ── */}
+              <div className="tarjeta-resultado tarjeta-izquierda">
+                <div className="tarjeta-header">
+                  <h3>📝 Texto Extraído</h3>
+                  <p className="tipo-etiqueta">Lectura mediante OCR</p>
+                </div>
 
-                  <div className="controles-audio">
-                    <div className="velocidad-control">
-                      <label>Velocidad: {velocidad}x</label>
-                      <input
-                        type="range" min="0.5" max="2" step="0.1"
-                        value={velocidad}
-                        onChange={(e) => setVelocidad(parseFloat(e.target.value))}
-                        disabled={hablando}
-                      />
+                {resultado.texto && resultado.texto.trim().length > 0 ? (
+                  <>
+                    <div className="texto-extraido">
+                      {resultado.texto}
                     </div>
-                    <div className="botones-audio">
-                      {!hablando ? (
-                        <button className="btn-leer" onClick={() => leer(resultado.texto)}>▶️ Leer texto</button>
-                      ) : (
-                        <>
-                          <button className="btn-pausar" onClick={pausarReanudar}>
-                            {pausado ? "▶️ Reanudar" : "⏸ Pausar"}
+                    <p className="contador-caracteres">
+                      {resultado.caracteres} caracteres
+                    </p>
+
+                    <div className="controles-audio">
+                      <div className="velocidad-control">
+                        <label>Velocidad: {velocidad}x</label>
+                        <input
+                          type="range"
+                          min="0.5"
+                          max="2"
+                          step="0.1"
+                          value={velocidad}
+                          onChange={(e) => setVelocidad(parseFloat(e.target.value))}
+                          disabled={hablando}
+                        />
+                      </div>
+                      <div className="botones-audio">
+                        {!hablando ? (
+                          <button className="btn-leer" onClick={() => leer(resultado.texto)}>
+                            ▶️ Leer texto
                           </button>
-                          <button className="btn-detener" onClick={detener}>⏹ Detener</button>
-                        </>
-                      )}
+                        ) : (
+                          <>
+                            <button className="btn-pausar" onClick={pausarReanudar}>
+                              {pausado ? "▶️ Reanudar" : "⏸ Pausar"}
+                            </button>
+                            <button className="btn-detener" onClick={detener}>
+                              ⏹ Detener
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="sin-texto-aviso">
-                  <p>📷 No se encontró texto en la imagen.</p>
-                </div>
-              )}
-
-              {/* ── Sección IA ── */}
-              <div className="ia-seccion">
-                <h3>🤖 Descripción con IA</h3>
-                <p className="ia-desc">Analiza dibujos, pictogramas y fotos aunque no tengan texto escrito.</p>
-
-                {!describiendo ? (
-                  <button
-                    className="btn-describir"
-                    onClick={handleDescribirIA}
-                    disabled={describiendo}
-                  >
-                    🔍 Describir imagen con IA
-                  </button>
+                  </>
                 ) : (
+                  <div className="sin-contenido">
+                    <p>No se encontró texto en la imagen.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* ── TARJETA DERECHA: Descripción con IA ── */}
+              <div className="tarjeta-resultado tarjeta-derecha">
+                <div className="tarjeta-header">
+                  <h3>🤖 Descripción con IA</h3>
+                  <p className="tipo-etiqueta">Análisis visual de la imagen</p>
+                </div>
+
+                {describiendo ? (
                   <div className="ia-loading">
                     <div className="spinner-ia"></div>
                     <span>{progresoIA || "Procesando..."}</span>
                   </div>
-                )}
-
-                {descripcion && !describiendo && (
-                  <div className="descripcion-resultado">
+                ) : descripcion ? (
+                  <>
                     <div className="descripcion-texto">{descripcion}</div>
-                    <div className="botones-audio" style={{marginTop: "0.75rem"}}>
-                      <button className="btn-leer" onClick={() => leer(descripcion)}>▶️ Escuchar descripción</button>
-                      {hablando && (
-                        <>
-                          <button className="btn-pausar" onClick={pausarReanudar}>
-                            {pausado ? "▶️ Reanudar" : "⏸ Pausar"}
+
+                    <div className="controles-audio">
+                      <div className="botones-audio">
+                        {!hablando ? (
+                          <button className="btn-leer" onClick={() => leer(descripcion)}>
+                            ▶️ Escuchar descripción
                           </button>
-                          <button className="btn-detener" onClick={detener}>⏹ Detener</button>
-                        </>
-                      )}
+                        ) : (
+                          <>
+                            <button className="btn-pausar" onClick={pausarReanudar}>
+                              {pausado ? "▶️ Reanudar" : "⏸ Pausar"}
+                            </button>
+                            <button className="btn-detener" onClick={detener}>
+                              ⏹ Detener
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
+                  </>
+                ) : (
+                  <div className="sin-contenido">
+                    <button
+                      className="btn-describir"
+                      onClick={handleDescribirIA}
+                      disabled={describiendo}
+                    >
+                      {describiendo ? "Analizando..." : "🔍 Analizar imagen"}
+                    </button>
                   </div>
                 )}
               </div>
-            </>
-          )}
-            <div className="empty-state">
-              <p>Carga una imagen para extraer texto o describirla con IA</p>
             </div>
           )}
         </div>

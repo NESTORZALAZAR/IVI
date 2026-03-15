@@ -1,0 +1,41 @@
+.image-reader-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a1a 100%);
+  padding: 2rem;
+  color: #e8d4b8;
+}
+
+.reader-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.reader-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.reader-header h1 {
+  color: #f0e0d0;
+  font-size: 2.5rem;
+  margin: 0 0 1rem 0;
+}
+
+.reader-header p {
+  color: #c4a080;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.reader-content {
+  background-color: #262626;
+  border: 2px solid #b8a080;
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Backup - No longer used */
+

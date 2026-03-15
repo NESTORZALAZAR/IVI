@@ -146,24 +146,40 @@ def procesar_archivo(request):
 
 @api_view(['POST'])
 def describe_imagen_ia(request):
-    """Describe imagen usando BLIP captioning dividiendo en secciones"""
+    """Describe imagen usando OCR primero, luego BLIP si no hay texto"""
     if 'file' not in request.FILES:
         return Response({'error': 'No se recibio ninguna imagen'}, status=400)
 
     try:
         from PIL import Image as PILImage
         import io as _io
+        import pytesseract
         import torch
         from transformers import BlipProcessor, BlipForConditionalGeneration
 
+        archivo_bytes = request.FILES['file'].read()
+        imagen = PILImage.open(_io.BytesIO(archivo_bytes)).convert('RGB')
+
+        # Primero intentar con OCR para extraer texto
+        try:
+            texto_ocr = pytesseract.image_to_string(imagen, lang='spa+eng')
+            if texto_ocr.strip() and len(texto_ocr.strip()) > 10:
+                # Si hay texto significativo, retornar eso
+                return Response({
+                    'descripcion': texto_ocr.strip(),
+                    'tipo': 'ocr',
+                    'original': texto_ocr.strip()
+                })
+        except Exception as e:
+            pass
+
+        # Si no hay texto, usar BLIP para descripción visual
         global _blip_processor, _blip_model
         if '_blip_processor' not in globals() or _blip_processor is None:
             _blip_processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
             _blip_model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
             _blip_model.eval()
 
-        archivo_bytes = request.FILES['file'].read()
-        imagen = PILImage.open(_io.BytesIO(archivo_bytes)).convert('RGB')
         w, h = imagen.size
 
         # Prompts que guian al modelo a describir libremente lo que ve
@@ -188,7 +204,6 @@ def describe_imagen_ia(request):
                 caption = _blip_processor.decode(out[0], skip_special_tokens=True).strip()
                 if caption and len(caption) > 5:
                     candidatos.append(caption)
-            # Devolver la descripcion mas larga y detallada
             return max(candidatos, key=len) if candidatos else ""
 
         descripciones = []
@@ -228,11 +243,19 @@ def describe_imagen_ia(request):
             t_data = t_resp.json()
             traduccion = t_data.get('responseData', {}).get('translatedText', '')
             if traduccion and 'mymemory' not in traduccion.lower():
-                return Response({'descripcion': traduccion, 'original': descripcion_en})
+                return Response({
+                    'descripcion': traduccion,
+                    'tipo': 'blip',
+                    'original': descripcion_en
+                })
         except Exception:
             pass
 
-        return Response({'descripcion': descripcion_en, 'original': descripcion_en})
+        return Response({
+            'descripcion': descripcion_en,
+            'tipo': 'blip',
+            'original': descripcion_en
+        })
 
     except Exception as e:
         return Response({'error': str(e)}, status=500)

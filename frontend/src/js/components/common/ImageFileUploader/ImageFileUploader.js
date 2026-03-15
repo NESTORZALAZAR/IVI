@@ -115,15 +115,15 @@ export default function ImageFileUploader({ onFileProcessed }) {
       const { data } = await worker.recognize(archivo);
       const texto = limpiarTexto(data.text.trim());
 
-      if (!texto) {
-        setProgreso("");
-        alert("No se encontró texto en la imagen. Intenta con una imagen más clara.");
-        setIsLoading(false);
-        return;
-      }
-
       setProgreso("");
-      onFileProcessed({ texto, caracteres: texto.length, archivo });
+      
+      // Siempre procesar la imagen, incluso sin texto OCR
+      // Si no hay texto, el sistema intentará con IA automáticamente
+      onFileProcessed({ 
+        texto: texto || "", // Pasar texto vacío si no se encontró nada
+        caracteres: texto ? texto.length : 0,
+        archivo 
+      });
     } catch (error) {
       console.error("Error OCR:", error);
       setProgreso("");
