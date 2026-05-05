@@ -29,53 +29,65 @@ def check_tesseract(request):
 def extract_and_speak(request):
     """
     Endpoint para extraer texto de archivos (PDF, DOCX, TXT, JPG, PNG, GIF, BMP)
-    y generar audio con text-to-speech
+    o recibir texto directamente y generar audio con text-to-speech
     """
-    if 'file' not in request.FILES:
+    text = None
+    
+    # Opción 1: Texto enviado en JSON
+    if request.data.get('text'):
+        text = request.data.get('text', '').strip()
+    # Opción 2: Archivo
+    elif 'file' in request.FILES:
+        file = request.FILES['file']
+        file_ext = os.path.splitext(file.name)[1].lower()
+        
+        try:
+            # Verificar si es una imagen y Tesseract no está disponible
+            if file_ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp']:
+                if not TESSERACT_AVAILABLE:
+                    return Response(
+                        {
+                            'error': '❌ Tesseract OCR no está instalado',
+                            'message': 'Para procesar imágenes, instala Tesseract OCR desde: https://github.com/UB-Mannheim/tesseract/wiki',
+                            'instrucciones': 'Windows: Descarga tesseract-ocr-w64-setup-v5.x.x.exe y ejecuta el instalador',
+                            'archivo': file.name,
+                            'tipo': 'imagen'
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            
+            # Extraer texto según el tipo de archivo
+            if file_ext == '.pdf':
+                text = extract_text_from_pdf(file)
+            elif file_ext == '.docx':
+                text = extract_text_from_docx(file)
+            elif file_ext == '.txt':
+                text = file.read().decode('utf-8')
+            elif file_ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp']:
+                text = extract_text_from_image(file)
+            else:
+                return Response(
+                    {'error': f'Tipo de archivo no soportado: {file_ext}'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    else:
         return Response(
-            {'error': 'No file provided'},
+            {'error': 'No file or text provided'},
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    file = request.FILES['file']
-    file_ext = os.path.splitext(file.name)[1].lower()
+    if not text or not text.strip():
+        return Response(
+            {'error': 'No se pudo extraer texto del archivo'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
     
     try:
-        # Verificar si es una imagen y Tesseract no está disponible
-        if file_ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp']:
-            if not TESSERACT_AVAILABLE:
-                return Response(
-                    {
-                        'error': '❌ Tesseract OCR no está instalado',
-                        'message': 'Para procesar imágenes, instala Tesseract OCR desde: https://github.com/UB-Mannheim/tesseract/wiki',
-                        'instrucciones': 'Windows: Descarga tesseract-ocr-w64-setup-v5.x.x.exe y ejecuta el instalador',
-                        'archivo': file.name,
-                        'tipo': 'imagen'
-                    },
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        
-        # Extraer texto según el tipo de archivo
-        if file_ext == '.pdf':
-            text = extract_text_from_pdf(file)
-        elif file_ext == '.docx':
-            text = extract_text_from_docx(file)
-        elif file_ext == '.txt':
-            text = file.read().decode('utf-8')
-        elif file_ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp']:
-            text = extract_text_from_image(file)
-        else:
-            return Response(
-                {'error': f'Tipo de archivo no soportado: {file_ext}'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        if not text.strip():
-            return Response(
-                {'error': 'No se pudo extraer texto del archivo'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
         # Generar audio
         audio_path = generate_speech(text)
         

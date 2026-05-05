@@ -33,7 +33,6 @@ export default function TopNav() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isAbout = location.pathname === "/about";
-  const isResultados = location.pathname === "/resultados";
   
   // Detectar si el usuario está logeado
   const isLoggedIn = !!localStorage.getItem("token");
@@ -83,36 +82,19 @@ export default function TopNav() {
                   className="dropdown-link"
                   onClick={() => setShowLectores(false)}
                 >
-                  📄 Documentos (Completo)
+                  📄 Lectura de Documentos
                 </Link>
                 <Link
                   to="/lector-textos"
                   className="dropdown-link"
                   onClick={() => setShowLectores(false)}
                 >
-                  📄 Solo Textos (PDF, DOCX, TXT)
-                </Link>
-                <Link
-                  to="/lector-imagenes"
-                  className="dropdown-link"
-                  onClick={() => setShowLectores(false)}
-                >
-                  🖼️ Solo Imágenes (OCR)
+                  ✏️ Lectura de Textos
                 </Link>
               </div>
             )}
           </div>
           
-          {/* Mostrar Resultados solo si está logeado */}
-          {isLoggedIn && (
-            <Link 
-              to="/resultados" 
-              className={`nav-link ${isResultados ? 'active' : ''}`}
-            >
-              Mis Resultados
-            </Link>
-          )}
-
           {/* Mostrar botones según si está logeado o no */}
           {!isLoggedIn ? (
             <>

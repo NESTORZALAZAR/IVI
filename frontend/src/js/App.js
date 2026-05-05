@@ -9,13 +9,6 @@ import HomePage from "./pages/NewHomePage";
 import AboutPage from "./pages/AboutPage";
 import DocumentReaderPage from "./pages/DocumentReaderPage";
 import TextReaderPage from "./pages/TextReaderPage";
-import ImageReaderPage from "./pages/ImageReaderPage";
-import ResultadosPage from "./pages/ResultadosPage";
-import PruebasPage from "./pages/PruebasPage";
-import PruebaLecturaPage from "./pages/PruebaLecturaPage";
-import PruebaVelocidadPage from "./pages/PruebaVelocidadPage";
-import PruebaComprensionPage from "./pages/PruebaComprensionPage";
-import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
 
 import TopNav from "./components/layouts/TopNav/TopNav";
 import TextToSpeechPopup from "./components/common/TextToSpeechPopup/TextToSpeechPopup";
@@ -32,11 +25,6 @@ const FONT_MAP = {
   AtkinsonLocal: "'Atkinson-Local', sans-serif",
   OpenDyslexicLocal: "'OpenDyslexic-Local', sans-serif"
 };
-
-function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/" />;
-}
 
 function AppLayout({ children }) {
   const { fontSize, spacing, theme, font } = useContext(AccessibilityContext);
@@ -113,62 +101,6 @@ function AppContent() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/lector-documentos" element={<DocumentReaderPage />} />
           <Route path="/lector-textos" element={<TextReaderPage />} />
-          <Route path="/lector-imagenes" element={<ImageReaderPage />} />
-
-          {/* Protegidas */}
-          <Route
-            path="/resultados"
-            element={
-              <ProtectedRoute>
-                <ResultadosPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/pruebas"
-            element={
-              <ProtectedRoute>
-                <PruebasPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/pruebas/lectura"
-            element={
-              <ProtectedRoute>
-                <PruebaLecturaPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/pruebas/velocidad"
-            element={
-              <ProtectedRoute>
-                <PruebaVelocidadPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/pruebas/comprension"
-            element={
-              <ProtectedRoute>
-                <PruebaComprensionPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/pruebas/ortografia"
-            element={
-              <ProtectedRoute>
-                <PruebaOrtografiaPage />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
       </AppLayout>
     </Router>
