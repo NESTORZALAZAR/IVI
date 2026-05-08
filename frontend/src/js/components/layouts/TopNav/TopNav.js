@@ -48,8 +48,11 @@ export default function TopNav() {
       <div className="topnav-container">
         <div className="topnav-brand">
           <Link to="/" className="brand-link">
-            <h1>IVI</h1>
-            <p>Plataforma de Apoyo y Tamizaje Dislexia</p>
+            <img src="/images/logo192.png" alt="IVI Logo" className="brand-logo" />
+            <div className="brand-text">
+              <h1>IVI</h1>
+              <p>Plataforma de Apoyo y Tamizaje Dislexia</p>
+            </div>
           </Link>
         </div>
 

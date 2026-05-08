@@ -28,6 +28,32 @@
 
 .topnav-brand {
   display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-logo {
+  height: 50px;
+  width: auto;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+.brand-text {
+  display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
