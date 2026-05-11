@@ -4,6 +4,7 @@ import { AccessibilityContext } from "../../../context/AccessibilityContext";
 import "./TopNav.css";
 
 export default function TopNav() {
+  const [showWarning, setShowWarning] = useState(true);
   const navigate = useNavigate();
   const [showAccessibility, setShowAccessibility] = useState(false);
   const [showLectores, setShowLectores] = useState(false);
@@ -45,10 +46,21 @@ export default function TopNav() {
 
   return (
     <nav className="topnav" role="navigation" aria-label="Navegación principal">
+      {/* Badge flotante de advertencia */}
+      {showWarning && (
+        <div className="floating-warning-badge" role="status" aria-live="polite">
+          <span>
+            ⚠️ Los resultados son orientativos y no constituyen un diagnóstico médico. Se recomienda acudir a un profesional especializado para una evaluación completa.
+          </span>
+          <button className="close-warning-badge" aria-label="Cerrar advertencia" onClick={() => setShowWarning(false)}>
+            ×
+          </button>
+        </div>
+      )}
       <div className="topnav-container">
         <div className="topnav-brand">
           <Link to="/" className="brand-link">
-            <img src="/images/logo192.png" alt="IVI Logo" className="brand-logo" />
+            <img src="/images/logoSF.png" alt="Logo de IVI" className="brand-logo" />
             <div className="brand-text">
               <h1>IVI</h1>
               <p>Plataforma de Apoyo y Tamizaje Dislexia</p>

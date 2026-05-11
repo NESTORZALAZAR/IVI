@@ -11,6 +11,65 @@
   border-bottom: 1px solid var(--border);
 }
 
+/* =========================
+   ⚠️ BANNER DE ADVERTENCIA
+   ========================= */
+
+/* =========================
+   ⚠️ BADGE FLOTANTE DE ADVERTENCIA
+   ========================= */
+.floating-warning-badge {
+  position: fixed;
+  top: 4.5rem;
+  right: 2.2rem;
+  z-index: 1500;
+  background: rgba(255,243,205,0.92);
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: auto;
+  opacity: 0.93;
+  transition: opacity 0.2s, top 0.2s, right 0.2s;
+  max-width: 320px;
+}
+.close-warning-badge {
+  background: none;
+  border: none;
+  color: #856404;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-left: 0.3rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close-warning-badge:hover {
+  opacity: 1;
+  background: #ffeeba;
+}
+@media (max-width: 600px) {
+  .floating-warning-badge {
+    right: 0.3rem;
+    top: 3.2rem;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+    max-width: 90vw;
+  }
+}
+
 .topnav-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -42,14 +101,19 @@
 }
 
 .brand-logo {
-  height: 50px;
-  width: auto;
-  border-radius: 8px;
-  transition: transform 0.2s ease;
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: #ffffff;
+  padding: 0.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .brand-logo:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
 .brand-text {
