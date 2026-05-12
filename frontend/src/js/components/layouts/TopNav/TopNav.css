@@ -187,6 +187,9 @@
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .dropdown-btn:hover {
@@ -259,17 +262,25 @@
    ========================= */
 
 .accessibility-btn {
-  font-size: 1.6rem !important;
   padding: 0.6rem 0.8rem !important;
   min-width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--primary) !important;
+  background-color: var(--border) !important;
   color: #fff !important;
   border-radius: 8px !important;
   transition: transform 0.2s ease, background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.accessibility-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: inline-block;
 }
 
 .accessibility-btn:hover {
@@ -448,6 +459,29 @@
 
 /* Responsive */
 
+/* =========================
+   🎨 IMAGEN IVI - RESPONSIVE
+   ========================= */
+
+/* =========================
+   🎨 IMAGEN IVI - RESPONSIVE
+   ========================= */
+
+.topnav-ivi-image {
+  height: 28px;
+  width: auto;
+  max-width: 40px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.dropdown-btn:hover .topnav-ivi-image {
+  transform: scale(1.1);
+}
+
 @media (max-width: 768px) {
   .topnav-container {
     flex-direction: column;
@@ -468,5 +502,29 @@
   .accessibility-modal {
     max-width: 100%;
     margin-right: 0;
+  }
+
+  .topnav-ivi-image {
+    height: 24px;
+    max-width: 32px;
+    margin-right: 0.3rem;
+  }
+
+  .accessibility-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topnav-ivi-image {
+    height: 20px;
+    max-width: 28px;
+    margin-right: 0.2rem;
+  }
+
+  .accessibility-icon {
+    width: 28px;
+    height: 28px;
   }
 }

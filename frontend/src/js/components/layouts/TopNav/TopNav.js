@@ -63,7 +63,7 @@ export default function TopNav() {
             <img src="/images/logoSF.png" alt="Logo de IVI" className="brand-logo" />
             <div className="brand-text">
               <h1>IVI</h1>
-              <p>Plataforma de Apoyo y Tamizaje Dislexia</p>
+              <p>Plataforma de Apoyo y Tamizaje Dislexico</p>
             </div>
           </Link>
         </div>
@@ -88,7 +88,13 @@ export default function TopNav() {
               aria-haspopup="true"
               aria-expanded={showLectores}
             >
-              📖 Lectores
+              <img 
+                src="/images/IviSF.png" 
+                alt="IVI te ayuda" 
+                className="topnav-ivi-image" 
+                title="IVI te ayuda"
+              />
+              <span>Ivi te ayuda:</span>
             </button>
             {showLectores && (
               <div className="dropdown-menu">
@@ -142,7 +148,11 @@ export default function TopNav() {
             aria-label="Abrir panel de accesibilidad"
             title="Accesibilidad"
           >
-            ♿
+            <img 
+              src="/images/IviACC.png" 
+              alt="Accesibilidad" 
+              className="accessibility-icon"
+            />
           </button>
         </div>
 

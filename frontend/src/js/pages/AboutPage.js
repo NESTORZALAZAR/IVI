@@ -4,12 +4,12 @@ export default function AboutPage() {
   return (
     <main className="about-page">
       <div className="about-container">
-        <h1>Acerca de IVI</h1>
+        <h1>Acerca de la Plataforma</h1>
         
         <section className="about-section">
-          <h2>¿Qué es IVI?</h2>
+          <h2>¿Quién es IVI y que hace?</h2>
           <p>
-            IVI (Plataforma de Apoyo y Tamizaje Dislexia) es una herramienta digital diseñada 
+            IVI es quien asiste en la Plataforma de Apoyo y Tamizaje Dislexico, muestra que es una herramienta digital diseñada 
             para proporcionar apoyo a personas con dislexia mediante evaluaciones especializadas 
             y herramientas de accesibilidad personalizadas.
           </p>
