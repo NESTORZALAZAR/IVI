@@ -60,7 +60,12 @@ export default function TopNav() {
       <div className="topnav-container">
         <div className="topnav-brand">
           <Link to="/" className="brand-link">
-            <img src="/images/logoSF.png" alt="Logo de IVI" className="brand-logo" />
+            <img 
+              src="/images/logoSF.png" 
+              alt="Logo de IVI" 
+              className="brand-logo" 
+              style={{ width: fontSize * 2.5 + 'px', height: fontSize * 2.5 + 'px', minWidth: fontSize * 2.5 + 'px', minHeight: fontSize * 2.5 + 'px', objectFit: 'contain' }}
+            />
             <div className="brand-text">
               <h1>IVI</h1>
               <p>Plataforma de Apoyo y Tamizaje Dislexico</p>
@@ -83,16 +88,17 @@ export default function TopNav() {
           </Link>
           <div className="nav-dropdown" ref={dropdownRef}>
             <button
-              className={`nav-link dropdown-btn ${showLectores ? 'active' : ''}`}
+              className={`nav-link accessibility-btn dropdown-btn ${showLectores ? 'active' : ''}`}
               onClick={() => setShowLectores(prev => !prev)}
               aria-haspopup="true"
               aria-expanded={showLectores}
+              style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: 700, fontSize: '1.1rem', padding: '0.6rem 1.2rem', minWidth: '48px', height: '48px', backgroundColor: 'var(--border)' }}
             >
               <img 
-                src="/images/IviSF.png" 
+                src="/images/IviLector.png" 
                 alt="IVI te ayuda" 
-                className="topnav-ivi-image" 
                 title="IVI te ayuda"
+                style={{ width: fontSize * 1.7 + 'px', height: fontSize * 1.7 + 'px', minWidth: fontSize * 1.7 + 'px', minHeight: fontSize * 1.7 + 'px', objectFit: 'contain', display: 'inline-block' }}
               />
               <span>Ivi te ayuda:</span>
             </button>
@@ -147,12 +153,15 @@ export default function TopNav() {
             onClick={() => setShowAccessibility(!showAccessibility)}
             aria-label="Abrir panel de accesibilidad"
             title="Accesibilidad"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
             <img 
               src="/images/IviACC.png" 
               alt="Accesibilidad" 
               className="accessibility-icon"
+              style={{ width: fontSize * 1.5 + 'px', height: fontSize * 1.5 + 'px' }}
             />
+            <span style={{ fontWeight: 500, fontSize: '1.1rem' }}>Accesibilidad</span>
           </button>
         </div>
 
