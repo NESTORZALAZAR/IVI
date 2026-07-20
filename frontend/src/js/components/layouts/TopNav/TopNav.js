@@ -6,9 +6,15 @@ import "./TopNav.css";
 export default function TopNav() {
   const [showWarning, setShowWarning] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  
   const [showAccessibility, setShowAccessibility] = useState(false);
   const [showLectores, setShowLectores] = useState(false);
   const dropdownRef = useRef(null);
+
+  // 👤 Detección de Usuario y Rol desde localStorage
+  const user = JSON.parse(localStorage.getItem("ivi_user")) || null;
+  const isLoggedIn = !!user;
 
   // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
@@ -20,6 +26,7 @@ export default function TopNav() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   const {
     font,
     setFont,
@@ -31,16 +38,15 @@ export default function TopNav() {
     setTheme
   } = useContext(AccessibilityContext);
 
-  const location = useLocation();
   const isHome = location.pathname === "/";
   const isAbout = location.pathname === "/about";
-  
-  // Detectar si el usuario está logeado
-  const isLoggedIn = !!localStorage.getItem("token");
+  const isAdmin = location.pathname.startsWith("/admin");
+  const isProfessional = location.pathname.startsWith("/professional");
 
+  // 🚪 Función de Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("ivi_user");
     navigate("/");
   };
 
@@ -57,22 +63,25 @@ export default function TopNav() {
           </button>
         </div>
       )}
+
       <div className="topnav-container">
+        {/* Brand / Logo */}
         <div className="topnav-brand">
           <Link to="/" className="brand-link">
             <img 
               src="/images/logoSF.png" 
               alt="Logo de IVI" 
               className="brand-logo" 
-              style={{ width: fontSize * 2.5 + 'px', height: fontSize * 2.5 + 'px', minWidth: fontSize * 2.5 + 'px', minHeight: fontSize * 2.5 + 'px', objectFit: 'contain' }}
+              style={{ "--brand-logo-size": `${fontSize * 2.5}px` }}
             />
             <div className="brand-text">
               <h1>IVI</h1>
-              <p>Plataforma de Apoyo y Tamizaje Dislexico</p>
+              <p>Plataforma de Apoyo y Tamizaje Disléxico</p>
             </div>
           </Link>
         </div>
 
+        {/* Menú de Navegación */}
         <div className="topnav-menu">
           <Link 
             to="/" 
@@ -80,26 +89,22 @@ export default function TopNav() {
           >
             Inicio
           </Link>
+
           <Link 
             to="/about" 
             className={`nav-link ${isAbout ? 'active' : ''}`}
           >
             Acerca de
           </Link>
+
+          {/* Menú Desplegable "Ivi te ayuda" */}
           <div className="nav-dropdown" ref={dropdownRef}>
             <button
               className={`nav-link accessibility-btn dropdown-btn ${showLectores ? 'active' : ''}`}
               onClick={() => setShowLectores(prev => !prev)}
               aria-haspopup="true"
               aria-expanded={showLectores}
-              style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: 700, fontSize: '1.1rem', padding: '0.6rem 1.2rem', minWidth: '48px', height: '48px', backgroundColor: 'var(--border)' }}
             >
-              <img 
-                src="/images/IviLector.png" 
-                alt="IVI te ayuda" 
-                title="IVI te ayuda"
-                style={{ width: fontSize * 1.7 + 'px', height: fontSize * 1.7 + 'px', minWidth: fontSize * 1.7 + 'px', minHeight: fontSize * 1.7 + 'px', objectFit: 'contain', display: 'inline-block' }}
-              />
               <span>Ivi te ayuda:</span>
             </button>
             {showLectores && (
@@ -121,8 +126,27 @@ export default function TopNav() {
               </div>
             )}
           </div>
-          
-          {/* Mostrar botones según si está logeado o no */}
+
+          {/* 👑 ACCESOS DINÁMICOS SEGÚN EL ROL */}
+          {isLoggedIn && user?.role === "admin" && (
+            <Link 
+              to="/admin" 
+              className={`nav-link ${isAdmin ? 'active' : ''}`}
+            >
+              ⚙️ Admin
+            </Link>
+          )}
+
+          {isLoggedIn && user?.role === "professional" && (
+            <Link 
+              to="/professional/dashboard" 
+              className={`nav-link ${isProfessional ? 'active' : ''}`}
+            >
+              📊 Panel Profesional
+            </Link>
+          )}
+
+          {/* Botones de Autenticación / Logout */}
           {!isLoggedIn ? (
             <>
               <Link 
@@ -144,27 +168,22 @@ export default function TopNav() {
               onClick={handleLogout}
               aria-label="Cerrar sesión"
             >
-              Salir
+              Salir ({user?.name || "Usuario"})
             </button>
           )}
 
+          {/* Botón Modal Accesibilidad */}
           <button
             className="nav-link accessibility-btn"
             onClick={() => setShowAccessibility(!showAccessibility)}
             aria-label="Abrir panel de accesibilidad"
             title="Accesibilidad"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
-            <img 
-              src="/images/IviACC.png" 
-              alt="Accesibilidad" 
-              className="accessibility-icon"
-              style={{ width: fontSize * 1.5 + 'px', height: fontSize * 1.5 + 'px' }}
-            />
-            <span style={{ fontWeight: 500, fontSize: '1.1rem' }}>Accesibilidad</span>
+            <span>Accesibilidad</span>
           </button>
         </div>
 
+        {/* Modal de Accesibilidad */}
         {showAccessibility && (
           <div className="accessibility-modal-overlay" onClick={() => setShowAccessibility(false)}>
             <div className="accessibility-modal" onClick={(e) => e.stopPropagation()}>
@@ -215,7 +234,7 @@ export default function TopNav() {
                   />
                 </div>
 
-                {/* Espaciado */}
+                {/* Interlineado */}
                 <div className="modal-control-group">
                   <label className="control-label-modal">
                     Interlineado: <span>{spacing.toFixed(1)}</span>
