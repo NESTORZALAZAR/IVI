@@ -13,6 +13,14 @@ export default function HomePage() {
     }
   };
 
+  const handleViewResults = () => {
+    if (isLoggedIn) {
+      navigate("/resultados");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <main className="home-page">
       <section className="hero">
@@ -22,9 +30,16 @@ export default function HomePage() {
           <p className="hero-description">
             Herramientas de accesibilidad diseñadas para apoyar a personas con dislexia
           </p>
-          <button className="btn-comenza" onClick={handleBeginTests}>
-            Comenzar Pruebas
-          </button>
+          <div className="hero-buttons">
+            <button className="btn-comenza" onClick={handleBeginTests}>
+              Comenzar Pruebas
+            </button>
+            {isLoggedIn && (
+              <button className="btn-resultados" onClick={handleViewResults}>
+                Ver Mis Resultados
+              </button>
+            )}
+          </div>
         </div>
       </section>
 

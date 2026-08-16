@@ -92,6 +92,15 @@ export default function PruebaComprensionPage() {
     const puntaje = calcularPuntaje();
     const duracion = Math.floor((Date.now() - tiempoInicio) / 1000);
     
+    // Construir array de respuestas con preguntas y opciones
+    const respuestasDetalladas = PREGUNTAS_COMPRENSION.map((pregunta, index) => ({
+      pregunta: pregunta.pregunta,
+      opciones: pregunta.opciones,
+      respuesta_seleccionada: pregunta.opciones[respuestas[index]],
+      respuesta_correcta: pregunta.opciones[pregunta.correcta],
+      es_correcta: respuestas[index] === pregunta.correcta
+    }));
+    
     setGuardando(true);
     try {
       const token = localStorage.getItem("token");
@@ -107,7 +116,8 @@ export default function PruebaComprensionPage() {
           duracion_segundos: duracion,
           detalles: {
             preguntas_respondidas: Object.keys(respuestas).length,
-            total_preguntas: PREGUNTAS_COMPRENSION.length
+            total_preguntas: PREGUNTAS_COMPRENSION.length,
+            respuestas: respuestasDetalladas
           }
         }),
       });
@@ -189,19 +199,21 @@ export default function PruebaComprensionPage() {
           </div>
 
           <div className="prueba-actions">
-            <button onClick={handleAnterior} disabled={indiceActual === 0} className="btn-anterior">
-              ← Anterior
-            </button>
-            <button onClick={handleSiguiente} disabled={indiceActual === PREGUNTAS_COMPRENSION.length - 1} className="btn-siguiente">
-              Siguiente →
-            </button>
+            {!todasRespondidas ? (
+              <>
+                <button onClick={handleAnterior} disabled={indiceActual === 0} className="btn-anterior">
+                  ← Anterior
+                </button>
+                <button onClick={handleSiguiente} disabled={indiceActual === PREGUNTAS_COMPRENSION.length - 1} className="btn-siguiente">
+                  Siguiente →
+                </button>
+              </>
+            ) : (
+              <button onClick={handleSubmit} disabled={guardando} className="btn-submit">
+                {guardando ? "Guardando..." : "✓ Enviar Respuestas"}
+              </button>
+            )}
           </div>
-
-          {todasRespondidas && (
-            <button onClick={handleSubmit} disabled={guardando} className="btn-submit">
-              {guardando ? "Guardando..." : "Enviar Respuestas"}
-            </button>
-          )}
         </div>
       </div>
     </div>

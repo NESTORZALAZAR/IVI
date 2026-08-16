@@ -88,6 +88,15 @@ export default function PruebaLecturaPage() {
     const puntaje = calcularPuntaje();
     const duracion = Math.floor((Date.now() - tiempoInicio) / 1000);
     
+    // Construir array de respuestas con preguntas y opciones
+    const respuestasDetalladas = textoActual.preguntas.map((pregunta, index) => ({
+      pregunta: pregunta.pregunta,
+      opciones: pregunta.opciones,
+      respuesta_seleccionada: pregunta.opciones[respuestas[index]],
+      respuesta_correcta: pregunta.opciones[pregunta.correcta],
+      es_correcta: respuestas[index] === pregunta.correcta
+    }));
+    
     setGuardando(true);
     try {
       const token = localStorage.getItem("token");
@@ -103,7 +112,8 @@ export default function PruebaLecturaPage() {
           duracion_segundos: duracion,
           detalles: {
             preguntas_respondidas: Object.keys(respuestas).length,
-            total_preguntas: textoActual.preguntas.length
+            total_preguntas: textoActual.preguntas.length,
+            respuestas: respuestasDetalladas
           }
         }),
       });

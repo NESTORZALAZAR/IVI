@@ -33,6 +33,15 @@ export default function LoginPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      // Si el usuario es admin, abrir el panel de administración en pestaña nueva
+      try {
+        if (data.user && data.user.role === 'admin') {
+          window.open('/admin/', '_blank');
+        }
+      } catch (e) {
+        // en entornos donde window no está disponible, ignorar
+      }
+
       navigate("/");
     } catch (err) {
       setError("Error al conectar con el servidor");

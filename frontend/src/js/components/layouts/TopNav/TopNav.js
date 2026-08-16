@@ -8,13 +8,18 @@ export default function TopNav() {
   const navigate = useNavigate();
   const [showAccessibility, setShowAccessibility] = useState(false);
   const [showLectores, setShowLectores] = useState(false);
+  const [showAdminMenu, setShowAdminMenu] = useState(false);
   const dropdownRef = useRef(null);
+  const adminRef = useRef(null);
 
   // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowLectores(false);
+      }
+      if (adminRef.current && !adminRef.current.contains(e.target)) {
+        setShowAdminMenu(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -36,7 +41,10 @@ export default function TopNav() {
   const isAbout = location.pathname === "/about";
   
   // Detectar si el usuario está logeado
+  const storedUser = localStorage.getItem("user");
+  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
   const isLoggedIn = !!localStorage.getItem("token");
+  const isAdmin = parsedUser && parsedUser.role === 'admin';
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -139,13 +147,37 @@ export default function TopNav() {
               </Link>
             </>
           ) : (
-            <button 
-              className="nav-link logout-btn" 
-              onClick={handleLogout}
-              aria-label="Cerrar sesión"
-            >
-              Salir
-            </button>
+            <>
+              {isAdmin && (
+                <div className="nav-dropdown admin-dropdown" ref={adminRef}>
+                  <button
+                    className={`nav-link dropdown-btn ${showAdminMenu ? 'active' : ''}`}
+                    onClick={() => setShowAdminMenu(prev => !prev)}
+                    aria-haspopup="true"
+                    aria-expanded={showAdminMenu}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700 }}
+                  >
+                    Admin
+                  </button>
+                  {showAdminMenu && (
+                    <div className="dropdown-menu admin-menu">
+                      <Link className="dropdown-link" to="/admin">Panel Admin</Link>
+                      <Link className="dropdown-link" to="/admin/users">Usuarios</Link>
+                      <Link className="dropdown-link" to="/admin/profiles">Perfiles</Link>
+                      <Link className="dropdown-link" to="/admin/results">Resultados</Link>
+                      <Link className="dropdown-link" to="/admin/lector">Lector</Link>
+                    </div>
+                  )}
+                </div>
+              )}
+              <button 
+                className="nav-link logout-btn" 
+                onClick={handleLogout}
+                aria-label="Cerrar sesión"
+              >
+                Salir
+              </button>
+            </>
           )}
 
           <button

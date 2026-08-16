@@ -296,3 +296,134 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Respuestas Detalladas */
+.respuestas-section {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.respuestas-section h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.respuestas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.respuesta-item {
+  background: white;
+  border-radius: 6px;
+  padding: 1rem;
+  border-left: 4px solid #999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+.respuesta-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.respuesta-item.correcta {
+  border-left-color: #4caf50;
+  background: #f1f8f4;
+}
+
+.respuesta-item.incorrecta {
+  border-left-color: #f44336;
+  background: #fef5f5;
+}
+
+.respuesta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.respuesta-numero {
+  font-weight: 600;
+  color: #667eea;
+  font-size: 0.9rem;
+}
+
+.respuesta-estado {
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.respuesta-estado.correcto {
+  background: #c8e6c9;
+  color: #2e7d32;
+}
+
+.respuesta-estado.incorrecto {
+  background: #ffcdd2;
+  color: #c62828;
+}
+
+.respuesta-pregunta {
+  margin: 0.5rem 0 1rem 0;
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.respuesta-opciones {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.opcion-seleccionada,
+.opcion-correcta {
+  padding: 0.75rem;
+  border-radius: 4px;
+  background: white;
+}
+
+.opcion-seleccionada {
+  border-left: 3px solid #ff9800;
+}
+
+.opcion-correcta {
+  border-left: 3px solid #4caf50;
+}
+
+.opcion-seleccionada strong,
+.opcion-correcta strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.opcion-seleccionada strong {
+  color: #ff9800;
+}
+
+.opcion-correcta strong {
+  color: #4caf50;
+}
+
+.opcion-seleccionada p,
+.opcion-correcta p {
+  margin: 0;
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

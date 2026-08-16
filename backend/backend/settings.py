@@ -122,3 +122,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Use BigAutoField by default to avoid AutoField warnings on new models
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

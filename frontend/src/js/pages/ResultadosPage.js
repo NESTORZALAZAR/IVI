@@ -69,14 +69,17 @@ export default function ResultadosPage() {
       correctas: "Correctas",
       incorrectas: "Incorrectas",
       palabras_leidas: "Palabras leídas",
+      velocidad_ppm: "Velocidad ppm",
       tiempo_por_palabra: "Tiempo por palabra",
       errores: "Errores",
       aciertos: "Aciertos",
     };
-    return Object.entries(detalles).map(([key, value]) => ({
-      label: etiquetas[key] || key.replace(/_/g, " "),
-      value,
-    }));
+    return Object.entries(detalles)
+      .filter(([key]) => key !== "respuestas")
+      .map(([key, value]) => ({
+        label: etiquetas[key] || key.replace(/_/g, " "),
+        value,
+      }));
   };
 
   const getColorPuntaje = (puntaje) => {
@@ -165,6 +168,37 @@ export default function ResultadosPage() {
                       ))
                     }
                   </div>
+
+                  {resultado.detalles && resultado.detalles.respuestas && resultado.detalles.respuestas.length > 0 && (
+                    <div className="respuestas-section">
+                      <h4>Respuestas Detalladas</h4>
+                      <div className="respuestas-list">
+                        {resultado.detalles.respuestas.map((resp, idx) => (
+                          <div key={idx} className={`respuesta-item ${resp.es_correcta ? 'correcta' : 'incorrecta'}`}>
+                            <div className="respuesta-header">
+                              <span className="respuesta-numero">Pregunta {idx + 1}</span>
+                              <span className={`respuesta-estado ${resp.es_correcta ? 'correcto' : 'incorrecto'}`}>
+                                {resp.es_correcta ? '✓ Correcta' : '✗ Incorrecta'}
+                              </span>
+                            </div>
+                            <p className="respuesta-pregunta">{resp.pregunta}</p>
+                            <div className="respuesta-opciones">
+                              <div className="opcion-seleccionada">
+                                <strong>Tu respuesta:</strong>
+                                <p>{resp.respuesta_seleccionada}</p>
+                              </div>
+                              {!resp.es_correcta && (
+                                <div className="opcion-correcta">
+                                  <strong>Respuesta correcta:</strong>
+                                  <p>{resp.respuesta_correcta}</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="resultado-progress">
                     <div className="progress-bar">

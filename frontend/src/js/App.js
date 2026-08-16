@@ -9,6 +9,16 @@ import HomePage from "./pages/NewHomePage";
 import AboutPage from "./pages/AboutPage";
 import DocumentReaderPage from "./pages/DocumentReaderPage";
 import TextReaderPage from "./pages/TextReaderPage";
+import PruebasPage from "./pages/PruebasPage";
+import PruebaLecturaPage from "./pages/PruebaLecturaPage";
+import PruebaVelocidadPage from "./pages/PruebaVelocidadPage";
+import PruebaComprensionPage from "./pages/PruebaComprensionPage";
+import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
+import ResultadosPage from "./pages/ResultadosPage";
+import AdminUsers from "./pages/AdminUsers";
+import AdminProfiles from "./pages/AdminProfiles";
+import AdminResults from "./pages/AdminResults";
+import AdminLector from "./pages/AdminLector";
 
 import TopNav from "./components/layouts/TopNav/TopNav";
 import TextToSpeechPopup from "./components/common/TextToSpeechPopup/TextToSpeechPopup";
@@ -101,6 +111,17 @@ function AppContent() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/lector-documentos" element={<DocumentReaderPage />} />
           <Route path="/lector-textos" element={<TextReaderPage />} />
+          <Route path="/pruebas" element={<PruebasPage />} />
+          <Route path="/pruebas/lectura" element={<PruebaLecturaPage />} />
+          <Route path="/pruebas/velocidad" element={<PruebaVelocidadPage />} />
+          <Route path="/pruebas/comprension" element={<PruebaComprensionPage />} />
+          <Route path="/pruebas/ortografia" element={<PruebaOrtografiaPage />} />
+          <Route path="/resultados" element={<ResultadosPage />} />
+          <Route path="/admin" element={<HomePage />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/profiles" element={<AdminProfiles />} />
+          <Route path="/admin/results" element={<AdminResults />} />
+          <Route path="/admin/lector" element={<AdminLector />} />
         </Routes>
       </AppLayout>
     </Router>
