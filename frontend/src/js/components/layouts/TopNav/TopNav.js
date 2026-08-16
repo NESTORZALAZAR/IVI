@@ -163,12 +163,13 @@ export default function TopNav() {
                     <div className="dropdown-menu admin-menu">
                       <Link className="dropdown-link" to="/admin">Panel Admin</Link>
                       <Link className="dropdown-link" to="/admin/users">Usuarios</Link>
-                      <Link className="dropdown-link" to="/admin/profiles">Perfiles</Link>
                       <Link className="dropdown-link" to="/admin/results">Resultados</Link>
-                      <Link className="dropdown-link" to="/admin/lector">Lector</Link>
                     </div>
                   )}
                 </div>
+              )}
+              {parsedUser && parsedUser.role === 'doctor' && (
+                <Link to="/doctor" className="nav-link">Doctor</Link>
               )}
               <button 
                 className="nav-link logout-btn" 

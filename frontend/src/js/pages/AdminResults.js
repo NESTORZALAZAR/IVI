@@ -12,7 +12,7 @@ export default function AdminResults() {
     fetch('http://localhost:8000/api/admin/results/', { headers: { Authorization: `Bearer ${token}` } })
       .then(async res => {
         if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); return; }
-        const data = await res.json(); setResults(data);
+        const data = await res.json(); setResults(data.results || data);
       }).catch(()=> setError('Error de conexión'));
   }, [navigate]);
 

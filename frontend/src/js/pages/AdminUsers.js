@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './AdminUsers.css';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -17,9 +18,10 @@ export default function AdminUsers() {
   const [total, setTotal] = useState(0);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
   const navigate = useNavigate();
 
-  const load = (p=1) => {
+  const load = useCallback((p=1) => {
     const token = localStorage.getItem('token');
     if (!token) { navigate('/login'); return; }
     let qs = `?page=${p}&page_size=${pageSize}`;
@@ -36,9 +38,13 @@ export default function AdminUsers() {
       if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); return; }
       const data = await res.json(); setUsers(data.results); setTotal(data.count); setPage(data.page);
     }).catch(()=> setError('Error de conexión'));
-  }
+  }, [pageSize, query, roleFilter, hasCiFilter, dateFrom, dateTo, isStaffFilter, isSuperuserFilter, navigate]);
 
-  useEffect(()=>{ load(1); }, []);
+  useEffect(()=>{ load(1); }, [load]);
+
+  const newUser = () => {
+    setEditing({ isNew: true, username: '', email: '', first_name: '', last_name: '', role: 'paciente', ci: '', password: '' });
+  }
 
   useEffect(()=>{
     if (toast) {
@@ -53,19 +59,37 @@ export default function AdminUsers() {
   const saveEdit = async () => {
     if (!editing) return;
     setSaving(true);
+    console.log('saveEdit called', editing);
+    setFieldErrors({});
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:8000/api/admin/users/${editing.id}/`, {
-        method: 'PUT',
-        headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ role: editing.role, ci: editing.ci, first_name: editing.first_name, last_name: editing.last_name, email: editing.email, password: editing.password })
-      });
+      let res;
+      if (editing.isNew) {
+        res = await fetch(`http://localhost:8000/api/admin/users/`, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ username: editing.username, password: editing.password, role: editing.role, ci: editing.ci, first_name: editing.first_name, last_name: editing.last_name, email: editing.email })
+        });
+      } else {
+        res = await fetch(`http://localhost:8000/api/admin/users/${editing.id}/`, {
+          method: 'PUT',
+          headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ role: editing.role, ci: editing.ci, first_name: editing.first_name, last_name: editing.last_name, email: editing.email, password: editing.password })
+        });
+      }
       if (!res.ok) {
-        const d = await res.json().catch(()=>({})); setError(d.error||'Error guardando');
+        const d = await res.json().catch(()=>({}));
+        console.error('saveEdit response error', d);
+        if (d.field_errors) {
+          setFieldErrors(d.field_errors);
+          setError('Errores en los campos');
+        } else {
+          setError(d.error||JSON.stringify(d) || 'Error guardando');
+        }
       } else {
         setEditing(null);
         load(page);
-        setToast({ type: 'success', message: 'Usuario guardado' });
+        setToast({ type: 'success', message: editing.isNew ? 'Usuario creado' : 'Usuario guardado' });
       }
     } catch (e) { setError('Error de conexión'); }
     setSaving(false);
@@ -133,6 +157,10 @@ export default function AdminUsers() {
         </tbody>
       </table>
 
+      <div style={{marginTop:'0.6rem'}}>
+        <button onClick={newUser} className="btn">Nuevo usuario</button>
+      </div>
+
       <div style={{display:'flex', gap:'1rem', alignItems:'center', marginTop:'1rem', flexWrap:'wrap'}}>
         <input placeholder="Buscar por usuario, email o CI" value={query} onChange={e=>setQuery(e.target.value)} />
         <select value={roleFilter} onChange={e=>setRoleFilter(e.target.value)}>
@@ -172,10 +200,19 @@ export default function AdminUsers() {
       {editing && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Editar usuario {editing.username}</h3>
+            <h3>{editing.isNew ? 'Nuevo usuario' : `Editar usuario ${editing.username}`}</h3>
+            {editing.isNew && (
+              <>
+                <label>Usuario: <input value={editing.username||''} onChange={e=>setEditing({...editing, username: e.target.value})} /></label>
+                {fieldErrors.username && <div className="field-error">{fieldErrors.username}</div>}
+              </>
+            )}
             <label>Nombre: <input value={editing.first_name||''} onChange={e=>setEditing({...editing, first_name: e.target.value})} /></label>
+            {fieldErrors.first_name && <div className="field-error">{fieldErrors.first_name}</div>}
             <label>Apellido: <input value={editing.last_name||''} onChange={e=>setEditing({...editing, last_name: e.target.value})} /></label>
+            {fieldErrors.last_name && <div className="field-error">{fieldErrors.last_name}</div>}
             <label>Email: <input value={editing.email||''} onChange={e=>setEditing({...editing, email: e.target.value})} /></label>
+            {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
             <label>Rol:
               <select value={editing.role||'paciente'} onChange={e=>setEditing({...editing, role: e.target.value})}>
                 <option value="paciente">Paciente</option>
@@ -184,7 +221,9 @@ export default function AdminUsers() {
               </select>
             </label>
             <label>CI: <input value={editing.ci||''} onChange={e=>setEditing({...editing, ci: e.target.value})} /></label>
+            {fieldErrors.ci && <div className="field-error">{fieldErrors.ci}</div>}
             <label>Contraseña (dejar vacío para no cambiar): <input type="password" value={editing.password||''} onChange={e=>setEditing({...editing, password: e.target.value})} /></label>
+            {fieldErrors.password && <div className="field-error">{fieldErrors.password}</div>}
             <div style={{marginTop: '1rem'}}>
               {!editing.confirmDelete ? (
                 <>

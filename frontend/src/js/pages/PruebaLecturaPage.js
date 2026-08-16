@@ -60,7 +60,7 @@ siendo elementos irreemplazables en el proceso educativo.`,
 export default function PruebaLecturaPage() {
   const navigate = useNavigate();
   const [tiempoInicio] = useState(Date.now());
-  const [indiceTexto, setIndiceTexto] = useState(0);
+  const [indiceTexto] = useState(0);
   const [respuestas, setRespuestas] = useState({});
   const [mostrarResultados, setMostrarResultados] = useState(false);
   const [guardando, setGuardando] = useState(false);

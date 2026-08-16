@@ -32,18 +32,28 @@ def login_view(request):
 
         # Intentar autenticar con el valor ingresado como username
         user = authenticate(username=email_or_username, password=password)
-        
+
         if user is None:
-            # Si falla, intentar buscar por email
+            # Intentar username case-insensitive
             try:
-                user_obj = User.objects.get(email=email_or_username)
-                user = authenticate(username=user_obj.username, password=password)
+                user_ci = User.objects.get(username__iexact=email_or_username)
+                if user_ci.check_password(password):
+                    user = user_ci
+            except User.DoesNotExist:
+                pass
+
+        if user is None:
+            # Si aún falla, intentar buscar por email case-insensitive
+            try:
+                user_obj = User.objects.get(email__iexact=email_or_username)
+                # Comprobar password directamente en el objeto de usuario como fallback
+                if user_obj.check_password(password):
+                    user = user_obj
+                else:
+                    return Response({"error": "Correo o contraseña incorrectos"}, status=status.HTTP_401_UNAUTHORIZED)
             except User.DoesNotExist:
                 # Si tampoco existe por email, retornar error
-                return Response(
-                    {"error": "Correo o contraseña incorrectos"},
-                    status=status.HTTP_401_UNAUTHORIZED
-                )
+                return Response({"error": "Correo o contraseña incorrectos"}, status=status.HTTP_401_UNAUTHORIZED)
 
         if user is None:
             return Response(
@@ -224,11 +234,79 @@ def signup_view(request):
     }
     Devuelve: {"token": "...", "user": {...}}
     """
-    # Las cuentas deben ser creadas sólo desde el panel de admin.
-    return Response(
-        {"error": "Creación de cuentas deshabilitada vía API. Use el panel de administración."},
-        status=status.HTTP_403_FORBIDDEN
-    )
+    # Permitir registro desde UI: creamos usuarios con role 'paciente' y validamos campos.
+    try:
+        data = json.loads(request.body)
+        username = (data.get('username') or '').strip()
+        email = (data.get('email') or '').strip()
+        password = data.get('password') or ''
+        first_name = data.get('first_name') or ''
+        last_name = data.get('last_name') or ''
+        ci = (data.get('ci') or '').strip()
+
+        if not username or not password or not email:
+            field_errors = {}
+            if not username:
+                field_errors['username'] = 'username es requerido'
+            if not email:
+                field_errors['email'] = 'email es requerido'
+            if not password:
+                field_errors['password'] = 'password es requerida'
+            return Response({'field_errors': field_errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Unicidad username (case-insensitive)
+        if User.objects.filter(username__iexact=username).exists():
+            return Response({'field_errors': {'username': 'username ya existe'}}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Unicidad email (case-insensitive)
+        if User.objects.filter(email__iexact=email).exists():
+            return Response({'field_errors': {'email': 'email ya registrado'}}, status=status.HTTP_400_BAD_REQUEST)
+
+        # CI obligatorio y numérico para pacientes
+        if not ci:
+            return Response({'field_errors': {'ci': 'CI es obligatorio'}}, status=status.HTTP_400_BAD_REQUEST)
+        if not str(ci).isdigit():
+            return Response({'field_errors': {'ci': 'CI debe contener sólo dígitos'}}, status=status.HTTP_400_BAD_REQUEST)
+        # Unicidad CI
+        if Profile.objects.filter(ci=ci).exists():
+            return Response({'field_errors': {'ci': 'CI ya registrado para otro usuario'}}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Crear usuario
+        user_new = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name)
+        user_new.set_password(password)
+        user_new.is_active = True
+        user_new.save()
+
+        # Crear o actualizar profile
+        prof, _ = Profile.objects.get_or_create(user=user_new)
+        prof.role = 'paciente'
+        prof.ci = ci
+        try:
+            prof.full_clean()
+        except Exception as e:
+            # En caso de validación fallida, eliminar usuario creado y retornar error
+            user_new.delete()
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        prof.save()
+
+        # Generar token simple
+        token = f"token_{user_new.id}_{user_new.username}"
+        return Response({
+            'token': token,
+            'user': {
+                'id': user_new.id,
+                'username': user_new.username,
+                'email': user_new.email,
+                'first_name': user_new.first_name,
+                'last_name': user_new.last_name,
+                'role': prof.role,
+                'ci': prof.ci,
+            }
+        }, status=status.HTTP_201_CREATED)
+    except json.JSONDecodeError:
+        return Response({'error': 'JSON inválido'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -259,6 +337,9 @@ def doctor_view(request):
 
     name = request.GET.get('name', '').strip()
     ci = request.GET.get('ci', '').strip()
+    tipo_prueba = request.GET.get('tipo_prueba', '').strip()
+    date_from_r = request.GET.get('date_from', '').strip()
+    date_to_r = request.GET.get('date_to', '').strip()
 
     pacientes = []
     if ci:
@@ -269,12 +350,52 @@ def doctor_view(request):
         usuarios = User.objects.filter(username__icontains=name) | User.objects.filter(first_name__icontains=name) | User.objects.filter(last_name__icontains=name)
         pacientes = list(usuarios.distinct())
     else:
-        return Response({"error": "Se requiere `name` o `ci` como parámetro de búsqueda"}, status=status.HTTP_400_BAD_REQUEST)
+        # Si no se especifica name ni ci, devolver un preview: últimos resultados por paciente
+        preview = []
+        perfiles = Profile.objects.filter(role='paciente').select_related('user')
+        for p in perfiles:
+            paciente = p.user
+            res_qs = ResultadoPrueba.objects.filter(usuario=paciente).order_by('-fecha_prueba')[:3]
+            last_results = []
+            tipo_acc = {}
+            for r in res_qs:
+                last_results.append({
+                    'resultado_id': r.id,
+                    'tipo_prueba': r.tipo_prueba,
+                    'puntaje': r.puntaje,
+                    'fecha_prueba': r.fecha_prueba.isoformat(),
+                })
+                t = r.tipo_prueba
+                if t not in tipo_acc: tipo_acc[t] = {'count':0,'sum':0}
+                tipo_acc[t]['count'] += 1
+                tipo_acc[t]['sum'] += (r.puntaje or 0)
+            averages = { k: (v['sum']/v['count']) if v['count']>0 else 0 for k,v in tipo_acc.items() }
+            preview.append({
+                'paciente_id': paciente.id,
+                'paciente_username': paciente.username,
+                'paciente_ci': p.ci,
+                'last_results': last_results,
+                'averages': averages,
+                'recent_count': ResultadoPrueba.objects.filter(usuario=paciente).count()
+            })
+        return Response(preview, status=status.HTTP_200_OK)
 
     # Recolectar resultados
     resultados = []
     for paciente in pacientes:
         res = ResultadoPrueba.objects.filter(usuario=paciente)
+        if tipo_prueba:
+            res = res.filter(tipo_prueba=tipo_prueba)
+        if date_from_r:
+            try:
+                res = res.filter(fecha_prueba__date__gte=date_from_r)
+            except Exception:
+                pass
+        if date_to_r:
+            try:
+                res = res.filter(fecha_prueba__date__lte=date_to_r)
+            except Exception:
+                pass
         for r in res:
             resultados.append({
                 "paciente_id": paciente.id,
@@ -291,7 +412,7 @@ def doctor_view(request):
     return Response(resultados, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def admin_users_view(request):
     """Lista usuarios (solo para admin)."""
     auth_header = request.headers.get('Authorization', '')
@@ -307,6 +428,58 @@ def admin_users_view(request):
         role = 'paciente'
     if role != 'admin':
         return Response({"error": "Acceso denegado: se requiere rol admin"}, status=status.HTTP_403_FORBIDDEN)
+
+    # POST: crear nuevo usuario (solo admin)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
+            email = data.get('email', '')
+            first_name = data.get('first_name', '')
+            last_name = data.get('last_name', '')
+            role_new = data.get('role', 'paciente')
+            ci_new = (data.get('ci', '') or '').strip()
+            is_staff_flag = bool(data.get('is_staff', False))
+            is_superuser_flag = bool(data.get('is_superuser', False))
+
+            if not username or not password:
+                return Response({'error': 'username y password son requeridos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if User.objects.filter(username=username).exists():
+                return Response({'error': 'username ya existe'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Validaciones de CI: obligatorio para pacientes
+            if role_new == 'paciente':
+                if not ci_new or not str(ci_new).strip():
+                    return Response({'error': 'CI es obligatorio para role paciente'}, status=status.HTTP_400_BAD_REQUEST)
+                # Unicidad de CI
+                if Profile.objects.filter(ci=ci_new).exists():
+                    return Response({'error': 'CI ya registrado para otro usuario'}, status=status.HTTP_400_BAD_REQUEST)
+
+            user_new = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name, is_staff=is_staff_flag, is_superuser=is_superuser_flag)
+            user_new.set_password(password)
+            user_new.is_active = True
+            user_new.save()
+            # Crear profile
+            try:
+                prof = Profile.objects.get(user=user_new)
+            except Profile.DoesNotExist:
+                prof = Profile(user=user_new)
+            prof.role = role_new
+            prof.ci = ci_new if ci_new != '' else None
+            # Validar el profile antes de guardar
+            try:
+                prof.full_clean()
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            prof.save()
+
+            return Response({'message': 'Usuario creado', 'id': user_new.id}, status=status.HTTP_201_CREATED)
+        except json.JSONDecodeError:
+            return Response({'error': 'JSON inválido'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Paginación simple: ?page=1&page_size=20
     try:
@@ -387,6 +560,26 @@ def admin_users_view(request):
         'page_size': page_size,
         'results': data,
     }, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def check_username_view(request):
+    """Verifica disponibilidad de username (case-insensitive)."""
+    username = (request.GET.get('username') or '').strip()
+    if not username:
+        return Response({'error': 'username requerido'}, status=status.HTTP_400_BAD_REQUEST)
+    exists = User.objects.filter(username__iexact=username).exists()
+    return Response({'available': not exists}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def check_email_view(request):
+    """Verifica disponibilidad de email (case-insensitive)."""
+    email = (request.GET.get('email') or '').strip()
+    if not email:
+        return Response({'error': 'email requerido'}, status=status.HTTP_400_BAD_REQUEST)
+    exists = User.objects.filter(email__iexact=email).exists()
+    return Response({'available': not exists}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -498,7 +691,8 @@ def admin_user_detail_view(request, user_id):
             if 'role' in data:
                 prof.role = data.get('role') or prof.role
             if 'ci' in data:
-                prof.ci = data.get('ci') or prof.ci
+                ci_val = (data.get('ci') or '').strip()
+                prof.ci = ci_val if ci_val != '' else None
             if 'password' in data and data.get('password'):
                 target.set_password(data.get('password'))
                 target.save()

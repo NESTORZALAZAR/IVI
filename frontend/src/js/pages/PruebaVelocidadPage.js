@@ -11,7 +11,7 @@ const PALABRAS_VELOCIDAD = [
 
 export default function PruebaVelocidadPage() {
   const navigate = useNavigate();
-  const [tiempoInicio, setTiempoInicio] = useState(Date.now());
+  const [tiempoInicio] = useState(Date.now());
   const [palabrasLeidas, setPalabrasLeidas] = useState(0);
   const [tiempoTranscurrido, setTiempoTranscurrido] = useState(0);
   const [corriendo, setCorriendo] = useState(true);

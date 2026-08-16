@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AccessibilityProvider } from "./context/AccessibilityContext";
 import { useContext, useEffect } from "react";
 import { AccessibilityContext } from "./context/AccessibilityContext";
@@ -16,9 +16,9 @@ import PruebaComprensionPage from "./pages/PruebaComprensionPage";
 import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
 import ResultadosPage from "./pages/ResultadosPage";
 import AdminUsers from "./pages/AdminUsers";
-import AdminProfiles from "./pages/AdminProfiles";
 import AdminResults from "./pages/AdminResults";
-import AdminLector from "./pages/AdminLector";
+import DoctorDashboard from "./pages/DoctorDashboard";
+import DoctorPatientDetail from "./pages/DoctorPatientDetail";
 
 import TopNav from "./components/layouts/TopNav/TopNav";
 import TextToSpeechPopup from "./components/common/TextToSpeechPopup/TextToSpeechPopup";
@@ -119,9 +119,9 @@ function AppContent() {
           <Route path="/resultados" element={<ResultadosPage />} />
           <Route path="/admin" element={<HomePage />} />
           <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/profiles" element={<AdminProfiles />} />
           <Route path="/admin/results" element={<AdminResults />} />
-          <Route path="/admin/lector" element={<AdminLector />} />
+          <Route path="/doctor" element={<DoctorDashboard />} />
+          <Route path="/doctor/patient/:ci" element={<DoctorPatientDetail />} />
         </Routes>
       </AppLayout>
     </Router>

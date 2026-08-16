@@ -71,9 +71,10 @@ def extract_and_speak(request):
                     status=status.HTTP_400_BAD_REQUEST
                 )
         except Exception as e:
+            # Errores en extracción de texto: devolver JSON claro en vez de 500
             return Response(
-                {'error': str(e)},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {'error': 'Error al procesar el archivo', 'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
             )
     else:
         return Response(
@@ -88,25 +89,33 @@ def extract_and_speak(request):
         )
     
     try:
-        # Generar audio
-        audio_path = generate_speech(text)
-        
+        # Generar audio (TTS)
+        try:
+            audio_path = generate_speech(text)
+        except Exception as e:
+            return Response(
+                {'error': 'Servicio TTS no disponible', 'detail': str(e)},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+
         # Leer el archivo de audio
         with open(audio_path, 'rb') as audio_file:
             audio_data = audio_file.read()
-        
+
         # Limpiar archivo temporal
-        os.remove(audio_path)
-        
+        try:
+            os.remove(audio_path)
+        except Exception:
+            pass
+
         return Response({
             'text': text,
             'audio': audio_data.hex(),
             'message': 'Texto extraído y audio generado correctamente'
         })
-        
     except Exception as e:
         return Response(
-            {'error': str(e)},
+            {'error': 'Error interno al generar audio', 'detail': str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
