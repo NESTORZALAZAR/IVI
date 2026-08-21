@@ -1,68 +1,90 @@
-/* About Page Styles */
+/* About Page — IVI Design System */
 
 .about-page {
-  min-height: 100vh;
-  padding: 2rem 1rem;
+  min-height: calc(100vh - 80px);
+  padding: var(--ivi-page-padding);
 }
 
 .about-container {
   max-width: 900px;
   margin: 0 auto;
+  /* Incorporado de la versión actual para que luzca como tarjeta con sombra: */
   background: var(--card);
-  padding: 3rem 2rem;
+  padding: 3rem 2.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .about-container h1 {
+  margin: 0 0 2.5rem;
   color: var(--primary);
-  font-size: 2.5rem;
-  margin: 0 0 2rem;
+  font-size: clamp(1.85rem, 4vw, 2.5rem);
+  font-weight: 700;
   text-align: center;
+  letter-spacing: 0.02em;
 }
 
 .about-section {
   margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+.about-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .about-section h2 {
-  color: var(--primary);
-  font-size: 1.5rem;
   margin: 0 0 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.65rem;
+  color: var(--primary);
+  font-size: 1.4rem;
+  font-weight: 700;
+  border-bottom: 2px solid color-mix(in srgb, var(--primary) 35%, transparent);
 }
 
 .about-section p {
-  color: var(--text);
-  line-height: 1.8;
   margin: 0 0 1rem;
+  color: var(--text);
   font-size: 1rem;
+  line-height: 1.75;
+  text-align: left;
 }
 
 .about-section ul {
-  list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .about-section li {
-  color: var(--text);
-  margin-bottom: 0.75rem;
-  padding-left: 1.5rem;
   position: relative;
-  line-height: 1.6;
+  margin-bottom: 0.85rem;
+  padding-left: 1.75rem;
+  color: var(--text);
+  line-height: 1.65;
+  text-align: left;
 }
 
-.about-section li:before {
+.about-section li::before {
   content: "✓";
   position: absolute;
   left: 0;
+  top: 0.05em;
   color: var(--primary);
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
 .about-section strong {
   color: var(--text);
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .about-container {
+    padding: 2rem 1.5rem;
+  }
 }

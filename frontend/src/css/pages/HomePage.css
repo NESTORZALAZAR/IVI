@@ -1,36 +1,75 @@
-/* Home Page Styles */
+/* Home Page — IVI Design System */
 
 .home-page {
-  min-height: 100vh;
-  padding: 2rem 1rem;
+  min-height: calc(100vh - 80px);
+  padding: var(--ivi-page-padding);
+  max-width: var(--ivi-page-max);
+  margin: 0 auto;
 }
 
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 4rem 2rem;
-  border-radius: 10px;
-  text-align: center;
+  position: relative;
+  overflow: hidden;
   margin-bottom: 3rem;
+  padding: 4rem 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
+  border-radius: var(--ivi-radius-xl);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary) 88%, #1a3a5c),
+    color-mix(in srgb, var(--primary) 55%, #2d1b4e)
+  );
+  color: #ffffff;
+  text-align: center;
+  box-shadow: var(--ivi-shadow-elevated);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 45%);
+  pointer-events: none;
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary) 45%, #1a1a2e),
+    color-mix(in srgb, var(--primary) 25%, #0d1117)
+  );
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+  box-shadow: var(--ivi-shadow-elevated);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-content h1 {
-  font-size: 3rem;
   margin: 0 0 1rem;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-weight: 600;
   opacity: 0.95;
 }
 
 .hero-description {
+  max-width: 640px;
+  margin: 0 auto 2rem;
   font-size: 1rem;
-  margin: 0 0 2rem;
-  opacity: 0.9;
+  line-height: 1.65;
+  opacity: 0.92;
 }
 
+/* Contenedor de botones agregado por tu compañero (mantiene su lógica y diseño) */
 .hero-buttons {
   display: flex;
   gap: 1rem;
@@ -40,6 +79,7 @@
 
 .btn-comenza {
   display: inline-block;
+  min-width: 200px;
   padding: 0.9rem 2.5rem;
   background: white;
   color: #667eea;
@@ -83,34 +123,53 @@
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .feature-card {
   background: var(--card);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 2rem 1.75rem;
   text-align: center;
-  transition: all 0.3s ease;
+  border-radius: 8px;
   border: 1px solid var(--border);
+  transition: all 0.3s var(--ivi-ease, ease);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .feature-card:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  transform: translateY(-5px);
+  transform: translateY(-4px);
+  box-shadow: var(--ivi-shadow-elevated, 0 8px 20px rgba(0, 0, 0, 0.15));
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
 }
 
 .feature-card h3 {
-  color: var(--primary);
   margin: 0 0 1rem;
-  font-size: 1.3rem;
+  color: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .feature-card p {
-  color: var(--text);
   margin: 0;
-  line-height: 1.6;
+  color: var(--text);
+  line-height: 1.65;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card:hover {
+    transform: none;
+  }
 }

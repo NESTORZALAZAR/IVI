@@ -12,7 +12,7 @@ export default function TopNav() {
   const dropdownRef = useRef(null);
   const adminRef = useRef(null);
 
-  // Cerrar dropdown al hacer clic fuera
+  // Cerrar dropdowns al hacer clic fuera
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -25,6 +25,7 @@ export default function TopNav() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   const {
     font,
     setFont,
@@ -39,12 +40,17 @@ export default function TopNav() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isAbout = location.pathname === "/about";
-  
-  // Detectar si el usuario está logeado
+  const isLectorDocs = location.pathname === "/lector-documentos";
+  const isLectorText = location.pathname === "/lector-textos";
+  const isPaciente = location.pathname === "/paciente";
+
+  // Detectar sesión del usuario
   const storedUser = localStorage.getItem("user");
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
   const isLoggedIn = !!localStorage.getItem("token");
-  const isAdmin = parsedUser && parsedUser.role === 'admin';
+  const isAdmin = parsedUser && parsedUser.role === "admin";
+  const isDoctor = parsedUser && parsedUser.role === "doctor";
+  const isPatient = parsedUser && parsedUser.role === "patient";
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -60,27 +66,40 @@ export default function TopNav() {
           <span>
             ⚠️ Los resultados son orientativos y no constituyen un diagnóstico médico. Se recomienda acudir a un profesional especializado para una evaluación completa.
           </span>
-          <button className="close-warning-badge" aria-label="Cerrar advertencia" onClick={() => setShowWarning(false)}>
+          <button 
+            className="close-warning-badge" 
+            aria-label="Cerrar advertencia" 
+            onClick={() => setShowWarning(false)}
+          >
             ×
           </button>
         </div>
       )}
+
       <div className="topnav-container">
+        {/* Logo / Marca */}
         <div className="topnav-brand">
           <Link to="/" className="brand-link">
             <img 
               src="/images/logoSF.png" 
               alt="Logo de IVI" 
               className="brand-logo" 
-              style={{ width: fontSize * 2.5 + 'px', height: fontSize * 2.5 + 'px', minWidth: fontSize * 2.5 + 'px', minHeight: fontSize * 2.5 + 'px', objectFit: 'contain' }}
+              style={{ 
+                width: `${fontSize * 2.5}px`, 
+                height: `${fontSize * 2.5}px`, 
+                minWidth: `${fontSize * 2.5}px`, 
+                minHeight: `${fontSize * 2.5}px`, 
+                objectFit: 'contain' 
+              }}
             />
             <div className="brand-text">
               <h1>IVI</h1>
-              <p>Plataforma de Apoyo y Tamizaje Dislexico</p>
+              <p>Plataforma de Apoyo y Tamizaje Disléxico</p>
             </div>
           </Link>
         </div>
 
+        {/* Menú principal */}
         <div className="topnav-menu">
           <Link 
             to="/" 
@@ -88,40 +107,61 @@ export default function TopNav() {
           >
             Inicio
           </Link>
+
           <Link 
             to="/about" 
             className={`nav-link ${isAbout ? 'active' : ''}`}
           >
             Acerca de
           </Link>
+
+          {/* Menú desplegable: IVI te ayuda */}
           <div className="nav-dropdown" ref={dropdownRef}>
             <button
-              className={`nav-link accessibility-btn dropdown-btn ${showLectores ? 'active' : ''}`}
+              className={`nav-link accessibility-btn dropdown-btn ${showLectores || isLectorDocs || isLectorText ? 'active' : ''}`}
               onClick={() => setShowLectores(prev => !prev)}
               aria-haspopup="true"
               aria-expanded={showLectores}
-              style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: 700, fontSize: '1.1rem', padding: '0.6rem 1.2rem', minWidth: '48px', height: '48px', backgroundColor: 'var(--border)' }}
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '12px', 
+                fontWeight: 700, 
+                fontSize: '1.1rem', 
+                padding: '0.6rem 1.2rem', 
+                minWidth: '48px', 
+                height: '48px', 
+                backgroundColor: 'var(--border)' 
+              }}
             >
               <img 
                 src="/images/IviLector.png" 
                 alt="IVI te ayuda" 
                 title="IVI te ayuda"
-                style={{ width: fontSize * 1.7 + 'px', height: fontSize * 1.7 + 'px', minWidth: fontSize * 1.7 + 'px', minHeight: fontSize * 1.7 + 'px', objectFit: 'contain', display: 'inline-block' }}
+                style={{ 
+                  width: `${fontSize * 1.7}px`, 
+                  height: `${fontSize * 1.7}px`, 
+                  minWidth: `${fontSize * 1.7}px`, 
+                  minHeight: `${fontSize * 1.7}px`, 
+                  objectFit: 'contain', 
+                  display: 'inline-block' 
+                }}
               />
               <span>Ivi te ayuda:</span>
             </button>
+
             {showLectores && (
               <div className="dropdown-menu">
                 <Link
                   to="/lector-documentos"
-                  className="dropdown-link"
+                  className={`dropdown-link ${isLectorDocs ? 'active' : ''}`}
                   onClick={() => setShowLectores(false)}
                 >
                   📄 Lectura de Documentos
                 </Link>
                 <Link
                   to="/lector-textos"
-                  className="dropdown-link"
+                  className={`dropdown-link ${isLectorText ? 'active' : ''}`}
                   onClick={() => setShowLectores(false)}
                 >
                   ✏️ Lectura de Textos
@@ -129,25 +169,37 @@ export default function TopNav() {
               </div>
             )}
           </div>
-          
-          {/* Mostrar botones según si está logeado o no */}
+
+          {/* Rutas condicionales por autenticación y roles */}
           {!isLoggedIn ? (
             <>
-              <Link 
-                to="/signup" 
-                className="nav-link signup-btn"
-              >
+              <Link to="/signup" className="nav-link signup-btn">
                 Registrarse
               </Link>
-              <Link 
-                to="/login" 
-                className="nav-link login-btn"
-              >
+              <Link to="/login" className="nav-link login-btn">
                 Iniciar Sesión
               </Link>
             </>
           ) : (
             <>
+              {/* Opción para Pacientes */}
+              {isPatient && (
+                <Link 
+                  to="/paciente" 
+                  className={`nav-link ${isPaciente ? 'active' : ''}`}
+                >
+                  Mi Perfil
+                </Link>
+              )}
+
+              {/* Opción para Doctores */}
+              {isDoctor && (
+                <Link to="/doctor" className="nav-link">
+                  Doctor
+                </Link>
+              )}
+
+              {/* Desplegable para Administradores */}
               {isAdmin && (
                 <div className="nav-dropdown admin-dropdown" ref={adminRef}>
                   <button
@@ -161,16 +213,21 @@ export default function TopNav() {
                   </button>
                   {showAdminMenu && (
                     <div className="dropdown-menu admin-menu">
-                      <Link className="dropdown-link" to="/admin">Panel Admin</Link>
-                      <Link className="dropdown-link" to="/admin/users">Usuarios</Link>
-                      <Link className="dropdown-link" to="/admin/results">Resultados</Link>
+                      <Link className="dropdown-link" to="/admin" onClick={() => setShowAdminMenu(false)}>
+                        Panel Admin
+                      </Link>
+                      <Link className="dropdown-link" to="/admin/users" onClick={() => setShowAdminMenu(false)}>
+                        Usuarios
+                      </Link>
+                      <Link className="dropdown-link" to="/admin/results" onClick={() => setShowAdminMenu(false)}>
+                        Resultados
+                      </Link>
                     </div>
                   )}
                 </div>
               )}
-              {parsedUser && parsedUser.role === 'doctor' && (
-                <Link to="/doctor" className="nav-link">Doctor</Link>
-              )}
+
+              {/* Botón de Logout */}
               <button 
                 className="nav-link logout-btn" 
                 onClick={handleLogout}
@@ -181,6 +238,7 @@ export default function TopNav() {
             </>
           )}
 
+          {/* Modal de Accesibilidad */}
           <button
             className="nav-link accessibility-btn"
             onClick={() => setShowAccessibility(!showAccessibility)}
@@ -192,12 +250,13 @@ export default function TopNav() {
               src="/images/IviACC.png" 
               alt="Accesibilidad" 
               className="accessibility-icon"
-              style={{ width: fontSize * 1.5 + 'px', height: fontSize * 1.5 + 'px' }}
+              style={{ width: `${fontSize * 1.5}px`, height: `${fontSize * 1.5}px` }}
             />
             <span style={{ fontWeight: 500, fontSize: '1.1rem' }}>Accesibilidad</span>
           </button>
         </div>
 
+        {/* Modal Configuraciones de Accesibilidad */}
         {showAccessibility && (
           <div className="accessibility-modal-overlay" onClick={() => setShowAccessibility(false)}>
             <div className="accessibility-modal" onClick={(e) => e.stopPropagation()}>
@@ -213,7 +272,7 @@ export default function TopNav() {
               </div>
 
               <div className="modal-content">
-                {/* Fuente */}
+                {/* Selección de Fuentes */}
                 <div className="modal-control-group">
                   <label className="control-label-modal">
                     Fuente: <span>{font || "Lato"}</span>
@@ -233,7 +292,7 @@ export default function TopNav() {
                   </select>
                 </div>
 
-                {/* Tamaño de letra */}
+                {/* Ajuste de Tamaño de Fuente */}
                 <div className="modal-control-group">
                   <label className="control-label-modal">
                     Tamaño: <span>{fontSize}px</span>
@@ -248,7 +307,7 @@ export default function TopNav() {
                   />
                 </div>
 
-                {/* Espaciado */}
+                {/* Ajuste de Interlineado */}
                 <div className="modal-control-group">
                   <label className="control-label-modal">
                     Interlineado: <span>{spacing.toFixed(1)}</span>
@@ -264,7 +323,7 @@ export default function TopNav() {
                   />
                 </div>
 
-                {/* Temas */}
+                {/* Selección de Tema */}
                 <div className="modal-control-group">
                   <label className="control-label-modal">Temas</label>
                   <select

@@ -1,16 +1,17 @@
-from django.shortcuts import render
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
-import pyttsx3
-import PyPDF2
-from docx import Document
-import pytesseract
-from PIL import Image
 import io
 import os
-import tempfile
 import shutil
+import tempfile
+from PIL import Image
+from docx import Document
+import PyPDF2
+import pytesseract
+import pyttsx3
+
+from django.shortcuts import render
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 # Verificar si Tesseract está disponible
 TESSERACT_AVAILABLE = shutil.which('tesseract') is not None
@@ -24,6 +25,7 @@ def check_tesseract(request):
         'message': '✅ Tesseract OCR está instalado' if TESSERACT_AVAILABLE else '❌ Tesseract OCR no está instalado',
         'install_url': 'https://github.com/UB-Mannheim/tesseract/wiki'
     })
+
 
 @api_view(['POST'])
 def extract_and_speak(request):
@@ -102,7 +104,7 @@ def extract_and_speak(request):
         with open(audio_path, 'rb') as audio_file:
             audio_data = audio_file.read()
 
-        # Limpiar archivo temporal
+        # Limpiar archivo temporal de forma segura
         try:
             os.remove(audio_path)
         except Exception:
@@ -126,7 +128,9 @@ def extract_text_from_pdf(file):
     pdf_reader = PyPDF2.PdfReader(file)
     for page_num in range(len(pdf_reader.pages)):
         page = pdf_reader.pages[page_num]
-        text += page.extract_text()
+        extracted = page.extract_text()
+        if extracted:
+            text += extracted
     return text
 
 
