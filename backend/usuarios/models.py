@@ -51,6 +51,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='paciente')
     ci = models.CharField(max_length=64, unique=True, null=True, blank=True, help_text='Identificador único (CI) del paciente')
+    license_number = models.CharField(max_length=100, blank=True, default='', verbose_name='Matrícula profesional')
+    specialty = models.CharField(max_length=150, blank=True, default='', verbose_name='Especialidad')
+    institution = models.CharField(max_length=200, blank=True, default='', verbose_name='Institución')
+    is_office_patient = models.BooleanField(default=False, verbose_name='Paciente en consultorio')
 
     def __str__(self):
         return f"{self.user.username} ({self.get_role_display()})"
@@ -63,6 +67,14 @@ class Profile(models.Model):
         if self.role == 'paciente':
             if not self.ci or not str(self.ci).strip():
                 raise ValidationError({'ci': 'CI es obligatorio para pacientes'})
+        if self.role == 'doctor':
+            errors = {}
+            if not self.license_number.strip():
+                errors['license_number'] = 'La matrícula profesional es obligatoria'
+            if not self.specialty.strip():
+                errors['specialty'] = 'La especialidad es obligatoria'
+            if errors:
+                raise ValidationError(errors)
 
 
 

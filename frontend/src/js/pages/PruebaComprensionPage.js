@@ -118,7 +118,8 @@ export default function PruebaComprensionPage() {
             preguntas_respondidas: Object.keys(respuestas).length,
             total_preguntas: PREGUNTAS_COMPRENSION.length,
             respuestas: respuestasDetalladas
-          }
+          },
+          target_user_id: JSON.parse(localStorage.getItem("ivi_office_patient") || "null")?.id
         }),
       });
 

@@ -12,6 +12,12 @@ export default function DoctorDashboard(){
   const [results, setResults] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [testMode, setTestMode] = useState(null);
+  const [officeName, setOfficeName] = useState('');
+  const [officeCi, setOfficeCi] = useState('');
+  const [officeError, setOfficeError] = useState('');
+  const [showOfficeResults, setShowOfficeResults] = useState(false);
+  const [officeResults, setOfficeResults] = useState([]);
 
   const token = localStorage.getItem('token');
   const storedUser = localStorage.getItem('user');
@@ -77,6 +83,42 @@ export default function DoctorDashboard(){
     navigate(`/doctor/patient/${encodeURIComponent(ci)}`);
   }
 
+  const beginOfficeTest = async () => {
+    setOfficeError('');
+    if (!officeName.trim() || !officeCi.trim()) {
+      setOfficeError('Ingresa el nombre y el número de cédula.');
+      return;
+    }
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/doctor/consultorio/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ name: officeName, ci: officeCi })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setOfficeError(data.error || Object.values(data.field_errors || {}).join(' '));
+        return;
+      }
+      localStorage.setItem('ivi_office_patient', JSON.stringify(data.patient));
+      navigate('/pruebas');
+    } catch (e) {
+      setOfficeError('No se pudo iniciar la evaluación en consultorio.');
+    }
+  };
+
+  const loadOfficeResults = async () => {
+    setShowOfficeResults(true);
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/doctor/?office=1', { headers: { Authorization: `Bearer ${token}` } });
+      if (!response.ok) return;
+      const data = await response.json();
+      setOfficeResults(data.map(p => ({ paciente_id: p.paciente_id, paciente_username: p.paciente_username, paciente_ci: p.paciente_ci, preview: p })));
+    } catch (e) {
+      setError('No se pudieron cargar los resultados de consultorio.');
+    }
+  };
+
   const statsFor = (resList) => {
     const byGame = {};
     resList.forEach(r => {
@@ -92,6 +134,11 @@ export default function DoctorDashboard(){
   return (
     <div className="doctor-page container">
       <h2>Panel Doctor - Resultados de Pacientes</h2>
+      <div className="doctor-actions">
+        <button onClick={() => setTestMode('choose')} className="btn">Comenzar Pruebas</button>
+        <button onClick={() => showOfficeResults ? setShowOfficeResults(false) : loadOfficeResults()} className="btn">Pacientes en consultorio</button>
+      </div>
+      {showOfficeResults && <div className="office-results-tab"><h3>Resultados de pacientes en consultorio</h3>{officeResults.length === 0 && <p>Aún no hay resultados de consultorio.</p>}{officeResults.map(p => <div key={p.paciente_id} className="office-result-row"><strong>{p.paciente_username}</strong> <span>CI: {p.paciente_ci}</span> <span>Pruebas: {p.preview?.recent_count || 0}</span><button className="btn" onClick={() => openDetail(p.paciente_ci)}>Ver resultados</button></div>)}</div>}
       <div className="doctor-search">
         <input placeholder="Buscar por nombre o usuario" value={query} onChange={e=>setQuery(e.target.value)} />
         <input placeholder="O buscar por CI" value={ci} onChange={e=>setCi(e.target.value)} />
@@ -151,6 +198,23 @@ export default function DoctorDashboard(){
           </div>
         ))}
       </div>
+      {testMode && <div className="modal-overlay">
+        <div className="modal">
+          {testMode === 'choose' ? <>
+            <h3>¿Quién realizará las pruebas?</h3>
+            <button className="btn" onClick={() => { localStorage.removeItem('ivi_office_patient'); navigate('/pruebas'); }}>Doctor</button>
+            <button className="btn" onClick={() => setTestMode('patient')}>Paciente en consultorio</button>
+            <button className="btn ghost" onClick={() => setTestMode(null)}>Cancelar</button>
+          </> : <>
+            <h3>Datos del paciente</h3>
+            <input placeholder="Nombre completo" value={officeName} onChange={e => setOfficeName(e.target.value)} />
+            <input placeholder="Número de cédula" value={officeCi} onChange={e => setOfficeCi(e.target.value)} />
+            {officeError && <div className="error">{officeError}</div>}
+            <button className="btn" onClick={beginOfficeTest}>Continuar</button>
+            <button className="btn ghost" onClick={() => setTestMode('choose')}>Volver</button>
+          </>}
+        </div>
+      </div>}
     </div>
   )
 }

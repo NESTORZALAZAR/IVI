@@ -41,7 +41,7 @@ class ProfileInline(admin.StackedInline):
 
 class CustomUserAdmin(DjangoUserAdmin):
     inlines = (ProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_role')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_role', 'get_license_number', 'get_specialty', 'get_institution')
 
     def get_role(self, obj):
         try:
@@ -49,6 +49,18 @@ class CustomUserAdmin(DjangoUserAdmin):
         except Exception:
             return ''
     get_role.short_description = 'Rol'
+
+    def get_license_number(self, obj):
+        return getattr(obj.profile, 'license_number', '')
+    get_license_number.short_description = 'Matrícula'
+
+    def get_specialty(self, obj):
+        return getattr(obj.profile, 'specialty', '')
+    get_specialty.short_description = 'Especialidad'
+
+    def get_institution(self, obj):
+        return getattr(obj.profile, 'institution', '')
+    get_institution.short_description = 'Institución'
 
 
 admin.site.unregister(User)

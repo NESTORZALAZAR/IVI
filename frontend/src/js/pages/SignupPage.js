@@ -315,6 +315,7 @@ export default function SignupPage() {
                     required
                     placeholder="Ej. MP-12345"
                   />
+                  {fieldErrors.license_number && <div className="field-error">{fieldErrors.license_number}</div>}
                 </div>
 
                 <div className="form-group">
@@ -328,6 +329,7 @@ export default function SignupPage() {
                     required
                     placeholder="Ej. Psicopedagogía"
                   />
+                  {fieldErrors.specialty && <div className="field-error">{fieldErrors.specialty}</div>}
                 </div>
               </div>
 

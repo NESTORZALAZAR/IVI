@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../css/pages/PruebasPage.css";
 
 export default function PruebasPage() {
+  const navigate = useNavigate();
+  const officePatient = JSON.parse(localStorage.getItem("ivi_office_patient") || "null");
   const pruebas = [
     {
       id: "lectura",
@@ -40,6 +42,7 @@ export default function PruebasPage() {
   return (
     <div className="pruebas-page">
       <div className="pruebas-container">
+        {officePatient && <div className="office-patient-banner"><strong>Paciente en consultorio:</strong> {officePatient.name} - CI: {officePatient.ci}<button type="button" onClick={() => { localStorage.removeItem("ivi_office_patient"); navigate("/doctor"); }}>Finalizar atención</button></div>}
         <div className="pruebas-header">
           <h1>Pruebas de Dislexia</h1>
           <p>Selecciona una prueba para evaluar tus habilidades</p>

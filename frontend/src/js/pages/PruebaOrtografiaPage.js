@@ -126,7 +126,8 @@ export default function PruebaOrtografiaPage() {
             preguntas_respondidas: Object.keys(respuestas).length,
             total_preguntas: PALABRAS_ORTOGRAFIA.length,
             respuestas: respuestasDetalladas
-          }
+          },
+          target_user_id: JSON.parse(localStorage.getItem("ivi_office_patient") || "null")?.id
         }),
       });
 

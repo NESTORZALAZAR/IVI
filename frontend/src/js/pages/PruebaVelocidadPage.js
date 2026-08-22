@@ -57,7 +57,8 @@ export default function PruebaVelocidadPage() {
           detalles: {
             palabras_leidas: palabrasLeidas,
             velocidad_ppm: velocidad
-          }
+          },
+          target_user_id: JSON.parse(localStorage.getItem("ivi_office_patient") || "null")?.id
         }),
       });
 

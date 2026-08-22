@@ -1,3 +1,5 @@
+.office-patient-banner{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;padding:.8rem 1rem;margin-bottom:1rem;background:#f5faff;border:1px solid #c9dfef;border-radius:8px}
+.office-patient-banner button{padding:.45rem .7rem;border:0;border-radius:6px;background:#1976d2;color:#fff;cursor:pointer}
 .pruebas-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

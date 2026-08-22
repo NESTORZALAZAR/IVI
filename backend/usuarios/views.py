@@ -174,6 +174,17 @@ def resultados_view(request):
             puntaje = data.get('puntaje')
             duracion_segundos = data.get('duracion_segundos', 0)
             detalles = data.get('detalles', {})
+            resultado_user = user
+            target_user_id = data.get('target_user_id')
+            if target_user_id:
+                if not hasattr(user, 'profile') or user.profile.role not in ('doctor', 'admin'):
+                    return Response({'error': 'Solo un doctor puede registrar resultados de otro usuario'}, status=status.HTTP_403_FORBIDDEN)
+                try:
+                    resultado_user = User.objects.get(id=target_user_id)
+                    if resultado_user.profile.role != 'paciente':
+                        return Response({'error': 'El destinatario debe ser un paciente'}, status=status.HTTP_400_BAD_REQUEST)
+                except (User.DoesNotExist, Profile.DoesNotExist):
+                    return Response({'error': 'Paciente no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
             # Validaciones
             valid_tipos = ['lectura', 'velocidad', 'comprension', 'ortografia']
@@ -191,7 +202,7 @@ def resultados_view(request):
 
             # Crear el resultado
             resultado = ResultadoPrueba.objects.create(
-                usuario=user,
+                usuario=resultado_user,
                 tipo_prueba=tipo_prueba,
                 puntaje=puntaje,
                 duracion_segundos=int(duracion_segundos),
@@ -243,6 +254,10 @@ def signup_view(request):
         first_name = data.get('first_name') or ''
         last_name = data.get('last_name') or ''
         ci = (data.get('ci') or '').strip()
+        requested_role = data.get('role', 'user')
+        license_number = (data.get('license_number') or '').strip()
+        specialty = (data.get('specialty') or '').strip()
+        institution = (data.get('institution') or '').strip()
 
         if not username or not password or not email:
             field_errors = {}
@@ -271,6 +286,14 @@ def signup_view(request):
         if Profile.objects.filter(ci=ci).exists():
             return Response({'field_errors': {'ci': 'CI ya registrado para otro usuario'}}, status=status.HTTP_400_BAD_REQUEST)
 
+        if requested_role == 'professional' and (not license_number or not specialty):
+            professional_errors = {}
+            if not license_number:
+                professional_errors['license_number'] = 'La matrícula profesional es obligatoria'
+            if not specialty:
+                professional_errors['specialty'] = 'La especialidad es obligatoria'
+            return Response({'field_errors': professional_errors}, status=status.HTTP_400_BAD_REQUEST)
+
         # Crear usuario
         user_new = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name)
         user_new.set_password(password)
@@ -279,8 +302,11 @@ def signup_view(request):
 
         # Crear o actualizar profile
         prof, _ = Profile.objects.get_or_create(user=user_new)
-        prof.role = 'paciente'
+        prof.role = 'doctor' if requested_role == 'professional' else 'paciente'
         prof.ci = ci
+        prof.license_number = license_number if prof.role == 'doctor' else ''
+        prof.specialty = specialty if prof.role == 'doctor' else ''
+        prof.institution = institution if prof.role == 'doctor' else ''
         try:
             prof.full_clean()
         except Exception as e:
@@ -301,6 +327,9 @@ def signup_view(request):
                 'last_name': user_new.last_name,
                 'role': prof.role,
                 'ci': prof.ci,
+                'license_number': prof.license_number,
+                'specialty': prof.specialty,
+                'institution': prof.institution,
             }
         }, status=status.HTTP_201_CREATED)
     except json.JSONDecodeError:
@@ -340,6 +369,7 @@ def doctor_view(request):
     tipo_prueba = request.GET.get('tipo_prueba', '').strip()
     date_from_r = request.GET.get('date_from', '').strip()
     date_to_r = request.GET.get('date_to', '').strip()
+    office_only = request.GET.get('office', '').strip().lower() in ('1', 'true', 'yes')
 
     pacientes = []
     if ci:
@@ -353,6 +383,8 @@ def doctor_view(request):
         # Si no se especifica name ni ci, devolver un preview: últimos resultados por paciente
         preview = []
         perfiles = Profile.objects.filter(role='paciente').select_related('user')
+        if office_only:
+            perfiles = perfiles.filter(is_office_patient=True)
         for p in perfiles:
             paciente = p.user
             res_qs = ResultadoPrueba.objects.filter(usuario=paciente).order_by('-fecha_prueba')[:3]
@@ -381,6 +413,9 @@ def doctor_view(request):
         return Response(preview, status=status.HTTP_200_OK)
 
     # Recolectar resultados
+    if office_only:
+        office_ids = Profile.objects.filter(is_office_patient=True).values_list('user_id', flat=True)
+        pacientes = [paciente for paciente in pacientes if paciente.id in office_ids]
     resultados = []
     for paciente in pacientes:
         res = ResultadoPrueba.objects.filter(usuario=paciente)
@@ -412,6 +447,45 @@ def doctor_view(request):
     return Response(resultados, status=status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+def doctor_consultorio_view(request):
+    """Crea o recupera un paciente provisional para una evaluación en consultorio."""
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return Response({'error': 'Token no proporcionado'}, status=status.HTTP_401_UNAUTHORIZED)
+    doctor = get_user_from_token(auth_header.replace('Bearer ', ''))
+    if not doctor or not hasattr(doctor, 'profile') or doctor.profile.role not in ('doctor', 'admin'):
+        return Response({'error': 'Se requiere rol doctor'}, status=status.HTTP_403_FORBIDDEN)
+
+    name = (request.data.get('name') or '').strip()
+    ci = (request.data.get('ci') or '').strip()
+    if not name or not ci:
+        return Response({'field_errors': {'name': 'Nombre requerido', 'ci': 'CI requerido'}}, status=status.HTTP_400_BAD_REQUEST)
+    if not ci.isdigit():
+        return Response({'field_errors': {'ci': 'El CI debe contener solo dígitos'}}, status=status.HTTP_400_BAD_REQUEST)
+
+    profile = Profile.objects.filter(ci=ci).select_related('user').first()
+    if profile:
+        patient = profile.user
+    else:
+        base_username = f'consultorio_{ci}'
+        username = base_username
+        suffix = 1
+        while User.objects.filter(username=username).exists():
+            username = f'{base_username}_{suffix}'
+            suffix += 1
+        patient = User.objects.create(username=username, first_name=name)
+        patient.set_unusable_password()
+        patient.save()
+        profile = patient.profile
+        profile.role = 'paciente'
+        profile.ci = ci
+    profile.is_office_patient = True
+    profile.save()
+
+    return Response({'patient': {'id': patient.id, 'name': name or patient.first_name, 'ci': profile.ci}}, status=status.HTTP_200_OK)
+
+
 @api_view(['GET','POST'])
 def admin_users_view(request):
     """Lista usuarios (solo para admin)."""
@@ -440,6 +514,9 @@ def admin_users_view(request):
             last_name = data.get('last_name', '')
             role_new = data.get('role', 'paciente')
             ci_new = (data.get('ci', '') or '').strip()
+            license_number_new = (data.get('license_number', '') or '').strip()
+            specialty_new = (data.get('specialty', '') or '').strip()
+            institution_new = (data.get('institution', '') or '').strip()
             is_staff_flag = bool(data.get('is_staff', False))
             is_superuser_flag = bool(data.get('is_superuser', False))
 
@@ -456,6 +533,8 @@ def admin_users_view(request):
                 # Unicidad de CI
                 if Profile.objects.filter(ci=ci_new).exists():
                     return Response({'error': 'CI ya registrado para otro usuario'}, status=status.HTTP_400_BAD_REQUEST)
+            if role_new == 'doctor' and (not license_number_new or not specialty_new):
+                return Response({'error': 'Matrícula profesional y especialidad son obligatorias para doctores'}, status=status.HTTP_400_BAD_REQUEST)
 
             user_new = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name, is_staff=is_staff_flag, is_superuser=is_superuser_flag)
             user_new.set_password(password)
@@ -468,6 +547,9 @@ def admin_users_view(request):
                 prof = Profile(user=user_new)
             prof.role = role_new
             prof.ci = ci_new if ci_new != '' else None
+            prof.license_number = license_number_new if role_new == 'doctor' else ''
+            prof.specialty = specialty_new if role_new == 'doctor' else ''
+            prof.institution = institution_new if role_new == 'doctor' else ''
             # Validar el profile antes de guardar
             try:
                 prof.full_clean()
@@ -539,12 +621,19 @@ def admin_users_view(request):
     usuarios = usuarios_qs[start:end]
     data = []
     for u in usuarios:
+        role_u = None
+        ci_u = None
+        license_number_u = ''
+        specialty_u = ''
+        institution_u = ''
         try:
             role_u = u.profile.role
             ci_u = u.profile.ci
+            license_number_u = u.profile.license_number
+            specialty_u = u.profile.specialty
+            institution_u = u.profile.institution
         except Exception:
-            role_u = None
-            ci_u = None
+            pass
         data.append({
             'id': u.id,
             'username': u.username,
@@ -553,6 +642,9 @@ def admin_users_view(request):
             'last_name': u.last_name,
             'role': role_u,
             'ci': ci_u,
+            'license_number': license_number_u,
+            'specialty': specialty_u,
+            'institution': institution_u,
         })
     return Response({
         'count': total,
@@ -663,9 +755,15 @@ def admin_user_detail_view(request, user_id):
             prof = target.profile
             role_t = prof.role
             ci_t = prof.ci
+            license_number_t = prof.license_number
+            specialty_t = prof.specialty
+            institution_t = prof.institution
         except Exception:
             role_t = None
             ci_t = None
+            license_number_t = ''
+            specialty_t = ''
+            institution_t = ''
         return Response({
             'id': target.id,
             'username': target.username,
@@ -674,6 +772,9 @@ def admin_user_detail_view(request, user_id):
             'last_name': target.last_name,
             'role': role_t,
             'ci': ci_t,
+            'license_number': license_number_t,
+            'specialty': specialty_t,
+            'institution': institution_t,
         })
 
     if request.method == 'PUT':
@@ -693,6 +794,18 @@ def admin_user_detail_view(request, user_id):
             if 'ci' in data:
                 ci_val = (data.get('ci') or '').strip()
                 prof.ci = ci_val if ci_val != '' else None
+            if 'license_number' in data:
+                prof.license_number = (data.get('license_number') or '').strip()
+            if 'specialty' in data:
+                prof.specialty = (data.get('specialty') or '').strip()
+            if 'institution' in data:
+                prof.institution = (data.get('institution') or '').strip()
+            if prof.role == 'doctor' and (not prof.license_number or not prof.specialty):
+                return Response({'error': 'Matrícula profesional y especialidad son obligatorias para doctores'}, status=status.HTTP_400_BAD_REQUEST)
+            if prof.role != 'doctor':
+                prof.license_number = ''
+                prof.specialty = ''
+                prof.institution = ''
             if 'password' in data and data.get('password'):
                 target.set_password(data.get('password'))
                 target.save()

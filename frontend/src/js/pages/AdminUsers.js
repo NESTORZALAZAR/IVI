@@ -43,7 +43,7 @@ export default function AdminUsers() {
   useEffect(()=>{ load(1); }, [load]);
 
   const newUser = () => {
-    setEditing({ isNew: true, username: '', email: '', first_name: '', last_name: '', role: 'paciente', ci: '', password: '' });
+    setEditing({ isNew: true, username: '', email: '', first_name: '', last_name: '', role: 'paciente', ci: '', license_number: '', specialty: '', institution: '', password: '' });
   }
 
   useEffect(()=>{
@@ -68,13 +68,13 @@ export default function AdminUsers() {
         res = await fetch(`http://localhost:8000/api/admin/users/`, {
           method: 'POST',
           headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ username: editing.username, password: editing.password, role: editing.role, ci: editing.ci, first_name: editing.first_name, last_name: editing.last_name, email: editing.email })
+          body: JSON.stringify({ username: editing.username, password: editing.password, role: editing.role, ci: editing.ci, license_number: editing.license_number, specialty: editing.specialty, institution: editing.institution, first_name: editing.first_name, last_name: editing.last_name, email: editing.email })
         });
       } else {
         res = await fetch(`http://localhost:8000/api/admin/users/${editing.id}/`, {
           method: 'PUT',
           headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ role: editing.role, ci: editing.ci, first_name: editing.first_name, last_name: editing.last_name, email: editing.email, password: editing.password })
+          body: JSON.stringify({ role: editing.role, ci: editing.ci, license_number: editing.license_number, specialty: editing.specialty, institution: editing.institution, first_name: editing.first_name, last_name: editing.last_name, email: editing.email, password: editing.password })
         });
       }
       if (!res.ok) {
@@ -137,6 +137,9 @@ export default function AdminUsers() {
             <th>Nombre</th>
             <th>Rol</th>
             <th>CI</th>
+            <th>Matrícula</th>
+            <th>Especialidad</th>
+            <th>Institución</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -149,6 +152,9 @@ export default function AdminUsers() {
               <td>{u.first_name} {u.last_name}</td>
               <td>{u.role}</td>
               <td>{u.ci}</td>
+              <td>{u.license_number || '-'}</td>
+              <td>{u.specialty || '-'}</td>
+              <td>{u.institution || '-'}</td>
               <td>
                 <button onClick={() => startEdit(u)} className="btn small">Editar</button>
               </td>
@@ -222,6 +228,9 @@ export default function AdminUsers() {
             </label>
             <label>CI: <input value={editing.ci||''} onChange={e=>setEditing({...editing, ci: e.target.value})} /></label>
             {fieldErrors.ci && <div className="field-error">{fieldErrors.ci}</div>}
+            <label>Matrícula profesional: <input value={editing.license_number||''} onChange={e=>setEditing({...editing, license_number: e.target.value})} /></label>
+            <label>Especialidad: <input value={editing.specialty||''} onChange={e=>setEditing({...editing, specialty: e.target.value})} /></label>
+            <label>Institución: <input value={editing.institution||''} onChange={e=>setEditing({...editing, institution: e.target.value})} /></label>
             <label>Contraseña (dejar vacío para no cambiar): <input type="password" value={editing.password||''} onChange={e=>setEditing({...editing, password: e.target.value})} /></label>
             {fieldErrors.password && <div className="field-error">{fieldErrors.password}</div>}
             <div style={{marginTop: '1rem'}}>

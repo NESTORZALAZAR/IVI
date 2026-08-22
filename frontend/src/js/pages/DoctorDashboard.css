@@ -4,3 +4,11 @@
 .patient-stats{display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.6rem}
 .game-stats{border-left:4px solid #1976d2;padding:0.4rem 0.8rem;background:#f9fafb;border-radius:4px}
 .error{color:#a33;padding:0.5rem;background:#fee;border-radius:6px}
+.doctor-actions{display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap}
+.office-results-tab{padding:1rem;margin-bottom:1rem;border:1px solid #d8e6f0;border-radius:8px;background:#f5faff}
+.office-result-row{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;padding:.6rem 0;border-top:1px solid #d8e6f0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:2000}
+.modal{display:flex;flex-direction:column;gap:.75rem;background:#fff;padding:1.5rem;border-radius:8px;width:min(92vw,420px);box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.modal input{padding:.7rem;border:1px solid #ccd6df;border-radius:6px}
+.modal .btn{width:100%}
+.btn.ghost{background:#eee;color:#333}
