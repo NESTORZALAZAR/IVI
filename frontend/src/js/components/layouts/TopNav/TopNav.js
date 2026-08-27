@@ -80,18 +80,6 @@ export default function TopNav() {
         {/* Logo / Marca */}
         <div className="topnav-brand">
           <Link to="/" className="brand-link">
-            <img 
-              src="/images/logoSF.png" 
-              alt="Logo de IVI" 
-              className="brand-logo" 
-              style={{ 
-                width: `${fontSize * 2.5}px`, 
-                height: `${fontSize * 2.5}px`, 
-                minWidth: `${fontSize * 2.5}px`, 
-                minHeight: `${fontSize * 2.5}px`, 
-                objectFit: 'contain' 
-              }}
-            />
             <div className="brand-text">
               <h1>IVI</h1>
               <p>Plataforma de Apoyo y Tamizaje Disléxico</p>
@@ -122,31 +110,7 @@ export default function TopNav() {
               onClick={() => setShowLectores(prev => !prev)}
               aria-haspopup="true"
               aria-expanded={showLectores}
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '12px', 
-                fontWeight: 700, 
-                fontSize: '1.1rem', 
-                padding: '0.6rem 1.2rem', 
-                minWidth: '48px', 
-                height: '48px', 
-                backgroundColor: 'var(--border)' 
-              }}
             >
-              <img 
-                src="/images/IviLector.png" 
-                alt="IVI te ayuda" 
-                title="IVI te ayuda"
-                style={{ 
-                  width: `${fontSize * 1.7}px`, 
-                  height: `${fontSize * 1.7}px`, 
-                  minWidth: `${fontSize * 1.7}px`, 
-                  minHeight: `${fontSize * 1.7}px`, 
-                  objectFit: 'contain', 
-                  display: 'inline-block' 
-                }}
-              />
               <span>Ivi te ayuda:</span>
             </button>
 
@@ -173,16 +137,15 @@ export default function TopNav() {
           {/* Rutas condicionales por autenticación y roles */}
           {!isLoggedIn ? (
             <>
-              <Link to="/signup" className="nav-link signup-btn">
-                Registrarse
-              </Link>
               <Link to="/login" className="nav-link login-btn">
                 Iniciar Sesión
+              </Link>
+              <Link to="/signup" className="nav-link signup-btn">
+                Registrarse
               </Link>
             </>
           ) : (
             <>
-              {/* Opción para Pacientes */}
               {isPatient && (
                 <Link 
                   to="/paciente" 
@@ -192,14 +155,12 @@ export default function TopNav() {
                 </Link>
               )}
 
-              {/* Opción para Doctores */}
               {isDoctor && (
                 <Link to="/doctor" className="nav-link">
                   Doctor
                 </Link>
               )}
 
-              {/* Desplegable para Administradores */}
               {isAdmin && (
                 <div className="nav-dropdown admin-dropdown" ref={adminRef}>
                   <button
@@ -207,7 +168,6 @@ export default function TopNav() {
                     onClick={() => setShowAdminMenu(prev => !prev)}
                     aria-haspopup="true"
                     aria-expanded={showAdminMenu}
-                    style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700 }}
                   >
                     Admin
                   </button>
@@ -227,7 +187,6 @@ export default function TopNav() {
                 </div>
               )}
 
-              {/* Botón de Logout */}
               <button 
                 className="nav-link logout-btn" 
                 onClick={handleLogout}
@@ -238,21 +197,16 @@ export default function TopNav() {
             </>
           )}
 
-          {/* Modal de Accesibilidad */}
+          {/* 🌟 BOTÓN GLOBAL DE PERSONALIZAR VISTA (UBICADO A LA DERECHA DEL TODO) */}
           <button
-            className="nav-link accessibility-btn"
-            onClick={() => setShowAccessibility(!showAccessibility)}
-            aria-label="Abrir panel de accesibilidad"
-            title="Accesibilidad"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+            type="button"
+            className="nav-link global-accessibility-trigger"
+            onClick={() => setShowAccessibility(prev => !prev)}
+            aria-label="Personalizar vista"
+            aria-expanded={showAccessibility}
           >
-            <img 
-              src="/images/IviACC.png" 
-              alt="Accesibilidad" 
-              className="accessibility-icon"
-              style={{ width: `${fontSize * 1.5}px`, height: `${fontSize * 1.5}px` }}
-            />
-            <span style={{ fontWeight: 500, fontSize: '1.1rem' }}>Accesibilidad</span>
+            <span aria-hidden="true" className="access-icon">◔</span>
+            <span className="access-text">Personalizar vista</span>
           </button>
         </div>
 

@@ -45,7 +45,7 @@ const FONT_MAP = {
  * 🛡️ Componente Guardián de Rutas (ProtectedRoute)
  */
 function ProtectedRoute({ children, allowedRoles }) {
-  const user = JSON.parse(localStorage.getItem("ivi_user")) || null;
+  const user = JSON.parse(localStorage.getItem("user")) || null;
 
   if (!user) {
     return <Navigate to="/login" replace />;

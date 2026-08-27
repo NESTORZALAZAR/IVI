@@ -665,3 +665,186 @@
     height: 28px;
   }
 }
+
+/* === 1. ENCABEZADO Y CONTENEDOR PRINCIPAL === */
+.topnav {
+  width: 100%;
+  background: var(--card);
+  border-top: 4px solid var(--text);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 45%, transparent);
+  color: var(--text);
+}
+
+.topnav-container {
+  max-width: 1280px;
+  min-height: 60px;
+  margin: 0 auto;
+  padding: 0.45rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinea todo hacia la izquierda para un flujo continuo */
+  gap: 2.5rem; /* Distancia perfecta entre IVI y el inicio de la navegación */
+}
+
+/* === 2. MARCA / BRANDING (IVI) === */
+.topnav-brand {
+  flex: 0 0 auto;
+}
+
+.topnav-brand .brand-logo,
+.topnav-brand .brand-text p {
+  display: none;
+}
+
+.brand-link {
+  gap: 0;
+}
+
+.topnav-brand h1 {
+  color: var(--text);
+  font-family: Georgia, serif;
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+/* === 3. MENÚ DE NAVEGACIÓN Y BOTONES === */
+.topnav-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.2rem;
+  flex: 1;
+}
+
+.topnav-menu .nav-link {
+  min-height: 34px;
+  padding: 0.25rem 0.55rem;
+  border-radius: 0;
+  color: var(--text);
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  font-weight: 600;
+  margin: 0 !important;
+}
+
+.topnav-menu .nav-link.active {
+  background: transparent;
+  border-bottom: 3px solid var(--text);
+  color: var(--text);
+  box-shadow: none;
+}
+
+/* Acciones de Login y Registro */
+.topnav-menu .nav-link.login-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  margin-left: auto !important; /* Empuja de forma limpia el bloque de sesión al extremo superior derecho */
+}
+
+.topnav-menu .nav-link.signup-btn {
+  border: 0;
+  min-width: 96px;
+  border-radius: 7px;
+  background: #172023;
+  color: #ffffff;
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  margin-right: 0 !important; /* Sin margen para que 'Personalizar vista' quede justo al lado */
+}
+
+.topnav-menu .nav-link.login-btn:hover,
+.topnav-menu .nav-link.signup-btn:hover {
+  transform: none;
+  opacity: 0.85;
+}
+
+/* === 4. OCULTAR ICONO AZUL Y MANTENER SOLO EL BOTÓN FLOTANTE === */
+.topnav-accessibility {
+  display: none !important; /* Elimina por completo el botón e icono azul del navbar */
+}
+
+/* ==========================================================
+   REGLAS DE GARANTÍA PARA EL BOTÓN "PERSONALIZAR VISTA"
+   ========================================================== */
+
+/* Botón principal dentro de la TopNav */
+/* Coloca el botón al extremo derecho */
+.global-accessibility-trigger {
+  margin-left: auto; /* Empuja el botón al extremo derecho si la barra usa flex */
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background-color: var(--border, #e2e8f0) !important;
+  color: var(--text, #1a2224) !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  border: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+
+.global-accessibility-trigger:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.95);
+}
+
+.global-accessibility-trigger .access-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* Soporte Responsivo Móvil / Dispositivos Pequeños */
+@media (max-width: 768px) {
+  .topnav-container {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .topnav-menu {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .global-accessibility-trigger {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* En celulares muy pequeños mantiene el icono y el texto legibles */
+  .global-accessibility-trigger .access-text {
+    display: inline-block !important;
+  }
+}
+
+/* === 5. TEMAS DE COLOR === */
+[data-theme="dark"] .topnav,
+[data-theme="dark"] .topnav-menu .nav-link,
+[data-theme="dark"] .topnav-brand h1,
+[data-theme="dark"] .topnav-brand p { color: #f4eee2; }
+[data-theme="dark"] .topnav-menu .nav-link.active { color: #ffffff; border-bottom-color: #82aaff; }
+[data-theme="dark"] .topnav-menu .nav-link.login-btn { color: #f4eee2; }
+[data-theme="dark"] .topnav-menu .nav-link.signup-btn { background: #111111; color: #6ee7a0; border-color: #3dd68c; }
+[data-theme="sepia"] .topnav,
+[data-theme="cream"] .topnav { color: var(--text); }
+
+/* === 6. RESPONSIVE DESIGN === */
+@media (max-width: 900px) {
+  .topnav-container {
+    padding: 0.75rem 1.25rem;
+    gap: 1.2rem;
+  }
+
+  .topnav-menu {
+    gap: 0.6rem;
+  }
+
+
+}
