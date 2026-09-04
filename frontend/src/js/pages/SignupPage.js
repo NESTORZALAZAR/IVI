@@ -217,7 +217,7 @@ export default function SignupPage() {
               className={`role-btn ${accountType === "user" ? "active" : ""}`}
               onClick={() => setAccountType("user")}
             >
-              👤 Usuario / Paciente
+              👤 Para mi - Para un familiar
             </button>
             <button
               type="button"
@@ -231,7 +231,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="username">Nombre de Usuario</label>
+            <label htmlFor="username">Nombre del Usuario (Datos de la persona a evaluar)</label>
             <input
               type="text"
               id="username"
@@ -285,7 +285,7 @@ export default function SignupPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Correo electrónico</label>
+            <label htmlFor="email">Correo electrónico (Del tutor o persona a evaluar)</label>
             <input
               type="email"
               id="email"

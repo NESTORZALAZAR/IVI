@@ -6,7 +6,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedRole, setSelectedRole] = useState("user"); // 'user', 'professional', 'admin'
+  const selectedRole = "user";
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -68,34 +68,6 @@ export default function LoginPage() {
         <h1>IVI</h1>
         <p className="subtitle">Plataforma de Apoyo y Tamizaje Dislexia</p>
 
-        {/* Selector de Rol */}
-        <div className="role-selector-container">
-          <label className="role-label">Tipo de acceso:</label>
-          <div className="role-buttons">
-            <button
-              type="button"
-              className={`role-btn ${selectedRole === "user" ? "active" : ""}`}
-              onClick={() => setSelectedRole("user")}
-            >
-              👤 Usuario
-            </button>
-            <button
-              type="button"
-              className={`role-btn ${selectedRole === "professional" ? "active" : ""}`}
-              onClick={() => setSelectedRole("professional")}
-            >
-              📊 Profesional
-            </button>
-            <button
-              type="button"
-              className={`role-btn ${selectedRole === "admin" ? "active" : ""}`}
-              onClick={() => setSelectedRole("admin")}
-            >
-              ⚙️ Admin
-            </button>
-          </div>
-        </div>
-
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Correo electrónico</label>
@@ -124,15 +96,7 @@ export default function LoginPage() {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" disabled={loading} className="btn-login">
-            {loading
-              ? "Ingresando..."
-              : `Ingresar como ${
-                  selectedRole === "admin"
-                    ? "Admin"
-                    : selectedRole === "professional"
-                    ? "Profesional"
-                    : "Usuario"
-                }`}
+            {loading ? "Ingresando..." : "Ingresar"}
           </button>
         </form>
 

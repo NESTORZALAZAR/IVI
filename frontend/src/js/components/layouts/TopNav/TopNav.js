@@ -77,18 +77,19 @@ export default function TopNav() {
       )}
 
       <div className="topnav-container">
-        {/* Logo / Marca */}
-        <div className="topnav-brand">
-          <Link to="/" className="brand-link">
-            <div className="brand-text">
-              <h1>IVI</h1>
-              <p>Plataforma de Apoyo y Tamizaje Disléxico</p>
-            </div>
-          </Link>
-        </div>
+        <div className="topnav-primary">
+          {/* Logo / Marca */}
+          <div className="topnav-brand">
+            <Link to="/" className="brand-link">
+              <div className="brand-text">
+                <h1>IVI</h1>
+                <p>Plataforma de Apoyo y Tamizaje Disléxico</p>
+              </div>
+            </Link>
+          </div>
 
-        {/* Menú principal */}
-        <div className="topnav-menu">
+          {/* Menú principal */}
+          <div className="topnav-menu primary-menu">
           <Link 
             to="/" 
             className={`nav-link ${isHome ? 'active' : ''}`}
@@ -134,6 +135,12 @@ export default function TopNav() {
             )}
           </div>
 
+          </div>
+
+        </div>
+
+        <div className="topnav-actions">
+          <div className="topnav-menu actions-menu">
           {/* Rutas condicionales por autenticación y roles */}
           {!isLoggedIn ? (
             <>
@@ -164,7 +171,7 @@ export default function TopNav() {
               {isAdmin && (
                 <div className="nav-dropdown admin-dropdown" ref={adminRef}>
                   <button
-                    className={`nav-link dropdown-btn ${showAdminMenu ? 'active' : ''}`}
+                    className={`nav-link accessibility-btn dropdown-btn ${showAdminMenu ? 'active' : ''}`}
                     onClick={() => setShowAdminMenu(prev => !prev)}
                     aria-haspopup="true"
                     aria-expanded={showAdminMenu}
@@ -208,6 +215,7 @@ export default function TopNav() {
             <span aria-hidden="true" className="access-icon">◔</span>
             <span className="access-text">Personalizar vista</span>
           </button>
+          </div>
         </div>
 
         {/* Modal Configuraciones de Accesibilidad */}

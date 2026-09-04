@@ -276,9 +276,9 @@
   z-index: 110;
   min-width: 260px;
   padding: 0.45rem;
-  background: color-mix(in srgb, var(--card) 95%, #ffffff);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--card) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
   border-radius: var(--ivi-radius-md, 6px);
   box-shadow: var(--ivi-shadow-elevated, 0 8px 16px rgba(0, 0, 0, 0.2));
@@ -286,7 +286,7 @@
 }
 
 [data-theme="dark"] .dropdown-menu {
-  background: color-mix(in srgb, var(--card) 95%, #1a1a2e);
+  background: var(--card) !important;
 }
 
 .dropdown-link {
@@ -718,6 +718,11 @@
   flex: 1;
 }
 
+.topnav-menu.authenticated-menu {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .topnav-menu .nav-link {
   min-height: 34px;
   padding: 0.25rem 0.55rem;
@@ -787,6 +792,10 @@
   white-space: nowrap !important;
 }
 
+.topnav-menu.authenticated-menu .global-accessibility-trigger {
+  margin-left: 0;
+}
+
 .global-accessibility-trigger:hover {
   transform: translateY(-1px);
   filter: brightness(0.95);
@@ -847,4 +856,59 @@
   }
 
 
+}
+
+/* === Distribución equilibrada: acciones a la izquierda y navegación a la derecha === */
+@media (min-width: 769px) {
+  .topnav-container {
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .topnav-primary,
+  .topnav-actions {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+
+  .topnav-primary {
+    gap: 1.2rem;
+    order: 1;
+  }
+
+  .topnav-actions {
+    order: 2;
+  }
+
+  .topnav-primary .topnav-menu,
+  .topnav-actions .topnav-menu {
+    flex: 0 0 auto;
+  }
+
+  .topnav-primary .topnav-menu {
+    gap: 1.2rem;
+  }
+
+  .topnav-actions .topnav-menu {
+    gap: 0.75rem;
+  }
+
+  .topnav-actions .login-btn,
+  .topnav-actions .global-accessibility-trigger {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .topnav-primary,
+  .topnav-actions {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .topnav-primary {
+    gap: 0.75rem;
+  }
 }
