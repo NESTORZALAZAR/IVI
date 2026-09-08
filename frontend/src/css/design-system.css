@@ -1,10 +1,10 @@
 /* ===IVI Design System - Fuenta Única de Verdad - Tokens + Componentes Reutilizables (Upgrade Premium)  === */
 /* 🎨 Temas accesibles (Base para toda la plataforma) */
 :root {
-  --bg: #f7f3e9;
-  --text: #2b2b2b;
-  --primary: #3a6ea5;
-  --border: #d0c8b8;
+  --bg: #f7f8fa;
+  --text: #27313a;
+  --primary: #356b9f;
+  --border: #d7dde2;
   --card: #ffffff;
 
   /* 📐 Tokens de diseño avanzados */
@@ -38,6 +38,14 @@
   --ivi-success-text: #6ee7a0;
 }
 
+[data-theme="white"] {
+  --bg: #f7f8fa;
+  --text: #27313a;
+  --primary: #356b9f;
+  --border: #d7dde2;
+  --card: #ffffff;
+}
+
 [data-theme="sepia"] {
   --bg: #f4ecd8;
   --text: #5b4636;
@@ -47,11 +55,11 @@
 }
 
 [data-theme="cream"] {
-  --bg: #fff8e7;
-  --text: #3a2f2f;
-  --primary: #7a4200;
-  --border: #e6d5c3;
-  --card: #ffffff;
+  --bg: #f3e5c5;
+  --text: #4d3b2b;
+  --primary: #8b5a19;
+  --border: #d6bd8d;
+  --card: #fff5dc;
 }
    /* ===Animaciones compartidas  === */
 

@@ -1,46 +1,6 @@
 @import "./design-system.css";
 
 /* =========================
-   🎨 SISTEMA DE TEMAS ACCESIBLES
-   ========================= */
-
-/* 🌞 Tema claro (dislexia-friendly) */
-:root {
-  --bg: #f7f3e9;
-  --text: #2b2b2b;
-  --primary: #3a6ea5;
-  --border: #d0c8b8;
-  --card: #ffffff;
-}
-
-/* 🌙 Tema oscuro accesible */
-[data-theme="dark"] {
-  --bg: #1a1a2e;
-  --text: #e8dcc8;
-  --primary: #82aaff;
-  --border: #444444;
-  --card: #262626;
-}
-
-/* 🟤 Sepia */
-[data-theme="sepia"] {
-  --bg: #f4ecd8;
-  --text: #5b4636;
-  --primary: #2e6b9e;
-  --border: #d8c3a5;
-  --card: #fff7e6;
-}
-
-/* 🍦 Cream */
-[data-theme="cream"] {
-  --bg: #fff8e7;
-  --text: #3a2f2f;
-  --primary: #7a4200;
-  --border: #e6d5c3;
-  --card: #ffffff;
-}
-
-/* =========================
    🌍 ESTILOS GLOBALES
    ========================= */
 
@@ -97,6 +57,100 @@ body {
 
 .App-link {
   color: var(--primary);
+}
+
+/* Superficies heredadas que aún pertenecen a vistas antiguas. */
+.prueba-lectura,
+.prueba-velocidad,
+.prueba-comprension,
+.prueba-ortografia,
+.pruebas-page,
+.resultados-page,
+.text-reader-page {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.prueba-container,
+.resultados-container,
+.resultado-container,
+.resultado-stats,
+.stat,
+.contador-item,
+.palabra-grande,
+.text-input-section,
+.reader-container,
+.patient-card,
+.modal,
+.empty-state,
+.resultado-item,
+.pregunta-card,
+.office-patient-banner,
+.office-results-tab {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.prueba-header,
+.resultados-list h2 {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.prueba-header h1,
+.prueba-header p,
+.texto-lectura h2,
+.texto-lectura p,
+.preguntas-section h3,
+.pregunta-text,
+.resultados-container h1,
+.resultados-list h2,
+.reader-header h1,
+.reader-header p,
+.text-input-section h3,
+.empty-state,
+.empty-state p,
+.form-group label {
+  color: var(--text);
+}
+
+.texto-lectura,
+.pregunta-card,
+.empty-state,
+.resultado-item,
+.game-stats,
+.contador-item,
+.palabra-grande {
+  background: color-mix(in srgb, var(--card) 82%, var(--bg));
+}
+
+.prueba-resultado,
+.resultado-container {
+  color: var(--text);
+}
+
+.score-text,
+.score-circle,
+.stat-label,
+.stat-value,
+.contador-label,
+.contador-valor,
+.instruccion {
+  color: var(--text);
+}
+
+.text-input,
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: color-mix(in srgb, var(--card) 70%, var(--bg));
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.progress-bar {
+  background: color-mix(in srgb, var(--border) 65%, var(--bg));
 }
 
 /* =========================

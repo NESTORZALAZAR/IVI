@@ -19,6 +19,7 @@ export default function AdminUsers() {
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const navigate = useNavigate();
 
   const load = useCallback((p=1) => {
@@ -112,96 +113,100 @@ export default function AdminUsers() {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <div className="admin-page container">
-      <h2>Usuarios</h2>
+    <main className="admin-page container">
+      <section className="admin-hero">
+        <div>
+          <p className="breadcrumb">Administración <span>/</span> Usuarios</p>
+          <h2>Gestión de Usuarios</h2>
+          <p className="hero-description">Visualiza, filtra y administra de manera accesible los profesionales, administradores y pacientes registrados en la plataforma IVI.</p>
+        </div>
+        <button onClick={newUser} className="btn primary-action">+ Nuevo usuario</button>
+      </section>
+
       {error && <div className="error">{error}</div>}
-      <style>{`
-        .modal-overlay{position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:2000}
-        .modal{background:#fff;padding:1rem;border-radius:8px;max-width:520px;width:90%;}
-        .admin-table{width:100%;border-collapse:collapse}
-        .admin-table th,.admin-table td{padding:0.6rem;border-bottom:1px solid #eee}
-        .btn{padding:0.4rem 0.6rem;border-radius:6px;border:none;background:#1976d2;color:#fff;cursor:pointer}
-        .btn.ghost{background:#eee;color:#333}
-        .btn.small{padding:0.2rem 0.4rem;font-size:0.9rem}
-        .btn.danger{background:#e74c3c}
-        .pagination{display:flex;gap:1rem;align-items:center;margin-top:0.8rem}
-        .toast{position:fixed;right:1rem;bottom:1rem;padding:0.8rem 1rem;border-radius:8px;color:#fff}
-        .toast.success{background:green}
-      `}</style>
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Email</th>
-            <th>Nombre</th>
-            <th>Rol</th>
-            <th>CI</th>
-            <th>Matrícula</th>
-            <th>Especialidad</th>
-            <th>Institución</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(u => (
-            <tr key={u.id}>
-              <td>{u.id}</td>
-              <td>{u.username}</td>
-              <td>{u.email}</td>
-              <td>{u.first_name} {u.last_name}</td>
-              <td>{u.role}</td>
-              <td>{u.ci}</td>
-              <td>{u.license_number || '-'}</td>
-              <td>{u.specialty || '-'}</td>
-              <td>{u.institution || '-'}</td>
-              <td>
-                <button onClick={() => startEdit(u)} className="btn small">Editar</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
 
-      <div style={{marginTop:'0.6rem'}}>
-        <button onClick={newUser} className="btn">Nuevo usuario</button>
-      </div>
+      <section className="filters-panel" aria-label="Filtros de usuarios">
+        <div className="filters-row">
+          <label className="search-field">
+            <span aria-hidden="true">⌕</span>
+            <input placeholder="Buscar por usuario, email o CI" value={query} onChange={e=>setQuery(e.target.value)} />
+          </label>
+          <select value={roleFilter} onChange={e=>setRoleFilter(e.target.value)} aria-label="Filtrar por rol">
+            <option value="">Todos los roles</option>
+            <option value="paciente">Paciente</option>
+            <option value="doctor">Doctor</option>
+            <option value="admin">Admin</option>
+          </select>
+          <select value={hasCiFilter} onChange={e=>setHasCiFilter(e.target.value)} aria-label="Filtrar por CI">
+            <option value="">CI: Todos</option>
+            <option value="1">Con CI</option>
+            <option value="0">Sin CI</option>
+          </select>
+          <button onClick={()=>{ load(1); }} className="btn filter-action">Aplicar</button>
+          <button onClick={()=>{ setQuery(''); setRoleFilter(''); setHasCiFilter(''); setDateFrom(''); setDateTo(''); setIsStaffFilter(''); setIsSuperuserFilter(''); load(1); }} className="btn ghost">Limpiar</button>
+        </div>
+        <div className="advanced-filter-toggle">
+          <button type="button" className="text-button" onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}>
+            {showAdvancedFilters ? '−' : '+'} Búsqueda avanzada
+          </button>
+        </div>
+        {showAdvancedFilters && (
+          <div className="advanced-filters">
+            <label>Desde <input type="date" value={dateFrom} onChange={e=>setDateFrom(e.target.value)} /></label>
+            <label>Hasta <input type="date" value={dateTo} onChange={e=>setDateTo(e.target.value)} /></label>
+            <select value={isStaffFilter} onChange={e=>setIsStaffFilter(e.target.value)} aria-label="Filtrar por staff">
+              <option value="">Staff: Todos</option><option value="1">Sí</option><option value="0">No</option>
+            </select>
+            <select value={isSuperuserFilter} onChange={e=>setIsSuperuserFilter(e.target.value)} aria-label="Filtrar por superusuario">
+              <option value="">Superuser: Todos</option><option value="1">Sí</option><option value="0">No</option>
+            </select>
+          </div>
+        )}
+        <div className="filter-summary">Mostrando <strong>{users.length}</strong> usuarios registrados <span>•</span> Filtro activo: <em>{query || roleFilter || hasCiFilter ? 'Personalizado' : 'Todos'}</em></div>
+      </section>
 
-      <div style={{display:'flex', gap:'1rem', alignItems:'center', marginTop:'1rem', flexWrap:'wrap'}}>
-        <input placeholder="Buscar por usuario, email o CI" value={query} onChange={e=>setQuery(e.target.value)} />
-        <select value={roleFilter} onChange={e=>setRoleFilter(e.target.value)}>
-          <option value="">Todos roles</option>
-          <option value="paciente">Paciente</option>
-          <option value="doctor">Doctor</option>
-          <option value="admin">Admin</option>
-        </select>
-        <select value={hasCiFilter} onChange={e=>setHasCiFilter(e.target.value)}>
-          <option value="">CI: Todos</option>
-          <option value="1">Con CI</option>
-          <option value="0">Sin CI</option>
-        </select>
-        <label>Desde: <input type="date" value={dateFrom} onChange={e=>setDateFrom(e.target.value)} /></label>
-        <label>Hasta: <input type="date" value={dateTo} onChange={e=>setDateTo(e.target.value)} /></label>
-        <select value={isStaffFilter} onChange={e=>setIsStaffFilter(e.target.value)}>
-          <option value="">Staff: Todos</option>
-          <option value="1">Sí</option>
-          <option value="0">No</option>
-        </select>
-        <select value={isSuperuserFilter} onChange={e=>setIsSuperuserFilter(e.target.value)}>
-          <option value="">Superuser: Todos</option>
-          <option value="1">Sí</option>
-          <option value="0">No</option>
-        </select>
-        <button onClick={()=>{ load(1); }} className="btn">Aplicar filtros</button>
-        <button onClick={()=>{ setQuery(''); setRoleFilter(''); setHasCiFilter(''); setDateFrom(''); setDateTo(''); setIsStaffFilter(''); setIsSuperuserFilter(''); load(1); }} className="btn ghost">Limpiar</button>
-        <div style={{flex:1}} />
-      </div>
-
-      <div className="pagination">
-        <button onClick={() => { if(page>1) { load(page-1); } }} disabled={page<=1}>Anterior</button>
-        <span> Página {page} / {totalPages} </span>
-        <button onClick={() => { if(page<totalPages) { load(page+1); } }} disabled={page>=totalPages}>Siguiente</button>
-      </div>
+      <section className="table-panel">
+        <div className="table-scroll">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuario &amp; perfil</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>CI</th>
+                <th>Matrícula</th>
+                <th>Especialidad / institución</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(u => (
+                <tr key={u.id}>
+                  <td className="user-id">{u.id}</td>
+                  <td>
+                    <div className="user-profile"><span className={`avatar avatar-${u.role || 'default'}`}>{(u.username || '?').slice(0, 2).toUpperCase()}</span><div><strong>{u.username}</strong><small>{[u.first_name, u.last_name].filter(Boolean).join(' ') || 'Sin nombre registrado'}</small></div></div>
+                  </td>
+                  <td className="email-cell">{u.email || '-'}</td>
+                  <td><span className={`role-badge role-${u.role || 'default'}`}><i />{u.role || 'Sin rol'}</span></td>
+                  <td>{u.ci || '-'}</td>
+                  <td>{u.license_number || '-'}</td>
+                  <td><strong>{u.specialty || 'Sin asignar'}</strong><small className="institution">{u.institution || ''}</small></td>
+                  <td><button onClick={() => startEdit(u)} className="btn edit-action">Editar</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="pagination">
+          <span>Página <strong>{page}</strong> de <strong>{totalPages}</strong> <span className="pagination-total">• Total: {total} registros</span></span>
+          <div className="pagination-actions">
+            <button onClick={() => { if(page>1) { load(page-1); } }} disabled={page<=1}>‹ Anterior</button>
+            <span className="current-page">{page}</span>
+            <button onClick={() => { if(page<totalPages) { load(page+1); } }} disabled={page>=totalPages}>Siguiente ›</button>
+          </div>
+        </div>
+      </section>
 
       {editing && (
         <div className="modal-overlay">
@@ -254,6 +259,6 @@ export default function AdminUsers() {
       {toast && (
         <div className={`toast ${toast.type}`}>{toast.message}</div>
       )}
-    </div>
+    </main>
   );
 }
