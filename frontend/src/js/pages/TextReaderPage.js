@@ -59,17 +59,29 @@ export default function TextReaderPage() {
   return (
     <div className="text-reader-page">
       <div className="reader-container">
-        <div className="reader-header">
-          <h1>📄 Lector de Textos</h1>
-          <p>
-            Ingresa tu texto y escúchalo leído en voz alta
-          </p>
-        </div>
+        <h1 className="text-reader-title">Lector de Textos</h1>
+        <h2 className="text-reader-subtitle">
+          Ingresa tu texto y escúchalo leído en voz alta con controles accesibles.
+        </h2>
 
         <div className="reader-content">
           {/* Sección de Entrada de Texto Directa */}
           <div className="text-input-section">
-            <h3>✏️ Escribe o Pega tu Texto</h3>
+            <div className="text-input-header">
+              <div className="text-input-title-group">
+                <h3>✏️ Escribe o Pega tu Texto</h3>
+                <button
+                  onClick={handleTextSubmit}
+                  disabled={isLoading || !inputText.trim()}
+                  className="btn-submit"
+                >
+                  {isLoading ? "Procesando..." : "Escuchar Texto"}
+                </button>
+              </div>
+              <div className="text-input-actions">
+                <span className="character-count">Caracteres: {inputText.length}</span>
+              </div>
+            </div>
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
@@ -78,13 +90,6 @@ export default function TextReaderPage() {
               disabled={isLoading}
               rows="8"
             />
-            <button
-              onClick={handleTextSubmit}
-              disabled={isLoading || !inputText.trim()}
-              className="btn-submit"
-            >
-              {isLoading ? "Procesando..." : "Escuchar Texto"}
-            </button>
           </div>
 
           {processedData && (
@@ -102,24 +107,6 @@ export default function TextReaderPage() {
               </p>
             </div>
           )}
-        </div>
-
-        <div className="reader-info">
-          <h3>ℹ️ Información</h3>
-          <ul>
-            <li>
-              <strong>Entrada:</strong> Escribe o pega tu texto directamente
-            </li>
-            <li>
-              <strong>Velocidad ajustable:</strong> De 0.5x a 2x
-            </li>
-            <li>
-              <strong>Accesible:</strong> Diseñado para personas con dislexia
-            </li>
-            <li>
-              <strong>Privado:</strong> Los textos se procesan localmente
-            </li>
-          </ul>
         </div>
       </div>
     </div>

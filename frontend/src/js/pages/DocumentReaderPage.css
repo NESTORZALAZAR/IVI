@@ -1,136 +1,313 @@
 .document-reader-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
-  padding: 2rem;
-  color: #e8d4b8;
+  min-height: calc(100vh - 80px);
+  padding: clamp(1.25rem, 3vw, 2.5rem) 1.25rem 4rem;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .reader-container {
-  max-width: 900px;
+  width: min(100%, 880px);
   margin: 0 auto;
 }
 
-.reader-header {
+.document-reader-page .reader-container {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.reader-title,
+.reader-subtitle {
+  width: min(100%, 680px);
+  margin-right: auto;
+  margin-left: auto;
   text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem 0;
 }
 
-.reader-header h1 {
-  color: #f0e0d0;
-  font-size: 2.5rem;
-  margin: 0 0 1rem 0;
+.reader-title {
+  margin-top: 0;
+  margin-bottom: 0.45rem;
+  color: var(--text);
+  font-size: clamp(2rem, 3.6vw, 2.25rem) !important;
+  line-height: 1.15;
 }
 
-.reader-header p {
-  color: #c4a080;
-  font-size: 1.1rem;
-  margin: 0;
+.reader-subtitle {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: color-mix(in srgb, var(--text) 78%, transparent);
+  font-size: 0.88rem !important;
+  font-weight: 400;
+  line-height: 1.4;
 }
 
-.reader-content {
-  background-color: #262626;
-  border: 2px solid #c4a080;
-  border-radius: 16px;
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+.reader-eyebrow {
+  display: inline-flex;
+  margin-bottom: 0.9rem;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 28%, var(--border));
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.reader-content,
+.reader-info {
+  border: 1px solid var(--border);
+  border-radius: var(--ivi-radius-lg, 16px);
+  background: var(--card);
+  box-shadow: var(--ivi-shadow-soft);
+}
+
+.document-reader-page .reader-content {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .uploader-section {
-  margin-bottom: 2rem;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 3rem;
-  color: #a89080;
-  font-size: 1.1rem;
-}
-
-.reader-info {
-  background-color: #262626;
-  border: 2px solid #c4a080;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-}
-
-.reader-info h3 {
-  color: #f0e0d0;
-  margin: 0 0 1.5rem 0;
-  font-size: 1.3rem;
-}
-
-.reader-info ul {
-  list-style: none;
-  padding: 0;
   margin: 0;
 }
 
-.reader-info li {
-  color: #e8d4b8;
-  margin: 1rem 0;
-  padding-left: 1.5rem;
-  position: relative;
-  line-height: 1.6;
+.upload-card,
+.result-card {
+  padding: clamp(0.9rem, 2.5vw, 1.35rem);
+  border: 1px solid var(--border);
+  border-radius: var(--ivi-radius-lg, 16px);
+  background: var(--card);
+  box-shadow: var(--ivi-shadow-soft);
 }
 
-.reader-info li:before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: #d4a574;
-  font-weight: bold;
+.document-reader-page .upload-card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-.reader-info strong {
-  color: #f0e0d0;
+.document-reader-page .compact-upload-card {
+  background: transparent;
+  box-shadow: none;
 }
 
-@media (max-width: 768px) {
-  .document-reader-page {
-    padding: 1rem;
-  }
-
-  .reader-header h1 {
-    font-size: 1.8rem;
-  }
-
-  .reader-content {
-    padding: 1.5rem;
-  }
-
-  .reader-info {
-    padding: 1.5rem;
-  }
+.file-uploader .upload-area {
+  min-height: 280px;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--ivi-radius-md, 12px);
+  background: color-mix(in srgb, var(--card) 88%, var(--bg)) !important;
 }
-.reader-link-btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  background-color: #c4a080;
-  color: #1a1a1a;
-  text-decoration: none;
-  border-radius: 6px;
+
+.file-uploader .upload-area:hover,
+.file-uploader .upload-area.active {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 7%, var(--card)) !important;
+}
+
+.file-uploader .upload-icon {
+  margin-bottom: 0.8rem;
+  font-size: 2.1rem;
+}
+
+.file-uploader .upload-area h3 {
+  margin: 0.35rem 0 0.55rem;
+  color: var(--text);
+  font-size: 1.08rem !important;
+}
+
+.file-uploader .upload-area p,
+.file-uploader .loading p {
+  color: color-mix(in srgb, var(--text) 68%, transparent);
+  font-size: 0.86rem !important;
+}
+
+.file-uploader .file-types {
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  font-size: 0.78rem;
+}
+
+.file-uploader .spinner {
+  border-color: var(--border);
+  border-top-color: var(--primary);
+}
+
+.empty-state {
+  padding: 1.5rem;
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.empty-state-message {
+  margin: 0;
+}
+
+.reading-options {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: left;
+}
+
+.reading-options h2 {
+  margin: 0 0 0.75rem;
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+  font-size: 1rem !important;
+}
+
+.reading-options-controls {
+  display: flex;
+  align-items: end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.speed-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 190px;
+  padding: 0.7rem;
+  border-radius: var(--ivi-radius-sm, 8px);
+  background: color-mix(in srgb, var(--primary) 8%, var(--card));
+  color: color-mix(in srgb, var(--text) 62%, transparent);
+  font-size: 0.75rem;
   font-weight: 600;
-  transition: all 0.3s ease;
-  border: 2px solid #c4a080;
 }
 
-.reader-link-btn:hover {
-  background-color: #d4a574;
-  border-color: #d4a574;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(196, 160, 128, 0.3);
+.speed-select select {
+  min-height: 34px;
+  padding: 0 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--ivi-radius-sm, 8px);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.78rem !important;
+}
+
+.reading-options-controls button {
+  min-height: 40px;
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-radius: var(--ivi-radius-sm, 8px);
+  background: color-mix(in srgb, var(--text) 55%, var(--card));
+  color: var(--card);
+  font-size: 0.78rem !important;
+  font-weight: 700;
+}
+
+.reading-options-controls button:disabled,
+.speed-select select:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.audio-player {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.reader-info {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.reader-info h3,
+.reader-info h4,
+.reader-info strong {
+  color: var(--text);
+}
+
+.reader-info h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
 }
 
 .reader-info h4 {
-  color: #f0e0d0;
-  margin: 1rem 0 0.5rem 0;
-  font-size: 1.1rem;
+  margin: 1rem 0 0.35rem;
+  font-size: 0.95rem;
 }
 
+.reader-info ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reader-info li,
 .reader-info p {
-  color: #e8d4b8;
-  margin: 0.5rem 0;
+  color: color-mix(in srgb, var(--text) 72%, transparent);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.reader-info li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.reader-info li::before {
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  content: "✓";
+  font-weight: 700;
+}
+
+.reader-link-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--ivi-radius-sm, 8px);
+  background: color-mix(in srgb, var(--card) 84%, var(--primary));
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.reader-link-btn:hover {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, var(--card));
+}
+
+@media (max-width: 680px) {
+  .document-reader-page {
+    padding: 2rem 0.8rem 3rem;
+  }
+
+  .reader-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .reader-info ul {
+    grid-template-columns: 1fr;
+  }
+
+  .file-uploader .upload-area {
+    min-height: 245px;
+  }
+
+  .reading-options-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .speed-select {
+    width: 100%;
+  }
 }

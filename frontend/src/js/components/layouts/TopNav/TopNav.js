@@ -81,6 +81,11 @@ export default function TopNav() {
           {/* Logo / Marca */}
           <div className="topnav-brand">
             <Link to="/" className="brand-link">
+              <img
+                className="brand-logo"
+                src="/images/logoNuevoSF.png"
+                alt="IVI"
+              />
               <div className="brand-text">
                 <h1>IVI</h1>
                 <p>Plataforma de Apoyo y Tamizaje Disléxico</p>

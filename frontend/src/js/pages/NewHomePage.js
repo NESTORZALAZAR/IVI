@@ -41,7 +41,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-visual">
-          <img src="/images/IviSF.png" alt="Persona leyendo cómodamente" />
+          <img src="/images/logoNuevoSF.png" alt="Logo de IVI" />
         </div>
       </section>
 
@@ -68,7 +68,7 @@ export default function HomePage() {
           <Link to="/contacto">Contacto</Link>
           <Link to="/soporte">Soporte</Link>
         </nav>
-        <span className="footer-copy">© 2024 IVI Platform. Diseñado para la accesibilidad cognitiva.</span>
+        <span className="footer-copy">© 2026 IVI Platform. Diseñado para la accesibilidad cognitiva.</span>
       </footer>
     </main>
   );

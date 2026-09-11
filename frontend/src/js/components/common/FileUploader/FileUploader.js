@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./FileUploader.css";
 
-export default function FileUploader({ onFileProcessed, isLoading }) {
+export default function FileUploader({ onFileProcessed, isLoading, compact = false }) {
   const [dragActive, setDragActive] = useState(false);
 
   const handleDrag = (e) => {
@@ -100,7 +100,7 @@ export default function FileUploader({ onFileProcessed, isLoading }) {
   };
 
   return (
-    <div className="file-uploader">
+    <div className={`file-uploader ${compact ? "compact" : ""}`}>
       <div
         className={`upload-area ${dragActive ? "active" : ""}`}
         onDragEnter={handleDrag}
@@ -109,11 +109,13 @@ export default function FileUploader({ onFileProcessed, isLoading }) {
         onDrop={handleDrop}
       >
         <div className="upload-content">
-          <div className="upload-icon">📄</div>
-          <h3>Carga tu documento o imagen</h3>
-          <p>Arrastra y suelta aquí o haz clic para seleccionar</p>
-          <p className="file-types">Soportados: PDF, DOCX, TXT, JPG, PNG, GIF, BMP</p>
+          {!compact && <div className="upload-icon">📄</div>}
+          <h3>{compact ? "Selecciona o arrastra otro archivo" : "Selecciona o arrastra tu archivo aquí"}</h3>
+          {!compact && (
+            <p className="file-types">Tamaño máximo: 10MB</p>
+          )}
           <input
+            id="document-file-input"
             type="file"
             accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.gif,.bmp,image/*"
             onChange={handleChange}
@@ -121,6 +123,9 @@ export default function FileUploader({ onFileProcessed, isLoading }) {
             disabled={isLoading}
             aria-label="Seleccionar archivo o imagen para procesar"
           />
+          <label className="upload-button" htmlFor="document-file-input">
+            <span aria-hidden="true">⌕</span> {compact ? "Selecciona o arrastra otro archivo" : "Buscar archivo"}
+          </label>
         </div>
       </div>
 
