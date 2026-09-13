@@ -14,6 +14,7 @@ class ResultadoPrueba(models.Model):
         ('velocidad', 'Prueba de Velocidad'),
         ('comprension', 'Prueba de Comprensión'),
         ('ortografia', 'Prueba de Ortografía'),
+        ('alfabeto', 'Filtro de Conocimiento: Alfabeto'),
     ]
 
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resultados_pruebas')
@@ -51,6 +52,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='paciente')
     ci = models.CharField(max_length=64, unique=True, null=True, blank=True, help_text='Identificador único (CI) del paciente')
+    age = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Edad')
     license_number = models.CharField(max_length=100, blank=True, default='', verbose_name='Matrícula profesional')
     specialty = models.CharField(max_length=150, blank=True, default='', verbose_name='Especialidad')
     institution = models.CharField(max_length=200, blank=True, default='', verbose_name='Institución')

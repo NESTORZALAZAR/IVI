@@ -14,6 +14,7 @@ export default function SignupPage() {
     firstName: "",
     lastName: "",
     ci: "",
+    age: "",
     // Campos de profesionales:
     licenseNumber: "",
     specialty: "",
@@ -114,6 +115,18 @@ export default function SignupPage() {
       return;
     }
 
+    if (accountType !== "professional" && formData.age === "") {
+      setFieldErrors({ age: "La edad del paciente es obligatoria" });
+      setLoading(false);
+      return;
+    }
+
+    if (formData.age !== "" && (Number(formData.age) < 0 || Number(formData.age) > 120)) {
+      setFieldErrors({ age: "La edad debe estar entre 0 y 120 años" });
+      setLoading(false);
+      return;
+    }
+
     // Validación de CI
     if (!formData.ci || !formData.ci.trim()) {
       setFieldErrors({ ci: "El campo CI es obligatorio" });
@@ -148,6 +161,7 @@ export default function SignupPage() {
       email: formData.email,
       password: formData.password,
       ci: formData.ci,
+      age: formData.age === "" ? null : Number(formData.age),
       first_name: formData.firstName,
       last_name: formData.lastName,
       role: accountType,
@@ -217,21 +231,21 @@ export default function SignupPage() {
               className={`role-btn ${accountType === "user" ? "active" : ""}`}
               onClick={() => setAccountType("user")}
             >
-              👤 Para mi - Para un familiar
+              Para mi - Para un familiar
             </button>
             <button
               type="button"
               className={`role-btn ${accountType === "professional" ? "active" : ""}`}
               onClick={() => setAccountType("professional")}
             >
-              📊 Profesional
+              Profesional
             </button>
           </div>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="username">Nombre del Usuario (Datos de la persona a evaluar)</label>
+            <label htmlFor="username">Datos de la persona a evaluar</label>
             <input
               type="text"
               id="username"
@@ -282,6 +296,22 @@ export default function SignupPage() {
               placeholder="Ingrese su número de CI"
             />
             {fieldErrors.ci && <div className="field-error">{fieldErrors.ci}</div>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="age">Edad del paciente</label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              min="0"
+              max="120"
+              required={accountType !== "professional"}
+              placeholder="Ingrese la edad"
+            />
+            {fieldErrors.age && <div className="field-error">{fieldErrors.age}</div>}
           </div>
 
           <div className="form-group">

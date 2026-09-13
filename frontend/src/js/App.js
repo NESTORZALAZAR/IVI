@@ -16,6 +16,7 @@ import PruebaLecturaPage from "./pages/PruebaLecturaPage";
 import PruebaVelocidadPage from "./pages/PruebaVelocidadPage";
 import PruebaComprensionPage from "./pages/PruebaComprensionPage";
 import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
+import PruebaAlfabetoPage from "./pages/PruebaAlfabetoPage";
 import ResultadosPage from "./pages/ResultadosPage";
 
 // 👑 Vistas de Administración y Doctores
@@ -118,6 +119,7 @@ function AppContent() {
           <Route path="/pruebas/velocidad" element={<PruebaVelocidadPage />} />
           <Route path="/pruebas/comprension" element={<PruebaComprensionPage />} />
           <Route path="/pruebas/ortografia" element={<PruebaOrtografiaPage />} />
+          <Route path="/pruebas/alfabeto" element={<PruebaAlfabetoPage />} />
           <Route path="/resultados" element={<ResultadosPage />} />
 
           {/* ==========================================

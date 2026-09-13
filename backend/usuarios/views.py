@@ -67,9 +67,11 @@ def login_view(request):
         # Incluir role y ci desde el Profile si existe
         role = None
         ci = None
+        age = None
         try:
             role = user.profile.role
             ci = user.profile.ci
+            age = user.profile.age
         except Exception:
             pass
 
@@ -83,6 +85,7 @@ def login_view(request):
                 "last_name": user.last_name,
                 "role": role,
                 "ci": ci,
+                "age": age,
             }
         }, status=status.HTTP_200_OK)
 
@@ -187,7 +190,7 @@ def resultados_view(request):
                     return Response({'error': 'Paciente no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
             # Validaciones
-            valid_tipos = ['lectura', 'velocidad', 'comprension', 'ortografia']
+            valid_tipos = ['lectura', 'velocidad', 'comprension', 'ortografia', 'alfabeto']
             if tipo_prueba not in valid_tipos:
                 return Response(
                     {"error": f"Tipo de prueba inválido. Debe ser uno de: {', '.join(valid_tipos)}"},
@@ -254,6 +257,7 @@ def signup_view(request):
         first_name = data.get('first_name') or ''
         last_name = data.get('last_name') or ''
         ci = (data.get('ci') or '').strip()
+        age_value = data.get('age')
         requested_role = data.get('role', 'user')
         license_number = (data.get('license_number') or '').strip()
         specialty = (data.get('specialty') or '').strip()
@@ -286,6 +290,16 @@ def signup_view(request):
         if Profile.objects.filter(ci=ci).exists():
             return Response({'field_errors': {'ci': 'CI ya registrado para otro usuario'}}, status=status.HTTP_400_BAD_REQUEST)
 
+        age = None
+        if age_value not in (None, ''):
+            if isinstance(age_value, bool) or not str(age_value).isdigit():
+                return Response({'field_errors': {'age': 'La edad debe contener solo números'}}, status=status.HTTP_400_BAD_REQUEST)
+            age = int(age_value)
+            if age > 120:
+                return Response({'field_errors': {'age': 'La edad debe ser menor o igual a 120 años'}}, status=status.HTTP_400_BAD_REQUEST)
+        elif requested_role != 'professional':
+            return Response({'field_errors': {'age': 'La edad es obligatoria para pacientes'}}, status=status.HTTP_400_BAD_REQUEST)
+
         if requested_role == 'professional' and (not license_number or not specialty):
             professional_errors = {}
             if not license_number:
@@ -304,6 +318,7 @@ def signup_view(request):
         prof, _ = Profile.objects.get_or_create(user=user_new)
         prof.role = 'doctor' if requested_role == 'professional' else 'paciente'
         prof.ci = ci
+        prof.age = age
         prof.license_number = license_number if prof.role == 'doctor' else ''
         prof.specialty = specialty if prof.role == 'doctor' else ''
         prof.institution = institution if prof.role == 'doctor' else ''
@@ -327,6 +342,7 @@ def signup_view(request):
                 'last_name': user_new.last_name,
                 'role': prof.role,
                 'ci': prof.ci,
+                'age': prof.age,
                 'license_number': prof.license_number,
                 'specialty': prof.specialty,
                 'institution': prof.institution,
