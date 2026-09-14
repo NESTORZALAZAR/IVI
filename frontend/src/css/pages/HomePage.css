@@ -27,20 +27,6 @@
 }
 
 .hero-copy { min-width: 0; max-width: 560px; }
-.hero-copy::before {
-  content: "Entorno Adaptado & Modo Confort";
-  display: inline-flex;
-  max-width: 220px;
-  margin-bottom: 1.1rem;
-  padding: 0.25rem 1.35rem;
-  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
-  border-radius: 999px;
-  color: var(--primary);
-  font-size: 0.68rem;
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: center;
-}
 
 .hero-copy h1 {
   margin: 0 0 1.2rem;

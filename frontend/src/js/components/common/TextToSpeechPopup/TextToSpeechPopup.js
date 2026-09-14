@@ -90,7 +90,7 @@ export default function TextToSpeechPopup() {
         const selection = window.getSelection();
         const selectedText = selection ? selection.toString().trim() : "";
 
-        if (!selectedText || selectedText.length < 2) {
+        if (!selectedText) {
           setPopup((prev) => ({ ...prev, visible: false }));
           return;
         }
@@ -112,7 +112,7 @@ export default function TextToSpeechPopup() {
       setTimeout(() => {
         const selection = window.getSelection();
         const selectedText = selection ? selection.toString().trim() : "";
-        if (!selectedText || selectedText.length < 2) {
+        if (!selectedText) {
           setPopup((prev) => ({ ...prev, visible: false }));
           return;
         }

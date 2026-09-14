@@ -4,7 +4,7 @@
 	--admin-line: var(--border);
 	--admin-paper: var(--card);
 	--admin-control: var(--bg);
-	max-width: 1180px;
+	max-width: 1520px;
 	margin: 0 auto;
 	padding: 1.8rem 1.35rem 3rem;
 	text-align: left;
@@ -97,9 +97,9 @@
 
 .table-panel { overflow: hidden; }
 .table-scroll { overflow-x: auto; }
-.admin-table { border-collapse: collapse; min-width: 920px; width: 100%; }
-.admin-table th { background: color-mix(in srgb, var(--card) 82%, var(--bg)); color: var(--admin-ink); font-size: 0.66rem; letter-spacing: 0.08em; padding: 0.8rem 1rem; text-align: left; text-transform: uppercase; }
-.admin-table td { border-top: 1px solid var(--admin-line); color: var(--admin-ink); font-size: 0.75rem; padding: 0.72rem 1rem; vertical-align: middle; }
+.admin-table { border-collapse: collapse; table-layout: fixed; width: 100%; }
+.admin-table th { background: color-mix(in srgb, var(--card) 82%, var(--bg)); color: var(--admin-ink); font-size: 0.66rem; letter-spacing: 0.08em; padding: 0.8rem 0.75rem; text-align: left; text-transform: uppercase; }
+.admin-table td { border-top: 1px solid var(--admin-line); color: var(--admin-ink); font-size: 0.75rem; overflow-wrap: anywhere; padding: 0.72rem 0.75rem; vertical-align: middle; }
 .admin-table tr:hover td { background: color-mix(in srgb, var(--card) 72%, var(--bg)); }
 .admin-table td small { color: var(--admin-muted); display: block; font-size: 0.68rem; line-height: 1.3; }
 .user-id { color: var(--admin-muted) !important; font-size: 0.67rem !important; }
@@ -118,7 +118,7 @@
 .role-especialista { background: #fff0bd; color: #9b6700; }
 .role-educador { background: #f0ddff; color: #7d32b9; }
 .role-paciente, .role-default { background: #e8edef; color: #58666b; }
-.email-cell { white-space: nowrap; }
+.email-cell { white-space: normal; }
 .institution { margin-top: 0.12rem; }
 
 .pagination { align-items: center; border-top: 1px solid var(--admin-line); color: var(--admin-muted); display: flex; font-size: 0.73rem; justify-content: space-between; padding: 0.8rem 1.1rem; }

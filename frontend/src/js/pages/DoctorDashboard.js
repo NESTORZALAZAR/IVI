@@ -15,6 +15,7 @@ export default function DoctorDashboard(){
   const [testMode, setTestMode] = useState(null);
   const [officeName, setOfficeName] = useState('');
   const [officeCi, setOfficeCi] = useState('');
+  const [testAge, setTestAge] = useState('');
   const [officeError, setOfficeError] = useState('');
   const [showOfficeResults, setShowOfficeResults] = useState(false);
   const [officeResults, setOfficeResults] = useState([]);
@@ -85,15 +86,19 @@ export default function DoctorDashboard(){
 
   const beginOfficeTest = async () => {
     setOfficeError('');
-    if (!officeName.trim() || !officeCi.trim()) {
-      setOfficeError('Ingresa el nombre y el número de cédula.');
+    if (!officeName.trim() || !officeCi.trim() || !testAge) {
+      setOfficeError('Ingresa el nombre, el número de cédula y la edad.');
+      return;
+    }
+    if (Number(testAge) < 1 || Number(testAge) > 120) {
+      setOfficeError('La edad debe estar entre 1 y 120 años.');
       return;
     }
     try {
       const response = await fetch('http://127.0.0.1:8000/api/doctor/consultorio/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ name: officeName, ci: officeCi })
+        body: JSON.stringify({ name: officeName, ci: officeCi, age: testAge })
       });
       const data = await response.json();
       if (!response.ok) {
@@ -105,6 +110,21 @@ export default function DoctorDashboard(){
     } catch (e) {
       setOfficeError('No se pudo iniciar la evaluación en consultorio.');
     }
+  };
+
+  const beginDoctorTest = () => {
+    setOfficeError('');
+    if (!testAge) {
+      setOfficeError('Ingresa la edad.');
+      return;
+    }
+    if (Number(testAge) < 1 || Number(testAge) > 120) {
+      setOfficeError('La edad debe estar entre 1 y 120 años.');
+      return;
+    }
+    localStorage.removeItem('ivi_office_patient');
+    localStorage.setItem('ivi_test_age', testAge);
+    navigate('/pruebas');
   };
 
   const loadOfficeResults = async () => {
@@ -202,15 +222,18 @@ export default function DoctorDashboard(){
         <div className="modal">
           {testMode === 'choose' ? <>
             <h3>¿Quién realizará las pruebas?</h3>
-            <button className="btn" onClick={() => { localStorage.removeItem('ivi_office_patient'); navigate('/pruebas'); }}>Doctor</button>
-            <button className="btn" onClick={() => setTestMode('patient')}>Paciente en consultorio</button>
+            <button className="btn" onClick={() => { setTestAge(''); setOfficeError(''); setTestMode('doctor'); }}>Doctor</button>
+            <button className="btn" onClick={() => { setTestAge(''); setOfficeError(''); setTestMode('patient'); }}>Paciente en consultorio</button>
             <button className="btn ghost" onClick={() => setTestMode(null)}>Cancelar</button>
           </> : <>
-            <h3>Datos del paciente</h3>
-            <input placeholder="Nombre completo" value={officeName} onChange={e => setOfficeName(e.target.value)} />
-            <input placeholder="Número de cédula" value={officeCi} onChange={e => setOfficeCi(e.target.value)} />
+            <h3>{testMode === 'doctor' ? 'Edad del doctor' : 'Datos del paciente'}</h3>
+            {testMode === 'patient' && <>
+              <input placeholder="Nombre completo" value={officeName} onChange={e => setOfficeName(e.target.value)} />
+              <input placeholder="Número de cédula" value={officeCi} onChange={e => setOfficeCi(e.target.value)} />
+            </>}
+            <input type="number" min="1" max="120" placeholder="Edad" value={testAge} onChange={e => setTestAge(e.target.value)} />
             {officeError && <div className="error">{officeError}</div>}
-            <button className="btn" onClick={beginOfficeTest}>Continuar</button>
+            <button className="btn" onClick={testMode === 'doctor' ? beginDoctorTest : beginOfficeTest}>Continuar</button>
             <button className="btn ghost" onClick={() => setTestMode('choose')}>Volver</button>
           </>}
         </div>

@@ -3,11 +3,16 @@ import { useNavigate } from "react-router-dom";
 import "../../css/pages/PruebaPage.css";
 
 const PREGUNTAS = [
-  { pregunta: "¿Qué letra viene después de la C?", opciones: ["B", "D", "E", "F"], correcta: 1 },
-  { pregunta: "¿Cuál es la primera letra del alfabeto?", opciones: ["A", "E", "I", "O"], correcta: 0 },
-  { pregunta: "Completa la secuencia: M, N, __, P", opciones: ["L", "O", "Q", "R"], correcta: 1 },
-  { pregunta: "¿Qué letra viene antes de la Z?", opciones: ["X", "Y", "W", "V"], correcta: 1 },
-  { pregunta: "¿Cuál de estas letras aparece primero en el alfabeto?", opciones: ["R", "H", "K", "T"], correcta: 1 }
+  { pregunta: "Escucha o lee las siguientes opciones. ¿Cuál de ellas es una LETRA?", opciones: ["4", "8", "M", "2"], correcta: 2 }, 
+  { pregunta: "Ahora, observa estas opciones. ¿Cuál de ellas es un NÚMERO?", opciones: ["7", "P", "L", "S"], correcta: 0 },
+  { pregunta: "Si decimos el abecedario: A, B, C, D..., ¿Qué letra sigue a continuación?", opciones: ["Z", "E", "M", "X"], correcta: 1 },
+  { pregunta: "¿Cuál es la letra MINÚSCULA de la A mayúscula?", opciones: ["e", "o", "a", "u"], correcta: 2 },
+  { pregunta: "¿Cuál de los siguientes grupos está formado SOLO por vocales?", opciones: ["A-E-I", "P-L-M", "1-2-3", "B-C-D"], correcta: 0 },
+  { pregunta: "Si contamos del 1 al 5, ¿qué número va justo DESPUÉS del 3?", opciones: ["2", "4", "8", "1"], correcta: 1 },
+  { pregunta: "De los siguientes números, ¿cuál representa la cantidad MAYOR (el más grande)?", opciones: ["2", "9", "4", "1"], correcta: 1 },
+  { pregunta: "Si juntamos la letra M con la vocal A, ¿qué sonido se forma?", opciones: ["PE", "LA", "MA", "SO"], correcta: 2 },
+  { pregunta: "Escucha con atención: ¿Con qué vocal TERMINA la palabra O - S - O?", opciones: ["A", "E", "I", "O"], correcta: 3 },
+  { pregunta: "Observa estas palabras. ¿Cuál de ellas es la más CORTA?", opciones: ["MARIPOSA", "ELEFANTE", "PAN", "CARAMELO"], correcta: 2 }
 ];
 
 export default function PruebaAlfabetoPage() {
@@ -57,11 +62,11 @@ export default function PruebaAlfabetoPage() {
   }
 
   return (
-    <div className="prueba-lectura">
+    <div className="prueba-lectura prueba-alfabeto">
       <div className="prueba-container">
         <div className="prueba-header">
           <h1>Conocimiento del Alfabeto</h1>
-          <p>Responde las preguntas sobre las letras y su orden.</p>
+          <h2>Responde las preguntas sobre las letras y su orden.</h2>
         </div>
         <div className="preguntas-section">
           {PREGUNTAS.map((pregunta, index) => (

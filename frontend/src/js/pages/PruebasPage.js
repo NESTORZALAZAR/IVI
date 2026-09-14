@@ -5,7 +5,7 @@ export default function PruebasPage() {
   const navigate = useNavigate();
   const officePatient = JSON.parse(localStorage.getItem("ivi_office_patient") || "null");
   const storedUser = JSON.parse(localStorage.getItem("user") || localStorage.getItem("ivi_user") || "null");
-  const patientAge = officePatient?.age ?? storedUser?.age;
+  const patientAge = officePatient?.age ?? localStorage.getItem("ivi_test_age") ?? storedUser?.age;
   const canTakeKnowledgeFilter = Number.isFinite(Number(patientAge)) && Number(patientAge) >= 7;
   const pruebas = [
     {

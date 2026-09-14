@@ -475,10 +475,18 @@ def doctor_consultorio_view(request):
 
     name = (request.data.get('name') or '').strip()
     ci = (request.data.get('ci') or '').strip()
-    if not name or not ci:
-        return Response({'field_errors': {'name': 'Nombre requerido', 'ci': 'CI requerido'}}, status=status.HTTP_400_BAD_REQUEST)
+    age_value = request.data.get('age')
+    if not name or not ci or age_value in (None, ''):
+        return Response({'field_errors': {
+            **({'name': 'Nombre requerido'} if not name else {}),
+            **({'ci': 'CI requerido'} if not ci else {}),
+            **({'age': 'Edad requerida'} if age_value in (None, '') else {}),
+        }}, status=status.HTTP_400_BAD_REQUEST)
     if not ci.isdigit():
         return Response({'field_errors': {'ci': 'El CI debe contener solo dígitos'}}, status=status.HTTP_400_BAD_REQUEST)
+    if isinstance(age_value, bool) or not str(age_value).isdigit() or not 1 <= int(age_value) <= 120:
+        return Response({'field_errors': {'age': 'La edad debe ser un número entre 1 y 120'}}, status=status.HTTP_400_BAD_REQUEST)
+    age = int(age_value)
 
     profile = Profile.objects.filter(ci=ci).select_related('user').first()
     if profile:
@@ -497,9 +505,10 @@ def doctor_consultorio_view(request):
         profile.role = 'paciente'
         profile.ci = ci
     profile.is_office_patient = True
+    profile.age = age
     profile.save()
 
-    return Response({'patient': {'id': patient.id, 'name': name or patient.first_name, 'ci': profile.ci}}, status=status.HTTP_200_OK)
+    return Response({'patient': {'id': patient.id, 'name': name or patient.first_name, 'ci': profile.ci, 'age': profile.age}}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET','POST'])
