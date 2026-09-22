@@ -22,6 +22,9 @@
 .difficulty-options { display: flex; flex-wrap: wrap; gap: .4rem; }
 .difficulty-options button { min-height: 42px; padding: .55rem .9rem; border: 1px solid var(--border); border-radius: var(--ivi-radius-sm); background: var(--bg); color: var(--text); font: inherit; font-weight: 700; cursor: pointer; }
 .difficulty-options button.selected { border-color: var(--primary); background: var(--primary); color: #fff; }
+.age-options { display: flex; flex-wrap: wrap; gap: .4rem; }
+.age-options button { min-height: 42px; padding: .55rem .8rem; border: 1px solid var(--border); border-radius: var(--ivi-radius-sm); background: var(--card); color: var(--text); font: inherit; font-size: .86rem; cursor: pointer; }
+.age-options button.selected { border-color: var(--ivi-success); background: color-mix(in srgb, var(--ivi-success) 18%, var(--card)); color: var(--text); font-weight: 700; }
 
 .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
 .game-card { display: flex; position: relative; flex-direction: column; min-height: 330px; padding: 1.5rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--ivi-radius-lg); color: var(--text); text-decoration: none; box-shadow: var(--ivi-shadow-soft); transition: transform .2s, box-shadow .2s; }
