@@ -40,6 +40,10 @@
   margin-bottom: 3rem;
 }
 
+.games-entry-card{display:flex;align-items:center;justify-content:center;gap:1rem;margin:0 0 2rem;padding:1rem 1.25rem;background:#d9eee4;border:1px solid #b7d9c5;border-radius:10px;color:#233c46;text-decoration:none;box-shadow:0 6px 16px rgba(42,45,38,.08)}
+.games-entry-card:hover{transform:translateY(-2px)}
+.games-entry-icon{font-size:2rem}.games-entry-card strong{display:block;font-size:1.15rem;text-align:center}.games-entry-card small{display:block;color:#526168;margin-top:.2rem;text-align:center}.games-entry-card>span:last-child{font-size:1.5rem}
+
 .prueba-card {
   background: var(--card);
   border-radius: 12px;
@@ -332,11 +336,13 @@
 
 .knowledge-filter-card .prueba-content {
   gap: 0.2rem;
+  text-align: center;
 }
 
 .knowledge-card-title {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.55rem;
   flex-wrap: wrap;
 }
@@ -430,6 +436,21 @@
 .pruebas-grid .prueba-duracion {
   font-size: 0.68rem;
   line-height: 1.35;
+}
+
+.prueba-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.prueba-meta span {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.58rem;
+  font-weight: 700;
 }
 
 .pruebas-grid .prueba-arrow {

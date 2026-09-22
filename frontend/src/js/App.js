@@ -18,6 +18,8 @@ import PruebaComprensionPage from "./pages/PruebaComprensionPage";
 import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
 import PruebaAlfabetoPage from "./pages/PruebaAlfabetoPage";
 import ResultadosPage from "./pages/ResultadosPage";
+import JuegosPage from "./pages/JuegosPage";
+import { JuegoParejasPage, JuegoSilabasPage, JuegoLetrasPage } from "./pages/JuegosInteractivosPage";
 
 // 👑 Vistas de Administración y Doctores
 import AdminUsers from "./pages/AdminUsers";
@@ -121,6 +123,10 @@ function AppContent() {
           <Route path="/pruebas/ortografia" element={<PruebaOrtografiaPage />} />
           <Route path="/pruebas/alfabeto" element={<PruebaAlfabetoPage />} />
           <Route path="/resultados" element={<ResultadosPage />} />
+          <Route path="/juegos" element={<JuegosPage />} />
+          <Route path="/juegos/parejas" element={<JuegoParejasPage />} />
+          <Route path="/juegos/silabas" element={<JuegoSilabasPage />} />
+          <Route path="/juegos/letras" element={<JuegoLetrasPage />} />
 
           {/* ==========================================
               RUTAS PROTEGIDAS POR ROL (ADMIN & DOCTOR)

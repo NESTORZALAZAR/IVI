@@ -1,0 +1,101 @@
+.games-page,
+.game-page {
+  min-height: calc(100vh - 70px);
+  padding: 2rem 1.25rem 4rem;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.games-hero,
+.games-grid,
+.game-shell { max-width: 1100px; margin: 0 auto; }
+.games-hero { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 2rem 0 2.5rem; }
+.games-hero h1,
+.game-title h1 { margin: .35rem 0 .8rem; color: var(--text); font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.05; }
+.games-hero p,
+.game-title p { max-width: 650px; color: var(--text); font-size: 1.05rem; }
+.games-hero img { width: 150px; height: 150px; object-fit: contain; }
+.eyebrow { color: var(--primary); font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+
+.difficulty-filter { display: flex; align-items: center; justify-content: space-between; gap: 1rem; max-width: 1100px; margin: 0 auto 1.5rem; padding: 1rem 1.2rem; border: 1px solid var(--border); border-radius: var(--ivi-radius-md); background: var(--card); box-shadow: var(--ivi-shadow-soft); }
+.difficulty-filter h2 { margin: .25rem 0 0; color: var(--text); font-size: 1.1rem; }
+.difficulty-options { display: flex; flex-wrap: wrap; gap: .4rem; }
+.difficulty-options button { min-height: 42px; padding: .55rem .9rem; border: 1px solid var(--border); border-radius: var(--ivi-radius-sm); background: var(--bg); color: var(--text); font: inherit; font-weight: 700; cursor: pointer; }
+.difficulty-options button.selected { border-color: var(--primary); background: var(--primary); color: #fff; }
+
+.games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.game-card { display: flex; position: relative; flex-direction: column; min-height: 330px; padding: 1.5rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--ivi-radius-lg); color: var(--text); text-decoration: none; box-shadow: var(--ivi-shadow-soft); transition: transform .2s, box-shadow .2s; }
+.game-card:hover { transform: translateY(-5px); box-shadow: var(--ivi-shadow-elevated); }
+.game-card.mint { background: color-mix(in srgb, var(--card) 82%, #8dc8a8); }
+.game-card.gold { background: color-mix(in srgb, var(--card) 84%, #e8c766); }
+.game-card.coral { background: color-mix(in srgb, var(--card) 84%, #df927d); }
+.game-card img { width: 72px; height: 72px; margin-bottom: 1.2rem; object-fit: contain; }
+.game-tag { font-size: .75rem; font-weight: 700; letter-spacing: .08em; opacity: .7; text-transform: uppercase; }
+.game-card h2 { margin: .45rem 0; font-size: 1.45rem; }
+.game-card p { margin: 0; color: var(--text); }
+.game-card-level { margin-top: 1rem; color: var(--primary); font-size: .85rem; font-weight: 700; }
+.game-card-link { margin-top: auto; color: var(--primary); font-weight: 700; }
+.games-note { margin: 2rem auto 0; color: var(--text); font-size: .9rem; text-align: center; }
+
+.game-shell { max-width: 980px; }
+.back-link { display: inline-block; margin-bottom: 1.5rem; color: var(--primary); font-weight: 700; text-decoration: none; }
+.game-title { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.game-title img { width: 78px; height: 78px; object-fit: contain; }
+.game-title h1 { margin: .3rem 0; font-size: clamp(1.8rem, 4vw, 2.7rem); }
+.game-title p { margin: 0; }
+.level-tabs { display: flex; gap: .7rem; margin-bottom: 1.2rem; }
+.level-tabs button { flex: 1; padding: .7rem; border: 2px solid var(--border); border-radius: var(--ivi-radius-sm); background: var(--card); color: var(--text); font: inherit; font-weight: 700; cursor: pointer; }
+.level-tabs button small { display: block; margin-top: .2rem; font-weight: 400; }
+.level-tabs button.active { border-color: transparent; color: #fff; }
+.level-tabs button.active.easy { background: var(--ivi-success); }
+.level-tabs button.active.medium { background: #b47c20; }
+.level-tabs button.active.hard { background: var(--ivi-danger-dark); }
+.game-stats,
+.letter-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 1rem 0; }
+.game-stats b,
+.letter-stats b { padding: .7rem 1rem; border: 1px solid var(--border); border-radius: var(--ivi-radius-sm); background: var(--card); color: var(--text); font-size: .9rem; }
+.game-stats strong,
+.letter-stats strong { display: block; color: var(--primary); font-size: 1.25rem; }
+
+.memory-board { display: grid; grid-template-columns: repeat(var(--columns), minmax(58px, 105px)); justify-content: center; gap: .75rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: var(--ivi-radius-md); background: var(--card); box-shadow: var(--ivi-shadow-soft); }
+.memory-card { aspect-ratio: 1; border: 0; border-radius: var(--ivi-radius-sm); background: var(--primary); color: #fff; font-size: 2rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 0 color-mix(in srgb, var(--primary) 75%, #000); }
+.memory-card.revealed { background: var(--card); color: var(--primary); }
+.memory-card.matched { background: color-mix(in srgb, var(--ivi-success) 28%, var(--card)); color: var(--ivi-success-text); }
+.success-message { margin-top: 1rem; padding: 1rem; border-radius: var(--ivi-radius-sm); background: color-mix(in srgb, var(--ivi-success) 18%, var(--card)); text-align: center; }
+.success-message h2,
+.success-message p { margin: .2rem; }
+
+.word-prompt { display: flex; align-items: center; justify-content: center; gap: 1rem; color: var(--text); font-weight: 700; }
+.word-hint { font-size: 3rem; }
+.syllable-train { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; padding: 1.5rem; border-bottom: 5px solid var(--border); border-radius: var(--ivi-radius-md); background: color-mix(in srgb, var(--primary) 12%, var(--card)); }
+.train-engine { font-size: 2.5rem; }
+.train-car { min-width: 76px; padding: .8rem .6rem; border: 2px dashed var(--border); border-radius: var(--ivi-radius-sm); background: var(--card); color: var(--text); font-weight: 700; text-align: center; }
+.train-car.filled { border-style: solid; background: var(--primary); color: #fff; }
+.syllable-options { display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; }
+.syllable-options button,
+.field-overlay button { padding: .8rem 1.2rem; border: 0; border-radius: var(--ivi-radius-sm); background: var(--primary); color: #fff; font: inherit; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+.syllable-options button:disabled { opacity: .5; }
+
+.letter-field { position: relative; height: 440px; overflow: hidden; border: 3px solid var(--border); border-radius: var(--ivi-radius-md); background: var(--card); background-image: linear-gradient(color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px); background-size: 40px 40px; }
+.target-badge { position: absolute; z-index: 2; top: 1rem; left: 50%; padding: .55rem 1rem; transform: translateX(-50%); border-radius: 20px; background: var(--primary); color: #fff; }
+.target-badge strong { color: #fff; font-size: 1.4rem; }
+.target-letter,
+.distractor-letter { position: absolute; padding: .3rem; border: 0; background: transparent; font-size: 2.5rem; font-weight: 800; cursor: pointer; }
+.target-letter { color: var(--ivi-success); }
+.distractor-letter { color: var(--text); }
+.field-overlay { position: absolute; z-index: 3; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: color-mix(in srgb, var(--text) 88%, transparent); color: #fff; }
+.field-overlay p { font-size: 1.1rem; }
+.reset-button { display: block; margin: 1.3rem auto 0; padding: .65rem 1rem; border: 2px solid var(--primary); border-radius: var(--ivi-radius-sm); background: transparent; color: var(--primary); font: inherit; font-weight: 700; cursor: pointer; }
+
+@media (max-width: 760px) {
+  .difficulty-filter { align-items: flex-start; flex-direction: column; }
+  .games-grid { grid-template-columns: 1fr; }
+  .games-hero { padding-top: 1rem; }
+  .games-hero img { width: 100px; height: 100px; }
+  .game-title { align-items: flex-start; }
+  .memory-board { gap: .5rem; padding: .8rem; }
+  .memory-card { font-size: 1.5rem; }
+  .letter-field { height: 350px; }
+  .level-tabs { gap: .35rem; }
+  .level-tabs button { padding: .55rem .3rem; font-size: .85rem; }
+}

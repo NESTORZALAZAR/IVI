@@ -13,6 +13,8 @@ export default function PruebasPage() {
       nombre: "Prueba de Lectura",
       descripcion: "Evalúa la capacidad de lectura y comprensión de textos",
       duracion: "10-15 min",
+      edad: "8-15 años",
+      dificultad: "Media",
       color: "blue",
       icon: "📖"
     },
@@ -21,6 +23,8 @@ export default function PruebasPage() {
       nombre: "Prueba de Velocidad",
       descripcion: "Mide la velocidad de lectura y procesamiento",
       duracion: "8-10 min",
+      edad: "8-15 años",
+      dificultad: "Media",
       color: "orange",
       icon: "⚡"
     },
@@ -29,6 +33,8 @@ export default function PruebasPage() {
       nombre: "Prueba de Comprensión",
       descripcion: "Evalúa la comprensión de textos y conceptos",
       duracion: "12-15 min",
+      edad: "11-15 años",
+      dificultad: "Avanzada",
       color: "green",
       icon: "💡"
     },
@@ -37,6 +43,8 @@ export default function PruebasPage() {
       nombre: "Prueba de Ortografía",
       descripcion: "Evalúa el conocimiento de reglas ortográficas",
       duracion: "10-12 min",
+      edad: "8-15 años",
+      dificultad: "Media",
       color: "purple",
       icon: "✍️"
     }
@@ -67,6 +75,7 @@ export default function PruebasPage() {
                   <span>Filtro Esencial</span>
                 </div>
                 <p className="prueba-descripcion">Identifica letras y completa secuencias alfabéticas de forma guiada.</p>
+                <div className="prueba-meta"><span>7+ años</span><span>Inicial</span></div>
                 <p className="prueba-duracion">◷ 5 - 7 min</p>
               </div>
               <span className="knowledge-filter-action">Iniciar Evaluación <b>›</b></span>
@@ -78,6 +87,11 @@ export default function PruebasPage() {
           <h2>Pruebas de Dislexia</h2>
           <p>Selecciona una prueba para evaluar tus habilidades específicas.</p>
         </div>
+        <Link to="/juegos" className="games-entry-card">
+          <span className="games-entry-icon">🎮</span>
+          <span><strong>Juegos de tamizaje</strong><small>Memoria, sílabas y atención · 5-15 años · Fácil, medio y difícil</small></span>
+          <span aria-hidden="true">→</span>
+        </Link>
         <div className="pruebas-grid">
           {pruebas.map((prueba) => (
             <Link
@@ -89,6 +103,7 @@ export default function PruebasPage() {
               <div className="prueba-content">
                 <h2>{prueba.nombre}</h2>
                 <p className="prueba-descripcion">{prueba.descripcion}</p>
+                <div className="prueba-meta"><span>{prueba.edad}</span><span>{prueba.dificultad}</span></div>
                 <p className="prueba-duracion">⏱️ {prueba.duracion}</p>
               </div>
               <div className="prueba-arrow">→</div>
