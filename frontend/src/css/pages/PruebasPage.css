@@ -258,11 +258,15 @@
 
 .pruebas-header {
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .pruebas-header h1 {
-  font-size: clamp(1.55rem, 3vw, 2rem);
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
   letter-spacing: 0;
+  color: #17233d;
+  font-weight: 900;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.8);
 }
 
 .knowledge-filter-section {
@@ -386,18 +390,21 @@
 
 .tests-heading {
   margin-bottom: 0.9rem;
+  text-align: center;
 }
 
 .tests-heading h2 {
   margin: 0 0 0.15rem;
-  color: var(--text);
-  font-size: 1.25rem;
+  color: #253d88;
+  font-size: clamp(1.65rem, 3vw, 2.1rem);
+  font-weight: 900;
 }
 
 .tests-heading p {
   margin: 0;
-  color: var(--text);
-  font-size: 0.75rem;
+  color: #4a5872;
+  font-size: clamp(1.05rem, 2.1vw, 1.3rem);
+  font-weight: 600;
 }
 
 .pruebas-grid {

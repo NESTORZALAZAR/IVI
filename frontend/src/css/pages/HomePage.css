@@ -45,7 +45,7 @@
   overflow-wrap: anywhere;
 }
 
-.hero-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: flex-start; }
+.hero-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; align-items: center; }
 .btn-comenza,
 .btn-resultados {
   min-width: 174px;

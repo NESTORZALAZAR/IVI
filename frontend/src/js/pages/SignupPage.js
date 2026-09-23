@@ -157,7 +157,9 @@ export default function SignupPage() {
 
     // Construcción del Payload
     const payload = {
-      username: formData.username,
+      username: accountType === "professional"
+        ? `profesional_${formData.ci}`
+        : formData.username,
       email: formData.email,
       password: formData.password,
       ci: formData.ci,
@@ -244,19 +246,21 @@ export default function SignupPage() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Datos de la persona a evaluar</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              placeholder="Tu nombre de usuario"
-            />
-            {fieldErrors.username && <div className="field-error">{fieldErrors.username}</div>}
-          </div>
+          {accountType !== "professional" && (
+            <div className="form-group">
+              <label htmlFor="username">Datos de la persona a evaluar</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                placeholder="Nombre de usuario"
+              />
+              {fieldErrors.username && <div className="field-error">{fieldErrors.username}</div>}
+            </div>
+          )}
 
           <div className="form-row">
             <div className="form-group">
@@ -298,24 +302,30 @@ export default function SignupPage() {
             {fieldErrors.ci && <div className="field-error">{fieldErrors.ci}</div>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="age">Edad del paciente</label>
-            <input
-              type="number"
-              id="age"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              min="0"
-              max="120"
-              required={accountType !== "professional"}
-              placeholder="Ingrese la edad"
-            />
-            {fieldErrors.age && <div className="field-error">{fieldErrors.age}</div>}
-          </div>
+          {accountType !== "professional" && (
+            <div className="form-group">
+              <label htmlFor="age">Edad del paciente</label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                value={formData.age}
+                onChange={handleChange}
+                min="0"
+                max="120"
+                required
+                placeholder="Ingrese la edad"
+              />
+              {fieldErrors.age && <div className="field-error">{fieldErrors.age}</div>}
+            </div>
+          )}
 
           <div className="form-group">
-            <label htmlFor="email">Correo electrónico (Del tutor o persona a evaluar)</label>
+            <label htmlFor="email">
+              {accountType === "professional"
+                ? "Correo electrónico"
+                : "Correo electrónico (Del tutor o persona a evaluar)"}
+            </label>
             <input
               type="email"
               id="email"
