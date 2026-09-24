@@ -20,6 +20,27 @@ const getInitialLevel = () => {
 };
 const getInitialAge = () => edadesValidas.includes(queryParams.get("edad")) ? queryParams.get("edad") : "8-10";
 
+const guardarResultadoJuego = async (tipoPrueba, puntaje, duracionSegundos, detalles) => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const paciente = JSON.parse(localStorage.getItem("ivi_office_patient") || "null");
+  await fetch("http://localhost:8000/api/resultados/", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      tipo_prueba: tipoPrueba,
+      puntaje: Math.max(0, Math.min(100, Math.round(puntaje))),
+      duracion_segundos: duracionSegundos,
+      detalles,
+      target_user_id: paciente?.id,
+    }),
+  });
+};
+
 function Shell({ title, subtitle, image, level, setLevel, age, children, onReset }) {
   return <main className="game-page"><div className="game-shell"><Link className="back-link" to="/juegos">← Volver a juegos</Link><header className="game-title"><img src={image} alt="" /><div><span className="eyebrow">Versión {ETIQUETAS_EDAD[age]} · {age} años</span><h1>{title}</h1><p>{subtitle}</p></div></header><nav className="level-tabs" aria-label="Seleccionar nivel">{niveles.map((item, index) => <button className={level === index ? `active ${item.className}` : ""} onClick={() => setLevel(index)} key={item.label}>{item.label}<small>{item.detail}</small></button>)}</nav>{children}<button className="reset-button" onClick={onReset}>Reiniciar nivel</button></div></main>;
 }
@@ -46,13 +67,15 @@ const createMemoryDeck = (level, age) => {
 export function JuegoParejasPage() {
   const [level, setLevel] = useState(getInitialLevel);
   const [age] = useState(getInitialAge);
+  const [tiempoInicio, setTiempoInicio] = useState(Date.now);
   const [cards, setCards] = useState([]);
   const [selected, setSelected] = useState([]);
   const [moves, setMoves] = useState(0);
   const [matches, setMatches] = useState(0);
   const [locked, setLocked] = useState(false);
+  const [resultadoGuardado, setResultadoGuardado] = useState(false);
   const config = (PAREJAS_BY_AGE[age] || PAREJAS_BY_AGE["8-10"])[level];
-  const reset = () => { setCards(createMemoryDeck(level, age)); setSelected([]); setMoves(0); setMatches(0); setLocked(false); };
+  const reset = () => { setCards(createMemoryDeck(level, age)); setSelected([]); setMoves(0); setMatches(0); setLocked(false); setResultadoGuardado(false); setTiempoInicio(Date.now()); };
   useEffect(reset, [level, age]);
   const choose = (index) => {
     if (locked || cards[index]?.open || cards[index]?.matched || selected.length === 2) return;
@@ -62,7 +85,19 @@ export function JuegoParejasPage() {
       setMoves((value) => value + 1); setLocked(true);
       const [first, second] = picks;
       const matched = next[first].icon === next[second].icon;
-      setTimeout(() => { setCards((current) => current.map((card, cardIndex) => picks.includes(cardIndex) ? { ...card, open: matched, matched } : card)); if (matched) setMatches((value) => value + 1); setSelected([]); setLocked(false); }, matched ? 250 : config.delay);
+      setTimeout(() => {
+        setCards((current) => current.map((card, cardIndex) => picks.includes(cardIndex) ? { ...card, open: matched, matched } : card));
+        if (matched) {
+          const nextMatches = matches + 1;
+          const nextMoves = moves + 1;
+          setMatches(nextMatches);
+          if (nextMatches === config.pairs && !resultadoGuardado) {
+            setResultadoGuardado(true);
+            guardarResultadoJuego("parejas", (nextMatches / nextMoves) * 100, Math.floor((Date.now() - tiempoInicio) / 1000), { parejas: nextMatches, total_parejas: config.pairs, intentos: nextMoves, precision: Math.round((nextMatches / nextMoves) * 100), nivel: level });
+          }
+        }
+        setSelected([]); setLocked(false);
+      }, matched ? 250 : config.delay);
     }
   };
   return <Shell title="Parejas escondidas" subtitle={age === "5-7" ? "Encuentra animales iguales y fortalece tu memoria visual." : age === "15+" ? "Relaciona códigos y símbolos bajo presión de memoria." : "Encuentra los elementos iguales y ejercita tu memoria visuoespacial."} image={cerebro} level={level} setLevel={setLevel} age={age} onReset={reset}><div className="game-stats"><b>Parejas <strong>{matches}/{config.pairs}</strong></b><b>Intentos <strong>{moves}</strong></b><b>Precisión <strong>{moves ? Math.round((matches / moves) * 100) : 0}%</strong></b></div><div className="memory-board" style={{ "--columns": config.columns }}>{cards.map((card, index) => <button aria-label={card.open || card.matched ? `Símbolo ${card.icon}` : "Carta oculta"} className={`memory-card ${card.open || card.matched ? "revealed" : ""} ${card.matched ? "matched" : ""}`} onClick={() => choose(index)} key={card.id}>{card.open || card.matched ? <span className="memory-card-icon">{card.icon}</span> : "?"}</button>)}</div>{matches === config.pairs && <div className="success-message"><h2>¡Nivel completado!</h2><p>Lograste {matches} parejas en {moves} intentos.</p></div>}</Shell>;
@@ -76,10 +111,10 @@ const WORDS_BY_AGE = {
 };
 
 export function JuegoSilabasPage() {
-  const [level, setLevel] = useState(getInitialLevel); const [age] = useState(getInitialAge); const [index, setIndex] = useState(0); const [answer, setAnswer] = useState([]); const [correct, setCorrect] = useState(0); const [errors, setErrors] = useState(0);
+  const [level, setLevel] = useState(getInitialLevel); const [age] = useState(getInitialAge); const [index, setIndex] = useState(0); const [answer, setAnswer] = useState([]); const [correct, setCorrect] = useState(0); const [errors, setErrors] = useState(0); const [tiempoInicio, setTiempoInicio] = useState(Date.now); const [resultadoGuardado, setResultadoGuardado] = useState(false); const [finalizado, setFinalizado] = useState(false);
   const words = WORDS_BY_AGE[age] || WORDS_BY_AGE["8-10"]; const word = words[level][index];
-  const reset = () => { setIndex(0); setAnswer([]); setCorrect(0); setErrors(0); }; const changeLevel = (value) => { setLevel(value); reset(); };
-  const pick = (part) => { const next = [...answer, part]; setAnswer(next); if (next.length === word.parts.length) { if (next.join("") === word.word) { setCorrect((value) => value + 1); setTimeout(() => { setIndex((value) => (value + 1) % words[level].length); setAnswer([]); }, 500); } else { setErrors((value) => value + 1); setTimeout(() => setAnswer([]), 700); } } };
+  const reset = () => { setIndex(0); setAnswer([]); setCorrect(0); setErrors(0); setResultadoGuardado(false); setFinalizado(false); setTiempoInicio(Date.now()); }; const changeLevel = (value) => { setLevel(value); reset(); };
+  const pick = (part) => { if (finalizado) return; const next = [...answer, part]; setAnswer(next); if (next.length === word.parts.length) { if (next.join("") === word.word) { const nextCorrect = correct + 1; setCorrect(nextCorrect); if (nextCorrect === words[level].length && !resultadoGuardado) { setResultadoGuardado(true); setFinalizado(true); guardarResultadoJuego("silabas", (nextCorrect / (nextCorrect + errors)) * 100, Math.floor((Date.now() - tiempoInicio) / 1000), { palabras: nextCorrect, aciertos: nextCorrect, errores: errors, precision: 100, nivel: level }); } else { setTimeout(() => { setIndex((value) => (value + 1) % words[level].length); setAnswer([]); }, 500); } } else { setErrors((value) => value + 1); setTimeout(() => setAnswer([]), 700); } } };
   const available = shuffle(word.parts.filter((part, partIndex) => !answer.includes(part) || answer.indexOf(part) === partIndex));
   return <Shell title="El tren de sílabas" subtitle={age === "5-7" ? "Construye palabras conocidas con apoyo visual." : age === "15+" ? "Organiza vocabulario complejo y mejora tu precisión." : "Ordena las sílabas para construir palabras adecuadas a tu edad."} image={libros} level={level} setLevel={changeLevel} age={age} onReset={reset}><div className="word-prompt"><span className="word-hint">{word.hint}</span><span>Arma una palabra de {word.parts.length} sílabas</span></div><div className="syllable-train"><span className="train-engine">🚂</span>{word.parts.map((_, partIndex) => <span className={`train-car ${answer[partIndex] ? "filled" : ""}`} key={partIndex}>{answer[partIndex] || "___"}</span>)}</div><div className="syllable-options">{available.map((part, partIndex) => <button onClick={() => pick(part)} disabled={answer.length >= word.parts.length} key={`${part}-${partIndex}`}>{part}</button>)}</div><div className="game-stats"><b>Palabras <strong>{index + 1}/{words[level].length}</strong></b><b>Aciertos <strong>{correct}</strong></b><b>Errores <strong>{errors}</strong></b></div></Shell>;
 }
@@ -92,11 +127,11 @@ const LETRAS_BY_AGE = {
 };
 
 export function JuegoLetrasPage() {
-  const [level, setLevel] = useState(getInitialLevel); const [age] = useState(getInitialAge); const [letters, setLetters] = useState([]); const [hits, setHits] = useState(0); const [misses, setMisses] = useState(0); const [running, setRunning] = useState(false); const [time, setTime] = useState(0);
+  const [level, setLevel] = useState(getInitialLevel); const [age] = useState(getInitialAge); const [letters, setLetters] = useState([]); const [hits, setHits] = useState(0); const [misses, setMisses] = useState(0); const [running, setRunning] = useState(false); const [time, setTime] = useState(0); const [tiempoInicio, setTiempoInicio] = useState(Date.now); const [resultadoGuardado, setResultadoGuardado] = useState(false);
   const configs = LETRAS_BY_AGE[age] || LETRAS_BY_AGE["8-10"]; const config = configs[level];
-  const reset = () => { setRunning(false); setLetters([]); setHits(0); setMisses(0); setTime(config.duration); };
-  useEffect(() => { setRunning(false); setLetters([]); setHits(0); setMisses(0); setTime(config.duration); }, [level, age, config.duration]);
-  useEffect(() => { if (!running) return undefined; const currentConfig = configs[level]; const timer = setInterval(() => setTime((value) => { if (value <= 1) { setRunning(false); return 0; } return value - 1; }), 1000); const spawn = setInterval(() => setLetters((current) => [...current.slice(-7), { id: Date.now() + Math.random(), value: Math.random() < .35 ? currentConfig.target : shuffle(currentConfig.distractors)[0], left: 5 + Math.random() * 88, top: 5 + Math.random() * 82 }]), 850); return () => { clearInterval(timer); clearInterval(spawn); }; }, [running, level, age, configs]);
+  const reset = () => { setRunning(false); setLetters([]); setHits(0); setMisses(0); setTime(config.duration); setResultadoGuardado(false); setTiempoInicio(Date.now()); };
+  useEffect(() => { setRunning(false); setLetters([]); setHits(0); setMisses(0); setTime(config.duration); setResultadoGuardado(false); setTiempoInicio(Date.now()); }, [level, age, config.duration]);
+  useEffect(() => { if (!running) return undefined; const currentConfig = configs[level]; const timer = setInterval(() => setTime((value) => { if (value <= 1) { setRunning(false); if (!resultadoGuardado) { setResultadoGuardado(true); guardarResultadoJuego("letras", (hits / Math.max(1, hits + misses)) * 100, Math.floor((Date.now() - tiempoInicio) / 1000), { aciertos: hits, errores: misses, falsas_alarmas: misses, precision: Math.round((hits / Math.max(1, hits + misses)) * 100), nivel: level }); } return 0; } return value - 1; }), 1000); const spawn = setInterval(() => setLetters((current) => [...current.slice(-7), { id: Date.now() + Math.random(), value: Math.random() < .35 ? currentConfig.target : shuffle(currentConfig.distractors)[0], left: 5 + Math.random() * 88, top: 5 + Math.random() * 82 }]), 850); return () => { clearInterval(timer); clearInterval(spawn); }; }, [running, level, age, configs, resultadoGuardado, hits, misses, tiempoInicio]);
   const click = (letter) => { setLetters((current) => current.filter((item) => item.id !== letter.id)); if (letter.value === config.target) setHits((value) => value + 1); else setMisses((value) => value + 1); };
   return <Shell title="Lluvia de letras" subtitle={`Atrapa la letra ${config.target} e ignora las distractoras.`} image={juego} level={level} setLevel={setLevel} age={age} onReset={reset}><div className="letter-stats"><b>Tiempo <strong>{time}s</strong></b><b>Aciertos <strong>{hits}</strong></b><b>Falsas alarmas <strong>{misses}</strong></b></div><div className="letter-field" aria-label="Área de letras"><div className="target-badge">Objetivo: <strong>{config.target}</strong></div>{letters.map((letter) => <button className={letter.value === config.target ? "target-letter" : "distractor-letter"} style={{ left: `${letter.left}%`, top: `${letter.top}%` }} onClick={() => click(letter)} key={letter.id}>{letter.value}</button>)}{!running && <div className="field-overlay"><p>{time === 0 ? "Tiempo terminado" : "Pulsa iniciar cuando estés listo"}</p><button onClick={() => setRunning(true)}>{time === 0 ? "Jugar de nuevo" : "Iniciar"}</button></div>}</div></Shell>;
 }

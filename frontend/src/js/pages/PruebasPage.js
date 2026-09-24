@@ -10,41 +10,41 @@ export default function PruebasPage() {
   const pruebas = [
     {
       id: "lectura",
-      nombre: "Prueba de Lectura",
-      descripcion: "Evalúa la capacidad de lectura y comprensión de textos",
-      duracion: "10-15 min",
-      edad: "8-15 años",
-      dificultad: "Media",
+      nombre: "Infancia Temprana (5 a 7 años)",
+      descripcion: "Cuestionario de indicadores tempranos relacionados con lenguaje y aprendizaje.",
+      duracion: "5-10 min",
+      edad: "5-7 años",
+      dificultad: "Inicial",
       color: "blue",
       icon: "📖"
     },
     {
       id: "velocidad",
-      nombre: "Prueba de Velocidad",
-      descripcion: "Mide la velocidad de lectura y procesamiento",
-      duracion: "8-10 min",
-      edad: "8-15 años",
-      dificultad: "Media",
+      nombre: "Desarrollo Lector (8 a 10 años)",
+      descripcion: "Cuestionario sobre fluidez, precisión y hábitos de lectura.",
+      duracion: "5-10 min",
+      edad: "8-10 años",
+      dificultad: "Básica",
       color: "orange",
       icon: "⚡"
     },
     {
       id: "comprension",
-      nombre: "Prueba de Comprensión",
-      descripcion: "Evalúa la comprensión de textos y conceptos",
-      duracion: "12-15 min",
-      edad: "11-15 años",
-      dificultad: "Avanzada",
+      nombre: "Preadolescencia (11 a 14 años)",
+      descripcion: "Cuestionario sobre comprensión, organización y desempeño académico.",
+      duracion: "5-10 min",
+      edad: "11-14 años",
+      dificultad: "Intermedia",
       color: "green",
       icon: "💡"
     },
     {
       id: "ortografia",
-      nombre: "Prueba de Ortografía",
-      descripcion: "Evalúa el conocimiento de reglas ortográficas",
-      duracion: "10-12 min",
-      edad: "8-15 años",
-      dificultad: "Media",
+      nombre: "Adolescentes y Adultos (15 años en adelante)",
+      descripcion: "Cuestionario sobre lectura y escritura en el estudio, trabajo y vida cotidiana.",
+      duracion: "5-10 min",
+      edad: "15+ años",
+      dificultad: "Avanzada",
       color: "purple",
       icon: "✍️"
     }
@@ -85,7 +85,7 @@ export default function PruebasPage() {
 
         <div className="tests-heading">
           <h2>Pruebas de Dislexia</h2>
-          <p>Selecciona una prueba para evaluar tus habilidades específicas.</p>
+          <p>Selecciona Juegos de tamizaje o elige un cuestioario dependiendo de la edad del evaluado.</p>
         </div>
         <Link to="/juegos" className="games-entry-card">
           <span className="games-entry-icon">🎮</span>

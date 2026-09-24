@@ -32,6 +32,8 @@
 .game-card.mint { background: color-mix(in srgb, var(--card) 82%, #8dc8a8); }
 .game-card.gold { background: color-mix(in srgb, var(--card) 84%, #e8c766); }
 .game-card.coral { background: color-mix(in srgb, var(--card) 84%, #df927d); }
+.game-card.blue { background: color-mix(in srgb, var(--card) 84%, #7fa9d8); }
+.game-card.purple { background: color-mix(in srgb, var(--card) 84%, #b39ad9); }
 .game-card img { width: 144px; height: 144px; margin-bottom: 1.2rem; object-fit: contain; }
 .game-tag { font-size: .75rem; font-weight: 700; letter-spacing: .08em; opacity: .7; text-transform: uppercase; }
 .game-card h2 { margin: .45rem 0; font-size: 1.45rem; }

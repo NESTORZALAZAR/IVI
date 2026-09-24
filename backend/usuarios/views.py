@@ -190,7 +190,7 @@ def resultados_view(request):
                     return Response({'error': 'Paciente no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
             # Validaciones
-            valid_tipos = ['lectura', 'velocidad', 'comprension', 'ortografia', 'alfabeto']
+            valid_tipos = ['lectura', 'velocidad', 'comprension', 'ortografia', 'alfabeto', 'parejas', 'silabas', 'letras']
             if tipo_prueba not in valid_tipos:
                 return Response(
                     {"error": f"Tipo de prueba inválido. Debe ser uno de: {', '.join(valid_tipos)}"},

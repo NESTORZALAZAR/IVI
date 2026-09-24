@@ -46,9 +46,10 @@
 .empty-state {
   text-align: center;
   padding: 3rem 2rem;
-  background: #f9f9f9;
+  background: color-mix(in srgb, var(--card) 86%, var(--bg));
+  border: 1px solid var(--border);
   border-radius: 8px;
-  color: #666;
+  color: var(--text);
 }
 
 .empty-state p {
@@ -57,7 +58,7 @@
 }
 
 .empty-state .hint {
-  color: #999;
+  color: color-mix(in srgb, var(--text) 68%, var(--bg));
   font-size: 0.95rem;
 }
 
@@ -103,15 +104,16 @@
 
 .resultados-list h2 {
   font-size: 1.8rem;
-  color: #333;
+  color: var(--text);
   margin: 0 0 1.5rem 0;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--border);
 }
 
 .resultado-item {
-  background: #f9f9f9;
-  border-left: 4px solid #667eea;
+  background: color-mix(in srgb, var(--card) 92%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-left: 4px solid var(--primary);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   border-radius: 8px;
@@ -119,22 +121,22 @@
 }
 
 .resultado-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--text) 12%, transparent);
 }
 
 .resultado-item.alto {
-  border-left-color: #4caf50;
-  background: rgba(76, 175, 80, 0.05);
+  border-left-color: var(--ivi-success);
+  background: color-mix(in srgb, var(--ivi-success) 7%, var(--card));
 }
 
 .resultado-item.medio {
-  border-left-color: #ff9800;
-  background: rgba(255, 152, 0, 0.05);
+  border-left-color: #d88600;
+  background: color-mix(in srgb, #d88600 8%, var(--card));
 }
 
 .resultado-item.bajo {
-  border-left-color: #f44336;
-  background: rgba(244, 67, 54, 0.05);
+  border-left-color: var(--ivi-danger);
+  background: color-mix(in srgb, var(--ivi-danger) 7%, var(--card));
 }
 
 .resultado-header {
@@ -147,13 +149,13 @@
 
 .resultado-info h3 {
   margin: 0 0 0.25rem 0;
-  color: #333;
+  color: var(--text);
   font-size: 1.3rem;
 }
 
 .resultado-fecha {
   margin: 0;
-  color: #999;
+  color: color-mix(in srgb, var(--text) 68%, var(--bg));
   font-size: 0.9rem;
 }
 
@@ -210,7 +212,8 @@
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 1rem;
-  background: white;
+  background: color-mix(in srgb, var(--card) 86%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
   border-radius: 4px;
 }
 
@@ -222,12 +225,12 @@
 
 .detail-item .label {
   font-weight: 600;
-  color: #667eea;
+  color: var(--primary);
   font-size: 0.9rem;
 }
 
 .detail-item .value {
-  color: #333;
+  color: var(--text);
   font-size: 0.95rem;
   word-break: break-word;
 }
@@ -239,7 +242,7 @@
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: #e0e0e0;
+  background: color-mix(in srgb, var(--border) 72%, var(--bg));
   border-radius: 4px;
   overflow: hidden;
 }
@@ -301,15 +304,16 @@
 .respuestas-section {
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: #f5f5f5;
+  background: color-mix(in srgb, var(--bg) 82%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--primary);
 }
 
 .respuestas-section h4 {
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -321,26 +325,27 @@
 }
 
 .respuesta-item {
-  background: white;
+  background: var(--card);
   border-radius: 6px;
   padding: 1rem;
-  border-left: 4px solid #999;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+  border-left: 4px solid color-mix(in srgb, var(--text) 45%, var(--border));
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--text) 8%, transparent);
   transition: box-shadow 0.2s ease;
 }
 
 .respuesta-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--text) 14%, transparent);
 }
 
 .respuesta-item.correcta {
-  border-left-color: #4caf50;
-  background: #f1f8f4;
+  border-left-color: var(--ivi-success);
+  background: color-mix(in srgb, var(--ivi-success) 10%, var(--card));
 }
 
 .respuesta-item.incorrecta {
-  border-left-color: #f44336;
-  background: #fef5f5;
+  border-left-color: var(--ivi-danger);
+  background: color-mix(in srgb, var(--ivi-danger) 10%, var(--card));
 }
 
 .respuesta-header {
@@ -378,7 +383,7 @@
 .respuesta-pregunta {
   margin: 0.5rem 0 1rem 0;
   font-weight: 500;
-  color: #333;
+  color: var(--text);
   font-size: 0.95rem;
 }
 
@@ -392,15 +397,16 @@
 .opcion-correcta {
   padding: 0.75rem;
   border-radius: 4px;
-  background: white;
+  background: color-mix(in srgb, var(--card) 86%, var(--bg));
+  border: 1px solid var(--border);
 }
 
 .opcion-seleccionada {
-  border-left: 3px solid #ff9800;
+  border-left: 3px solid color-mix(in srgb, var(--ivi-danger) 75%, #f0a000);
 }
 
 .opcion-correcta {
-  border-left: 3px solid #4caf50;
+  border-left: 3px solid var(--ivi-success);
 }
 
 .opcion-seleccionada strong,
@@ -413,17 +419,17 @@
 }
 
 .opcion-seleccionada strong {
-  color: #ff9800;
+  color: color-mix(in srgb, var(--ivi-danger) 75%, #f0a000);
 }
 
 .opcion-correcta strong {
-  color: #4caf50;
+  color: var(--ivi-success-text);
 }
 
 .opcion-seleccionada p,
 .opcion-correcta p {
   margin: 0;
-  color: #333;
+  color: var(--text);
   font-size: 0.9rem;
   font-weight: 500;
 }

@@ -15,6 +15,9 @@ class ResultadoPrueba(models.Model):
         ('comprension', 'Prueba de Comprensión'),
         ('ortografia', 'Prueba de Ortografía'),
         ('alfabeto', 'Filtro de Conocimiento: Alfabeto'),
+        ('parejas', 'Juego: Parejas escondidas'),
+        ('silabas', 'Juego: El tren de sílabas'),
+        ('letras', 'Juego: Lluvia de letras'),
     ]
 
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resultados_pruebas')

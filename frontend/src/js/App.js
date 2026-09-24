@@ -12,11 +12,10 @@ import TextReaderPage from "./pages/TextReaderPage";
 
 // 📚 Páginas de Pruebas y Resultados
 import PruebasPage from "./pages/PruebasPage";
-import PruebaLecturaPage from "./pages/PruebaLecturaPage";
 import PruebaVelocidadPage from "./pages/PruebaVelocidadPage";
-import PruebaComprensionPage from "./pages/PruebaComprensionPage";
 import PruebaOrtografiaPage from "./pages/PruebaOrtografiaPage";
 import PruebaAlfabetoPage from "./pages/PruebaAlfabetoPage";
+import CuestionarioRiesgoPage from "./pages/CuestionarioRiesgoPage";
 import ResultadosPage from "./pages/ResultadosPage";
 import JuegosPage from "./pages/JuegosPage";
 import { JuegoParejasPage, JuegoSilabasPage, JuegoLetrasPage } from "./pages/JuegosInteractivosPage";
@@ -117,16 +116,18 @@ function AppContent() {
           <Route path="/lector-textos" element={<TextReaderPage />} />
           
           <Route path="/pruebas" element={<PruebasPage />} />
-          <Route path="/pruebas/lectura" element={<PruebaLecturaPage />} />
-          <Route path="/pruebas/velocidad" element={<PruebaVelocidadPage />} />
-          <Route path="/pruebas/comprension" element={<PruebaComprensionPage />} />
-          <Route path="/pruebas/ortografia" element={<PruebaOrtografiaPage />} />
+          <Route path="/pruebas/lectura" element={<CuestionarioRiesgoPage tipo="lectura" />} />
+          <Route path="/pruebas/velocidad" element={<CuestionarioRiesgoPage tipo="velocidad" />} />
+          <Route path="/pruebas/comprension" element={<CuestionarioRiesgoPage tipo="comprension" />} />
+          <Route path="/pruebas/ortografia" element={<CuestionarioRiesgoPage tipo="ortografia" />} />
           <Route path="/pruebas/alfabeto" element={<PruebaAlfabetoPage />} />
           <Route path="/resultados" element={<ResultadosPage />} />
           <Route path="/juegos" element={<JuegosPage />} />
           <Route path="/juegos/parejas" element={<JuegoParejasPage />} />
           <Route path="/juegos/silabas" element={<JuegoSilabasPage />} />
           <Route path="/juegos/letras" element={<JuegoLetrasPage />} />
+          <Route path="/juegos/velocidad" element={<PruebaVelocidadPage />} />
+          <Route path="/juegos/ortografia" element={<PruebaOrtografiaPage />} />
 
           {/* ==========================================
               RUTAS PROTEGIDAS POR ROL (ADMIN & DOCTOR)

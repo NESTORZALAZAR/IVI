@@ -9,6 +9,16 @@
   padding: 2rem;
 }
 
+.prueba-cuestionario .prueba-header p { margin: .5rem 0 0; color: #666; }
+.escala-opciones { display: grid; grid-template-columns: repeat(4, 1fr); }
+.resultado-score.bajo { color: #2e7d32; }
+.resultado-score.moderado { color: #b26a00; }
+.resultado-score.alto { color: #b3261e; }
+
+@media (max-width: 700px) {
+  .escala-opciones { grid-template-columns: 1fr; }
+}
+
 .prueba-container {
   max-width: 1000px;
   margin: 0 auto;

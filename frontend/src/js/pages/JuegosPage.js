@@ -8,7 +8,9 @@ import "../../css/pages/JuegosPage.css";
 const juegos = [
   { path: "parejas", title: "Parejas escondidas", text: "Entrena la memoria de trabajo visuoespacial encontrando cada pareja.", image: cerebro, color: "mint", tag: "Memoria", age: "5-15 años" },
   { path: "silabas", title: "El tren de sílabas", text: "Ordena las sílabas y arma palabras paso a paso.", image: libros, color: "gold", tag: "Conciencia fonológica", age: "5-15 años" },
-  { path: "letras", title: "Lluvia de letras", text: "Atrapa los objetivos y filtra las letras distractoras.", image: juego, color: "coral", tag: "Atención", age: "7-15 años" }
+  { path: "letras", title: "Lluvia de letras", text: "Atrapa los objetivos y filtra las letras distractoras.", image: juego, color: "coral", tag: "Atención", age: "7-15 años" },
+  { path: "velocidad", title: "Velocidad de lectura", text: "Lee palabras y registra cuántas puedes procesar por minuto.", image: juego, color: "blue", tag: "Fluidez lectora", age: "8-15 años" },
+  { path: "ortografia", title: "Reto de ortografía", text: "Elige la forma correcta de escribir cada palabra.", image: libros, color: "purple", tag: "Ortografía", age: "8-15 años" }
 ];
 
 const dificultades = [

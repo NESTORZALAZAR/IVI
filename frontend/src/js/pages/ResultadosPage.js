@@ -62,7 +62,7 @@ export default function ResultadosPage() {
     return `${minutos}m ${segs}s`;
   };
 
-  const formatearDetalles = (detalles) => {
+  const formatearDetalles = (detalles, esCuestionario = false, puntajeAlcanzado) => {
     const etiquetas = {
       preguntas_respondidas: "Preguntas respondidas",
       total_preguntas: "Total de preguntas",
@@ -73,7 +73,34 @@ export default function ResultadosPage() {
       tiempo_por_palabra: "Tiempo por palabra",
       errores: "Errores",
       aciertos: "Aciertos",
+      parejas: "Parejas",
+      total_parejas: "Total de parejas",
+      intentos: "Intentos",
+      precision: "Precisión",
+      palabras: "Palabras",
+      falsas_alarmas: "Falsas alarmas",
+      nivel: "Nivel",
+      rango_edad: "Rango de edad",
+      puntaje_alcanzado: "Puntaje alcanzado",
     };
+
+    if (esCuestionario) {
+      return [
+        ["total_preguntas", detalles.total_preguntas],
+        ["preguntas_respondidas", detalles.preguntas_respondidas],
+        ["rango_edad", detalles.rango_edad],
+        ["puntaje_maximo", detalles.puntaje_maximo],
+        ["puntaje_alcanzado", detalles.puntaje_alcanzado ?? puntajeAlcanzado],
+        ["escala", detalles.escala],
+        ["riesgo", detalles.riesgo],
+        ["recomendacion", detalles.recomendacion],
+      ].filter(([, value]) => value !== undefined && value !== null && value !== "")
+        .map(([key, value]) => ({
+          label: etiquetas[key] || key.replace(/_/g, " "),
+          value,
+        }));
+    }
+
     return Object.entries(detalles)
       .filter(([key]) => key !== "respuestas")
       .map(([key, value]) => ({
@@ -82,11 +109,19 @@ export default function ResultadosPage() {
       }));
   };
 
-  const getColorPuntaje = (puntaje) => {
+  const getColorPuntaje = (puntaje, detalles = {}) => {
+    if (detalles.puntaje_maximo === 30) {
+      if (puntaje >= 21) return "alto";
+      if (puntaje >= 11) return "medio";
+      return "bajo";
+    }
     if (puntaje >= 80) return "alto";
     if (puntaje >= 60) return "medio";
     return "bajo";
   };
+
+  const esCuestionarioRiesgo = (resultado) => resultado.detalles?.puntaje_maximo === 30;
+  const mostrarPuntaje = (resultado) => esCuestionarioRiesgo(resultado) ? `${resultado.puntaje}/30` : `${resultado.puntaje}%`;
 
   return (
     <div className="resultados-page">
@@ -132,35 +167,30 @@ export default function ResultadosPage() {
               {resultados.map((resultado) => (
                 <div
                   key={resultado.id}
-                  className={`resultado-item ${getColorPuntaje(
-                    resultado.puntaje
-                  )}`}
+                  className={`resultado-item ${getColorPuntaje(resultado.puntaje, resultado.detalles)}`}
                 >
                   <div className="resultado-header">
                     <div className="resultado-info">
-                      <h3>{resultado.tipo_prueba_display}</h3>
+                      <h3>{resultado.detalles?.rango_edad || resultado.tipo_prueba_display}</h3>
                       <p className="resultado-fecha">
                         {formatearFecha(resultado.fecha_prueba)}
                       </p>
                     </div>
                     <div className="resultado-score">
-                      <span className="puntaje">{resultado.puntaje}%</span>
+                      <span className="puntaje">{mostrarPuntaje(resultado)}</span>
                       <span className={`estado ${resultado.estado}`}>
-                        {resultado.estado.charAt(0).toUpperCase() +
-                          resultado.estado.slice(1)}
+                        {resultado.detalles?.riesgo || resultado.estado.charAt(0).toUpperCase() + resultado.estado.slice(1)}
                       </span>
                     </div>
                   </div>
 
                   <div className="resultado-details">
-                    <div className="detail-item">
+                    {!esCuestionarioRiesgo(resultado) && <div className="detail-item">
                       <span className="label">Duración:</span>
-                      <span className="value">
-                        {formatearDuracion(resultado.duracion_segundos)}
-                      </span>
-                    </div>
+                      <span className="value">{formatearDuracion(resultado.duracion_segundos)}</span>
+                    </div>}
                     {resultado.detalles && Object.keys(resultado.detalles).length > 0 &&
-                      formatearDetalles(resultado.detalles).map(({ label, value }) => (
+                      formatearDetalles(resultado.detalles, esCuestionarioRiesgo(resultado), resultado.puntaje).map(({ label, value }) => (
                         <div className="detail-item" key={label}>
                           <span className="label">{label}:</span>
                           <span className="value">{value}</span>
@@ -169,7 +199,7 @@ export default function ResultadosPage() {
                     }
                   </div>
 
-                  {resultado.detalles && resultado.detalles.respuestas && resultado.detalles.respuestas.length > 0 && (
+                  {!esCuestionarioRiesgo(resultado) && resultado.detalles && resultado.detalles.respuestas && resultado.detalles.respuestas.length > 0 && (
                     <div className="respuestas-section">
                       <h4>Respuestas Detalladas</h4>
                       <div className="respuestas-list">
@@ -204,7 +234,7 @@ export default function ResultadosPage() {
                     <div className="progress-bar">
                       <div
                         className="progress-fill"
-                        style={{ width: `${resultado.puntaje}%` }}
+                        style={{ width: `${esCuestionarioRiesgo(resultado) ? (resultado.puntaje / 30) * 100 : resultado.puntaje}%` }}
                       ></div>
                     </div>
                   </div>
