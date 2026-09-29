@@ -1,0 +1,34 @@
+.senales-page { min-height: calc(100vh - 90px); color: var(--text); background: var(--bg); }
+.senales-shell { width: min(1120px, calc(100% - 3rem)); margin: 0 auto; padding: 2rem 0 5rem; }
+.senales-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 3rem; }
+.senales-steps a { min-height: 48px; display: flex; align-items: center; padding: 0.75rem 1rem; border: 1px solid color-mix(in srgb, var(--border) 70%, transparent); border-radius: var(--ivi-radius-sm); color: var(--text); background: color-mix(in srgb, var(--card) 42%, transparent); font-size: 0.82rem; text-decoration: none; transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease; }
+.senales-steps a:hover, .senales-steps a.is-current { border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); background: color-mix(in srgb, var(--primary) 10%, var(--card)); transform: translateY(-1px); }
+.senales-hero, .senales-definition, .senales-card, .senales-note { border: 1px solid color-mix(in srgb, var(--border) 72%, transparent); border-radius: var(--ivi-radius-md); background: color-mix(in srgb, var(--card) 78%, transparent); box-shadow: var(--ivi-shadow-soft); }
+.senales-hero { padding: 2.5rem; animation: ivi-slide-up 0.55s ease both; }
+.eyebrow { margin: 0 0 0.65rem; color: color-mix(in srgb, var(--text) 78%, var(--primary)); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.senales-hero h1, .senales-definition h2, .senales-section h2, .senales-note h2 { margin: 0; color: var(--text); font-size: clamp(1.4rem, 2.4vw, 2.2rem) !important; font-weight: 700; line-height: 1.2 !important; }
+.senales-hero > p:last-child, .senales-definition p, .senales-section-heading > p:last-child, .senales-note p { max-width: 780px; margin: 0.9rem 0 0; color: color-mix(in srgb, var(--text) 82%, transparent); font-size: 0.95rem !important; line-height: 1.65 !important; }
+.senales-definition { display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 2.5rem; margin-top: 1.25rem; padding: 2rem; animation: ivi-slide-up 0.55s 0.08s ease both; }
+.senales-definition h2 { font-size: 1.35rem !important; }
+.senales-definition aside { padding-left: 1.5rem; border-left: 1px solid var(--border); }
+.senales-aside-icon, .senales-note-icon { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%; color: var(--primary); background: color-mix(in srgb, var(--primary) 14%, var(--card)); font-weight: 700; }
+.senales-definition aside strong { display: block; margin-top: 0.85rem; font-size: 0.9rem; }
+.senales-definition aside p { font-size: 0.82rem !important; }
+.senales-section { margin-top: 4rem; animation: ivi-slide-up 0.55s 0.14s ease both; }
+.senales-section-heading { margin-bottom: 1.35rem; }
+.senales-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.senales-card { padding: 1.5rem; box-shadow: none; }
+.senales-card-top { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+.senales-number { color: var(--primary); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; }
+.senales-card h3 { margin: 0; font-size: 1.05rem !important; }
+.senales-card-top span:last-child { display: block; margin-top: 0.25rem; color: color-mix(in srgb, var(--text) 65%, transparent); font-size: 0.72rem !important; }
+.senales-card > p { margin: 0 0 0.85rem; color: color-mix(in srgb, var(--text) 78%, transparent); font-size: 0.85rem !important; line-height: 1.55 !important; }
+.senales-card ul { display: grid; gap: 0.55rem; margin: 0; padding-left: 1rem; }
+.senales-card li { color: var(--text); font-size: 0.82rem !important; line-height: 1.5 !important; }
+.senales-note { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; margin-top: 4rem; padding: 1.5rem 2rem; }
+.senales-note h2 { font-size: 1.2rem !important; }
+.senales-note p { margin-top: 0.55rem; font-size: 0.85rem !important; }
+.senales-note a { display: inline-flex; align-items: center; gap: 0.7rem; color: var(--primary); font-size: 0.82rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.senales-note a span { font-size: 1.1rem; }
+.senales-footer { display: flex; justify-content: space-between; gap: 1rem; padding: 1.5rem max(1.5rem, calc((100% - 1120px) / 2)); border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent); color: color-mix(in srgb, var(--text) 70%, transparent); font-size: 0.72rem; line-height: 1.5; }
+@media (max-width: 760px) { .senales-shell { width: min(100% - 1.5rem, 1120px); padding-top: 1rem; } .senales-steps { grid-template-columns: 1fr; margin-bottom: 1.5rem; } .senales-hero, .senales-definition, .senales-note { padding: 1.35rem; } .senales-definition, .senales-grid, .senales-note { grid-template-columns: 1fr; } .senales-definition aside { padding: 1rem 0 0; border-top: 1px solid var(--border); border-left: none; } .senales-footer { flex-direction: column; padding: 1.25rem 0.75rem; } }

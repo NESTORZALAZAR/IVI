@@ -7,6 +7,8 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import HomePage from "./pages/NewHomePage";
 import AboutPage from "./pages/AboutPage";
+import ConsejosPage from "./pages/ConsejosPage";
+import SenalesPage from "./pages/SenalesPage";
 import DocumentReaderPage from "./pages/DocumentReaderPage";
 import TextReaderPage from "./pages/TextReaderPage";
 
@@ -111,6 +113,8 @@ function AppContent() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/consejos" element={<ConsejosPage />} />
+          <Route path="/senales" element={<SenalesPage />} />
           
           <Route path="/lector-documentos" element={<DocumentReaderPage />} />
           <Route path="/lector-textos" element={<TextReaderPage />} />

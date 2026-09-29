@@ -1,0 +1,237 @@
+.consejos-page {
+  min-height: calc(100vh - 90px);
+  color: var(--text);
+  background: var(--bg);
+}
+
+.consejos-shell {
+  width: min(1120px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 2rem 0 5rem;
+}
+
+.consejos-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.consejos-steps a {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: var(--ivi-radius-sm);
+  color: var(--text);
+  background: color-mix(in srgb, var(--card) 42%, transparent);
+  font-size: 0.82rem;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.consejos-steps a:hover,
+.consejos-steps a.is-current {
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  background: color-mix(in srgb, var(--primary) 10%, var(--card));
+  transform: translateY(-1px);
+}
+
+.consejos-intro,
+.consejos-feature,
+.consejos-tools,
+.consejos-callout {
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: var(--ivi-radius-md);
+  background: color-mix(in srgb, var(--card) 78%, transparent);
+  box-shadow: var(--ivi-shadow-soft);
+}
+
+.consejos-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2.2rem 2.5rem;
+  animation: ivi-slide-up 0.55s ease both;
+}
+
+.eyebrow,
+.card-kicker,
+.reality-label {
+  margin: 0 0 0.65rem;
+  color: color-mix(in srgb, var(--text) 78%, var(--primary));
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.consejos-intro h1,
+.consejos-feature h2,
+.section-heading h2,
+.tools-heading h2,
+.consejos-callout h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.35rem, 2.3vw, 2.1rem) !important;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2 !important;
+}
+
+.intro-copy,
+.section-heading > p:last-child,
+.tools-heading > p:last-child,
+.consejos-feature p,
+.consejos-callout p {
+  max-width: 720px;
+  margin: 0.9rem 0 0;
+  color: color-mix(in srgb, var(--text) 82%, transparent);
+  font-size: 0.95rem !important;
+  line-height: 1.65 !important;
+}
+
+.audio-note {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius: var(--ivi-radius-sm);
+  background: color-mix(in srgb, var(--primary) 7%, var(--card));
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.audio-note:hover, .audio-note.is-speaking { border-color: color-mix(in srgb, var(--primary) 50%, var(--border)); background: color-mix(in srgb, var(--primary) 13%, var(--card)); transform: translateY(-1px); }
+.audio-note:focus-visible { outline: none; box-shadow: var(--ivi-focus-ring); }
+
+.audio-note > span,
+.feature-mark,
+.tool-icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 16%, var(--card));
+  font-weight: 700;
+}
+
+.audio-note strong,
+.audio-note small {
+  display: block;
+  color: var(--text);
+}
+
+.audio-note strong { font-size: 0.78rem !important; }
+.audio-note small { margin-top: 0.25rem; font-size: 0.68rem !important; opacity: 0.72; }
+
+.consejos-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1.6rem 2rem;
+  animation: ivi-slide-up 0.55s 0.08s ease both;
+}
+
+.feature-mark { flex: 0 0 auto; }
+.consejos-feature h2 { font-size: 1.25rem !important; }
+
+.consejos-section { margin-top: 4rem; animation: ivi-slide-up 0.55s 0.14s ease both; }
+.section-heading { margin-bottom: 1.35rem; }
+.compact-heading { margin-bottom: 1.5rem; }
+
+.myths-grid,
+.stages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.myth-card,
+.stage-card {
+  min-width: 0;
+  padding: 1.45rem;
+  border: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+  border-radius: var(--ivi-radius-sm);
+  background: color-mix(in srgb, var(--card) 60%, transparent);
+}
+
+.myth-card h3,
+.stage-card h3,
+.tool-row h3 {
+  margin: 0 0 1.15rem;
+  color: var(--text);
+  font-size: 1rem !important;
+  line-height: 1.35 !important;
+}
+
+.myth-card .card-kicker { color: var(--ivi-danger-dark, #9e4b3d); }
+.reality-label { margin-bottom: 0.55rem; color: var(--primary); }
+.myth-card p,
+.stage-card p,
+.tool-row p {
+  margin: 0;
+  color: color-mix(in srgb, var(--text) 78%, transparent);
+  font-size: 0.86rem !important;
+  line-height: 1.62 !important;
+}
+
+.stages-grid { grid-template-columns: repeat(2, 1fr); }
+.stage-card { display: grid; grid-template-columns: auto 1fr; gap: 1rem; }
+.stage-number { color: var(--primary); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; }
+.stage-card h3 { margin-bottom: 0.35rem; }
+.stage-intro { margin-bottom: 0.8rem !important; }
+.stage-card ul { display: grid; gap: 0.5rem; margin: 0; padding-left: 1rem; }
+.stage-card li { color: var(--text); font-size: 0.82rem !important; line-height: 1.5 !important; }
+
+.consejos-tools {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 2rem;
+  margin-top: 4rem;
+  padding: 2rem;
+  animation: ivi-slide-up 0.55s 0.2s ease both;
+}
+
+.tools-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+.tool-row { display: flex; align-items: flex-start; gap: 0.75rem; padding-bottom: 0.85rem; border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent); }
+.tool-icon { width: 1.55rem; height: 1.55rem; flex: 0 0 auto; font-size: 1rem; }
+.tool-row h3 { margin-bottom: 0.3rem; font-size: 0.88rem !important; }
+.tool-row p { font-size: 0.78rem !important; }
+
+.consejos-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 4rem;
+  padding: 1.75rem 2rem;
+}
+
+.consejos-callout h2 { max-width: 650px; font-size: 1.2rem !important; }
+.consejos-button { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 0.8rem; min-height: 44px; padding: 0.7rem 1rem; border-radius: var(--ivi-radius-sm); color: #fff; background: var(--primary); font-size: 0.82rem; font-weight: 700; text-decoration: none; }
+.consejos-button:hover { filter: brightness(1.08); }
+.consejos-button span { font-size: 1.1rem; }
+
+.consejos-footer { display: flex; justify-content: space-between; gap: 1rem; padding: 1.5rem max(1.5rem, calc((100% - 1120px) / 2)); border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent); color: color-mix(in srgb, var(--text) 70%, transparent); font-size: 0.72rem; line-height: 1.5; }
+
+@media (max-width: 760px) {
+  .consejos-shell { width: min(100% - 1.5rem, 1120px); padding-top: 1rem; }
+  .consejos-steps { grid-template-columns: 1fr; margin-bottom: 1.5rem; }
+  .consejos-intro { align-items: flex-start; flex-direction: column; padding: 1.5rem; }
+  .consejos-feature, .consejos-tools, .consejos-callout { padding: 1.35rem; }
+  .myths-grid, .stages-grid, .consejos-tools { grid-template-columns: 1fr; }
+  .tools-list { grid-template-columns: 1fr; }
+  .consejos-callout { align-items: flex-start; flex-direction: column; }
+  .consejos-footer { flex-direction: column; padding: 1.25rem 0.75rem; }
+}

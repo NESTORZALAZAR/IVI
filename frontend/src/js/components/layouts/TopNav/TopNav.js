@@ -40,6 +40,7 @@ export default function TopNav() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isAbout = location.pathname === "/about";
+  const isConsejos = location.pathname === "/consejos";
   const isLectorDocs = location.pathname === "/lector-documentos";
   const isLectorText = location.pathname === "/lector-textos";
   const isPaciente = location.pathname === "/paciente";
@@ -107,6 +108,13 @@ export default function TopNav() {
             className={`nav-link ${isAbout ? 'active' : ''}`}
           >
             Acerca de
+          </Link>
+
+          <Link
+            to="/consejos"
+            className={`nav-link ${isConsejos ? 'active' : ''}`}
+          >
+            Consejos
           </Link>
 
           {/* Menú desplegable: IVI te ayuda */}
