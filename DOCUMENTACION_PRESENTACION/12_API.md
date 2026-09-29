@@ -41,6 +41,10 @@ Devuelve los resultados del usuario autenticado.
 
 Tipos permitidos: `lectura`, `velocidad`, `comprension`, `ortografia`, `alfabeto`, `parejas`, `silabas`, `letras`.
 
+El servidor resuelve `tipo_prueba` contra la tabla `TipoPrueba` y conserva los
+detalles variables en `ResultadoPrueba.detalles`. Las respuestas estructuradas
+pueden asociarse como registros de `RespuestaResultado`.
+
 ## Doctor
 
 - `GET /api/doctor/`: consulta previa o resultados de pacientes.
@@ -66,6 +70,8 @@ Requiere rol `admin`.
 
 - `GET /api/lector/check-tesseract/`: informa si Tesseract esta disponible.
 - `POST /api/lector/extract-and-speak/`: recibe texto JSON o archivo PDF, DOCX, TXT, JPG, PNG, GIF o BMP.
+- `POST /api/archivos/procesar/`: procesa PDF, DOCX o TXT y genera audio; guarda `ArchivoProcesado` y `ConversionAudio`.
+- `POST /api/archivos/describe-ia/`: describe una imagen mediante OCR o BLIP cuando las dependencias estan instaladas.
 
 La respuesta del lector contiene texto extraido y audio codificado para el frontend.
 

@@ -3,7 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import User
-from .models import ResultadoPrueba, Profile
+from .models import Paciente, Profesional, Profile, RespuestaResultado, ResultadoPrueba, TipoPrueba
 
 
 class ProfileForm(forms.ModelForm):
@@ -22,9 +22,9 @@ class ProfileForm(forms.ModelForm):
 
         # Verificar unicidad de CI cuando exista
         if ci:
-            qs = Profile.objects.filter(ci=ci)
-            if self.instance and self.instance.pk:
-                qs = qs.exclude(pk=self.instance.pk)
+            qs = Paciente.objects.filter(ci=ci)
+            if self.instance and self.instance.pk and hasattr(self.instance, 'paciente'):
+                qs = qs.exclude(pk=self.instance.paciente.pk)
             if qs.exists():
                 raise ValidationError({'ci': 'CI ya registrado para otro usuario'})
 
@@ -69,16 +69,23 @@ admin.site.register(User, CustomUserAdmin)
 
 @admin.register(ResultadoPrueba)
 class ResultadoPruebaAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'tipo_prueba', 'puntaje', 'fecha_prueba', 'estado')
-    list_filter = ('tipo_prueba', 'estado', 'fecha_prueba')
-    search_fields = ('usuario__username', 'usuario__email')
+    list_display = ('get_usuario', 'tipo_prueba', 'puntaje', 'fecha_prueba', 'estado')
+    list_filter = ('prueba', 'estado', 'fecha_prueba')
+    search_fields = ('paciente__profile__user__username', 'paciente__profile__user__email')
     readonly_fields = ('fecha_prueba',)
 
     fieldsets = (
         ('Información Básica', {
-            'fields': ('usuario', 'tipo_prueba', 'puntaje', 'estado')
+            'fields': ('paciente', 'prueba', 'puntaje', 'estado')
         }),
         ('Detalles', {
             'fields': ('duracion_segundos', 'detalles', 'fecha_prueba')
         }),
     )
+
+    @admin.display(description='Usuario')
+    def get_usuario(self, obj):
+        return obj.usuario
+
+
+admin.site.register((TipoPrueba, Paciente, Profesional, RespuestaResultado))

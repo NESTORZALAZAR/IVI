@@ -29,9 +29,10 @@ flowchart LR
 | Estado de interfaz | Fuente, tamano, espaciado y tema | `frontend/src/js/context/AccessibilityContext.js` |
 | Integracion | Peticiones HTTP, autenticacion y lectura de respuestas | Paginas y servicios frontend |
 | API | Rutas, validacion y respuestas JSON | `backend/*/views.py`, `urls.py` |
-| Dominio | Usuarios, perfiles y resultados | `backend/usuarios/models.py` |
-| Persistencia | Migraciones y base de datos Django | `backend/usuarios/migrations` |
-| OCR/TTS | Extraccion de texto y generacion de audio | `backend/lector`, Tesseract |
+| Dominio | Usuarios, perfiles, pruebas y resultados | `backend/usuarios/models.py` |
+| Procesamiento | Archivos extraidos y conversiones de audio | `backend/archivos/models.py`, `backend/lector` |
+| Persistencia | Migraciones y base de datos Django | `backend/usuarios/migrations`, `backend/archivos/migrations` |
+| OCR/TTS | Extraccion de texto y generacion de audio | `backend/lector`, `backend/archivos`, Tesseract |
 
 ## 1.3 Modulos funcionales
 
@@ -60,4 +61,8 @@ flowchart LR
 - Las rutas de administracion y doctor estan protegidas por rol.
 - Las peticiones autenticadas usan token almacenado en la sesion del navegador.
 - Los resultados validan tipo de prueba y puntaje de 0 a 100.
+- Los resultados se asocian a `Paciente`, no directamente a cualquier usuario.
+- El catalogo `TipoPrueba` evita repetir nombres y codigos en cada resultado.
+- Los datos especificos se separan en `Paciente` y `Profesional`; `Profile` conserva solo identidad y rol.
+- Las respuestas de una prueba se separan en `RespuestaResultado` y el lector registra `ArchivoProcesado` y `ConversionAudio`.
 - La aplicacion debe ejecutarse con HTTPS y variables de entorno seguras en produccion.

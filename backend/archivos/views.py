@@ -10,6 +10,7 @@ import uuid
 from io import BytesIO
 import base64
 import requests as http_requests
+from .models import ArchivoProcesado, ConversionAudio
 
 # Create your views here.
 
@@ -117,9 +118,21 @@ def procesar_archivo(request):
                 {"error": "No se pudo extraer texto del archivo"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        propietario = request.user if request.user.is_authenticated else None
+        archivo_procesado = ArchivoProcesado.objects.create(
+            propietario=propietario,
+            nombre_original=archivo.name,
+            tipo_mime=getattr(archivo, 'content_type', '') or '',
+            texto_extraido=texto,
+        )
         
         # Convertir a audio
         contenido_audio = convertir_texto_audio(texto, velocidad)
+        ConversionAudio.objects.create(
+            archivo=archivo_procesado,
+            velocidad=velocidad,
+        )
         
         # Codificar audio en base64 para enviar al cliente
         audio_base64 = base64.b64encode(contenido_audio).decode('utf-8')

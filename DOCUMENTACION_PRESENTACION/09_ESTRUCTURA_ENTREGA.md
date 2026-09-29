@@ -5,6 +5,8 @@
 ```text
 IVI/
 ├── backend/                         # API Django, modelos y procesamiento
+│   ├── usuarios/migrations/         # Migraciones del modelo de identidad y pruebas
+│   ├── archivos/migrations/         # Migraciones del lector y audio
 ├── frontend/                        # Aplicacion React y experiencia accesible
 ├── DOCUMENTACION_PRESENTACION/      # Paquete formal para presentar
 │   ├── README.md

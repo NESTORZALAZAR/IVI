@@ -34,6 +34,14 @@ IVI es una plataforma web de apoyo y tamizaje dislexico. Integra:
 - OCR para imagenes y conversion de texto a audio.
 - Configuracion de fuente, tamano, espaciado y tema.
 
+## Estado del modelo de datos
+
+La base de datos esta normalizada en nueve entidades documentadas en el DER:
+`User`, `Profile`, `Paciente`, `Profesional`, `TipoPrueba`, `ResultadoPrueba`,
+`RespuestaResultado`, `ArchivoProcesado` y `ConversionAudio`. La migracion
+`usuarios.0008` realiza el traslado desde el esquema anterior y el catalogo
+inicial contiene ocho tipos de prueba.
+
 ## Nota de alcance clinico
 
 Los resultados son orientativos y no constituyen un diagnostico medico. La plataforma apoya la deteccion temprana y el acompanamiento; la confirmacion corresponde a un profesional especializado.

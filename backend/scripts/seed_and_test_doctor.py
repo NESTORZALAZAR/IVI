@@ -11,7 +11,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
 from django.contrib.auth.models import User
-from usuarios.models import Profile, ResultadoPrueba
+from usuarios.models import Profile, ResultadoPrueba, TipoPrueba
 from django.utils import timezone
 
 def create_user(username, email, password, role='paciente', ci=None, is_staff=False, is_superuser=False):
@@ -32,7 +32,8 @@ def create_user(username, email, password, role='paciente', ci=None, is_staff=Fa
 def create_result(usuario, tipo_prueba, puntaje, detalles=None, fecha=None):
     if detalles is None: detalles = {}
     fecha = fecha or timezone.now()
-    r = ResultadoPrueba.objects.create(usuario=usuario, tipo_prueba=tipo_prueba, puntaje=puntaje, duracion_segundos=60, detalles=detalles)
+    prueba = TipoPrueba.objects.get(codigo=tipo_prueba, activo=True)
+    r = ResultadoPrueba.objects.create(paciente=usuario.profile.paciente, prueba=prueba, puntaje=puntaje, duracion_segundos=60, detalles=detalles)
     return r
 
 def seed():

@@ -4,8 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from .models import ResultadoPrueba
-from .models import Profile
+from .models import Paciente, Profile, ResultadoPrueba, TipoPrueba
 import json
 from datetime import datetime
 import shutil
@@ -145,7 +144,7 @@ def resultados_view(request):
         """
         Retorna todos los resultados del usuario.
         """
-        resultados = ResultadoPrueba.objects.filter(usuario=user)
+        resultados = ResultadoPrueba.objects.filter(paciente__profile__user=user)
         data = [
             {
                 "id": r.id,
@@ -205,8 +204,8 @@ def resultados_view(request):
 
             # Crear el resultado
             resultado = ResultadoPrueba.objects.create(
-                usuario=resultado_user,
-                tipo_prueba=tipo_prueba,
+                paciente=resultado_user.profile.paciente,
+                prueba=TipoPrueba.objects.get(codigo=tipo_prueba, activo=True),
                 puntaje=puntaje,
                 duracion_segundos=int(duracion_segundos),
                 detalles=detalles
@@ -287,7 +286,7 @@ def signup_view(request):
         if not str(ci).isdigit():
             return Response({'field_errors': {'ci': 'CI debe contener sólo dígitos'}}, status=status.HTTP_400_BAD_REQUEST)
         # Unicidad CI
-        if Profile.objects.filter(ci=ci).exists():
+        if Paciente.objects.filter(ci=ci).exists():
             return Response({'field_errors': {'ci': 'CI ya registrado para otro usuario'}}, status=status.HTTP_400_BAD_REQUEST)
 
         age = None
@@ -389,8 +388,7 @@ def doctor_view(request):
 
     pacientes = []
     if ci:
-        perfiles = Profile.objects.filter(ci=ci)
-        pacientes = [p.user for p in perfiles]
+        pacientes = [p.profile.user for p in Paciente.objects.filter(ci=ci).select_related('profile__user')]
     elif name:
         # Buscar por username o por nombre completo
         usuarios = User.objects.filter(username__icontains=name) | User.objects.filter(first_name__icontains=name) | User.objects.filter(last_name__icontains=name)
@@ -403,7 +401,7 @@ def doctor_view(request):
             perfiles = perfiles.filter(is_office_patient=True)
         for p in perfiles:
             paciente = p.user
-            res_qs = ResultadoPrueba.objects.filter(usuario=paciente).order_by('-fecha_prueba')[:3]
+            res_qs = ResultadoPrueba.objects.filter(paciente__profile__user=paciente).order_by('-fecha_prueba')[:3]
             last_results = []
             tipo_acc = {}
             for r in res_qs:
@@ -424,19 +422,19 @@ def doctor_view(request):
                 'paciente_ci': p.ci,
                 'last_results': last_results,
                 'averages': averages,
-                'recent_count': ResultadoPrueba.objects.filter(usuario=paciente).count()
+                'recent_count': ResultadoPrueba.objects.filter(paciente__profile__user=paciente).count()
             })
         return Response(preview, status=status.HTTP_200_OK)
 
     # Recolectar resultados
     if office_only:
-        office_ids = Profile.objects.filter(is_office_patient=True).values_list('user_id', flat=True)
+        office_ids = Paciente.objects.filter(is_office_patient=True).values_list('profile__user_id', flat=True)
         pacientes = [paciente for paciente in pacientes if paciente.id in office_ids]
     resultados = []
     for paciente in pacientes:
-        res = ResultadoPrueba.objects.filter(usuario=paciente)
+        res = ResultadoPrueba.objects.filter(paciente__profile__user=paciente)
         if tipo_prueba:
-            res = res.filter(tipo_prueba=tipo_prueba)
+            res = res.filter(prueba__codigo=tipo_prueba)
         if date_from_r:
             try:
                 res = res.filter(fecha_prueba__date__gte=date_from_r)
@@ -488,9 +486,10 @@ def doctor_consultorio_view(request):
         return Response({'field_errors': {'age': 'La edad debe ser un número entre 1 y 120'}}, status=status.HTTP_400_BAD_REQUEST)
     age = int(age_value)
 
-    profile = Profile.objects.filter(ci=ci).select_related('user').first()
-    if profile:
-        patient = profile.user
+    patient_record = Paciente.objects.filter(ci=ci).select_related('profile__user').first()
+    if patient_record:
+        patient = patient_record.profile.user
+        profile = patient_record.profile
     else:
         base_username = f'consultorio_{ci}'
         username = base_username
@@ -556,7 +555,7 @@ def admin_users_view(request):
                 if not ci_new or not str(ci_new).strip():
                     return Response({'error': 'CI es obligatorio para role paciente'}, status=status.HTTP_400_BAD_REQUEST)
                 # Unicidad de CI
-                if Profile.objects.filter(ci=ci_new).exists():
+                if Paciente.objects.filter(ci=ci_new).exists():
                     return Response({'error': 'CI ya registrado para otro usuario'}, status=status.HTTP_400_BAD_REQUEST)
             if role_new == 'doctor' and (not license_number_new or not specialty_new):
                 return Response({'error': 'Matrícula profesional y especialidad son obligatorias para doctores'}, status=status.HTTP_400_BAD_REQUEST)
@@ -605,7 +604,7 @@ def admin_users_view(request):
             models.Q(email__icontains=q) |
             models.Q(first_name__icontains=q) |
             models.Q(last_name__icontains=q) |
-            models.Q(profile__ci__icontains=q)
+            models.Q(profile__paciente__ci__icontains=q)
         )
 
     # Filtros avanzados
@@ -616,9 +615,9 @@ def admin_users_view(request):
     has_ci = request.GET.get('has_ci', None)
     if has_ci is not None and has_ci != '':
         if has_ci.lower() in ('1', 'true', 'yes'):
-            usuarios_qs = usuarios_qs.filter(profile__ci__isnull=False).exclude(profile__ci__exact='')
+            usuarios_qs = usuarios_qs.filter(profile__paciente__ci__isnull=False).exclude(profile__paciente__ci__exact='')
         elif has_ci.lower() in ('0', 'false', 'no'):
-            usuarios_qs = usuarios_qs.filter(models.Q(profile__ci__isnull=True) | models.Q(profile__ci__exact=''))
+            usuarios_qs = usuarios_qs.filter(models.Q(profile__paciente__ci__isnull=True) | models.Q(profile__paciente__ci__exact=''))
 
     date_from = request.GET.get('date_joined_from', '').strip()
     if date_from:
@@ -716,7 +715,7 @@ def admin_results_view(request):
     if role != 'admin':
         return Response({"error": "Acceso denegado: se requiere rol admin"}, status=status.HTTP_403_FORBIDDEN)
 
-    resultados = ResultadoPrueba.objects.select_related('usuario').all()
+    resultados = ResultadoPrueba.objects.select_related('paciente__profile__user').all()
     data = []
     for r in resultados:
         data.append({

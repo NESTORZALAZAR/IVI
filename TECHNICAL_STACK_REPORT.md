@@ -90,8 +90,8 @@ Las versiones anteriores son las restricciones declaradas en `frontend/package.j
 - **Motor confirmado:** SQLite mediante el archivo `backend/db.sqlite3`.
 - **Configuración:** `django.db.backends.sqlite3`, con la base en `BASE_DIR / 'db.sqlite3'`.
 - **ORM:** Django ORM (`django.db.models`).
-- **Modelos principales:** usuario estándar de Django, `Profile` y `ResultadoPrueba`; este último usa `JSONField` para detalles de las pruebas y relaciones `ForeignKey` con usuarios.
-- **Migraciones:** Django migrations; se observan migraciones de `usuarios` hasta `0007`.
+- **Modelos principales:** usuario estándar de Django, `Profile`, `Paciente`, `Profesional`, `TipoPrueba`, `ResultadoPrueba`, `RespuestaResultado`, `ArchivoProcesado` y `ConversionAudio`. `ResultadoPrueba` mantiene un `JSONField` para metadatos variables y referencia el catálogo mediante `ForeignKey`.
+- **Migraciones:** Django migrations; `usuarios.0008` normaliza perfiles y pruebas, y `archivos.0001` crea el registro de archivos y conversiones de audio.
 - **Conector/driver:** SQLite integrado en Python/Django; no se declara un driver externo para PostgreSQL, MySQL o MongoDB.
 - **Persistencia frontend:** `localStorage` para usuario, paciente de consultorio y preferencias/datos de sesión locales.
 - **No detectado:** PostgreSQL, MySQL, MongoDB, Redis, cache externo o almacenamiento de objetos.

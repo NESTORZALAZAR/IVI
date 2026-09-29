@@ -24,6 +24,9 @@ Verificar que IVI cumple sus funciones principales, protege los accesos por rol 
 | PF-12 | Admin crea, filtra y edita usuario | Operaciones completadas con validacion |
 | PF-13 | Procesar PDF, DOCX, TXT e imagen | Texto extraido o error explicado |
 | PF-14 | Activar lectura de guia | El navegador inicia y detiene TTS |
+| PF-15 | Crear resultado con tipo de prueba del catalogo | Resultado asociado a `TipoPrueba` |
+| PF-16 | Registrar respuesta detallada | No se repite la clave dentro del resultado |
+| PF-17 | Procesar archivo autenticado | Se crean `ArchivoProcesado` y `ConversionAudio` |
 
 ## Pruebas de accesibilidad
 
@@ -43,6 +46,7 @@ Verificar que IVI cumple sus funciones principales, protege los accesos por rol 
 4. La tarjeta 06 navega al menú principal.
 5. Doctor puede consultar el resultado del paciente.
 6. OCR responde cuando Tesseract esta disponible.
+7. `python manage.py migrate` deja aplicadas las migraciones de `usuarios` y `archivos`.
 
 ## Evidencia
 

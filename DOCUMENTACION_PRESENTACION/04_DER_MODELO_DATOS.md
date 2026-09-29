@@ -1,96 +1,116 @@
 # 4. DER - Modelo entidad relacion
 
-![DER de IVI](04_DER_MODELO_DATOS.svg)
+## 4.1 Criterio de organizacion
 
-## 4.1 Entidades principales
+El modelo separa la identidad comun, los datos especificos por tipo de usuario,
+el catalogo de pruebas, los resultados y el procesamiento de archivos. No se
+repiten datos de pacientes o profesionales en `Profile`.
 
-### User
+## 4.2 Tablas del dominio
 
-Entidad de autenticacion provista por Django.
+1. **User**: autenticacion provista por Django.
+2. **Profile**: relacion obligatoria con `User`; un usuario puede tener cero o un perfil y el perfil siempre pertenece a un usuario.
+3. **Paciente**: CI, edad y si fue atendido en consultorio.
+4. **Profesional**: matricula, especialidad e institucion del doctor.
+5. **TipoPrueba**: catalogo unico de evaluaciones y juegos.
+6. **ResultadoPrueba**: puntaje y estado de una prueba realizada por un paciente.
+7. **RespuestaResultado**: respuestas o detalles estructurados de un resultado.
+8. **ArchivoProcesado**: archivo recibido y texto extraido por el lector.
+9. **ConversionAudio**: conversiones de audio asociadas a un archivo procesado.
 
-- `id` (PK)
-- `username`
-- `email`
-- `password` almacenada por Django
-- `first_name`
-- `last_name`
-
-### Profile
-
-Extiende a User con informacion de dominio.
-
-- `id` (PK)
-- `user_id` (FK unica a User)
-- `role`: admin, doctor o paciente
-- `ci` (unica, nullable)
-- `age`
-- `license_number`
-- `specialty`
-- `institution`
-- `is_office_patient`
-
-### ResultadoPrueba
-
-Registra el desempeno de un cuestionario o juego.
-
-- `id` (PK)
-- `usuario_id` (FK a User)
-- `tipo_prueba`
-- `puntaje` de 0 a 100
-- `fecha_prueba`
-- `duracion_segundos`
-- `detalles` JSON
-- `estado`: completada, incompleta o cancelada
-
-## 4.2 Diagrama entidad relacion
+## 4.3 Diagrama entidad relacion
 
 ```mermaid
 erDiagram
-    USER ||--|| PROFILE : posee
-    USER ||--o{ RESULTADO_PRUEBA : obtiene
+    USER ||--o| PROFILE : posee
+    PROFILE ||--o| PACIENTE : tiene_datos
+    PROFILE ||--o| PROFESIONAL : tiene_datos
+    PACIENTE ||--o{ RESULTADO_PRUEBA : realiza
+    TIPO_PRUEBA ||--o{ RESULTADO_PRUEBA : clasifica
+    RESULTADO_PRUEBA ||--o{ RESPUESTA_RESULTADO : contiene
+    USER ||--o{ ARCHIVO_PROCESADO : carga
+    ARCHIVO_PROCESADO ||--o{ CONVERSION_AUDIO : genera
 
     USER {
         int id PK
-        string username
+        string username UK
         string email
-        string first_name
-        string last_name
+        string password
     }
-
     PROFILE {
         int id PK
-        int user_id FK
+        int user_id FK,UK
         string role
+    }
+    PACIENTE {
+        int id PK
+        int profile_id FK,UK
         string ci UK
         int age
-        string license_number
-        string specialty
-        string institution
         boolean is_office_patient
     }
-
+    PROFESIONAL {
+        int id PK
+        int profile_id FK,UK
+        string license_number UK
+        string specialty
+        string institution
+    }
+    TIPO_PRUEBA {
+        int id PK
+        string codigo UK
+        string nombre
+        string categoria
+        boolean activo
+    }
     RESULTADO_PRUEBA {
         int id PK
-        int usuario_id FK
-        string tipo_prueba
+        int paciente_id FK
+        int prueba_id FK
         int puntaje
         datetime fecha_prueba
         int duracion_segundos
         json detalles
         string estado
     }
+    RESPUESTA_RESULTADO {
+        int id PK
+        int resultado_id FK
+        string clave
+        json respuesta
+        int puntaje
+    }
+    ARCHIVO_PROCESADO {
+        int id PK
+        int propietario_id FK
+        string nombre_original
+        string tipo_mime
+        text texto_extraido
+        datetime creado_en
+    }
+    CONVERSION_AUDIO {
+        int id PK
+        int archivo_id FK
+        decimal velocidad
+        string formato
+        datetime creado_en
+    }
 ```
 
-## 4.3 Reglas de integridad
+## 4.4 Reglas de integridad
 
-- Cada usuario tiene un perfil asociado.
-- Un usuario puede tener cero o muchos resultados.
-- Si se elimina un usuario, sus resultados se eliminan por la relacion definida en Django.
-- El CI es unico cuando se informa.
-- El puntaje debe estar entre 0 y 100.
-- El tipo de prueba debe pertenecer al catalogo permitido.
-- Los resultados pueden registrar detalles variables en JSON para cada juego o cuestionario.
+- Un usuario puede tener cero o un `Profile`; cada `Profile` pertenece a exactamente un usuario.
+- `Paciente.ci` es unico cuando se informa.
+- `Profesional.license_number` es unico cuando se informa.
+- `Profile.role` solo admite `admin`, `doctor` o `paciente`.
+- `TipoPrueba.codigo` es unico y los resultados solo referencian tipos activos al crearse desde la API.
+- El puntaje de resultados y respuestas esta entre 0 y 100.
+- Un resultado no puede existir sin su paciente y su tipo de prueba.
+- Las respuestas se identifican por `resultado` y `clave`, evitando duplicados.
+- Un resultado puede tener cero o muchas respuestas; al eliminar un resultado se eliminan sus respuestas.
+- Un archivo puede tener cero o muchas conversiones de audio; al eliminarlo se eliminan sus conversiones.
+- Al eliminar un tipo de prueba se protegen sus resultados.
 
-## 4.4 Catalogo actual de tipos
+## 4.5 Catalogo inicial de tipos
 
 `lectura`, `velocidad`, `comprension`, `ortografia`, `alfabeto`, `parejas`, `silabas` y `letras`.

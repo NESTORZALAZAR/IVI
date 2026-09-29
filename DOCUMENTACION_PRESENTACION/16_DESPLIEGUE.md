@@ -56,6 +56,8 @@ Debe estar disponible el idioma `spa` para procesar texto en español.
 - [ ] CORS restringido.
 - [ ] Tesseract instalado en el servidor.
 - [ ] Migraciones aplicadas.
+- [ ] Verificar que el catalogo de `TipoPrueba` contenga los ocho tipos iniciales.
+- [ ] Revisar permisos y politica de retencion para archivos procesados y audio.
 - [ ] Usuario administrador creado.
 - [ ] Prueba de login ejecutada.
 - [ ] Prueba de OCR ejecutada.
