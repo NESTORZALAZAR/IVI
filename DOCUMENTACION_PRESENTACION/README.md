@@ -19,6 +19,7 @@ Este paquete resume la plataforma IVI para presentacion academica, tecnica y fun
 13. [15_MANUAL_USUARIO.md](15_MANUAL_USUARIO.md)
 14. [16_DESPLIEGUE.md](16_DESPLIEGUE.md)
 15. [17_ALCANCE_RIESGOS_CONCLUSIONES.md](17_ALCANCE_RIESGOS_CONCLUSIONES.md)
+16. [18_CATALOGO_DE_CASOS_DE_USO.md](18_CATALOGO_DE_CASOS_DE_USO.md)
 
 ## Alcance
 
