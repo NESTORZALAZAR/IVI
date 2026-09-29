@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 Z" fill="#416b9b"/></marker><style>text{font-family:Arial,sans-serif;fill:#24364b} .title{font-size:32px;font-weight:700}.label{font-size:20px;font-weight:700}.small{font-size:16px}.box{stroke:#b9c9da;stroke-width:2;rx:18}.line{stroke:#416b9b;stroke-width:3;fill:none;marker-end:url(#a)}</style></defs>
+<rect width="1200" height="700" fill="#f4f7fb"/><text x="60" y="65" class="title">Arquitectura de IVI</text><text x="60" y="98" class="small">Plataforma web de apoyo y tamizaje disléxico</text>
+<rect x="455" y="145" width="290" height="100" fill="#dcecff" class="box"/><text x="600" y="185" text-anchor="middle" class="label">Frontend React</text><text x="600" y="216" text-anchor="middle" class="small">Vistas · Router · Accesibilidad</text>
+<rect x="455" y="320" width="290" height="100" fill="#dff3e8" class="box"/><text x="600" y="360" text-anchor="middle" class="label">API Django</text><text x="600" y="391" text-anchor="middle" class="small">Roles · Tamizaje · Resultados</text>
+<rect x="455" y="500" width="290" height="100" fill="#fff0c9" class="box"/><text x="600" y="540" text-anchor="middle" class="label">Persistencia</text><text x="600" y="571" text-anchor="middle" class="small">Usuarios · Perfiles · Historial</text>
+<rect x="75" y="165" width="230" height="75" fill="#fff" class="box"/><text x="190" y="210" text-anchor="middle" class="label">Navegador</text><path d="M305 202 H450" class="line"/>
+<rect x="895" y="165" width="230" height="75" fill="#ffe3df" class="box"/><text x="1010" y="210" text-anchor="middle" class="label">OCR / TTS</text><path d="M750 202 H890" class="line"/>
+<path d="M600 245 V315" class="line"/><path d="M600 420 V495" class="line"/><text x="820" y="355" class="small">HTTP / JSON</text><text x="820" y="535" class="small">Modelos Django</text>
+</svg>

@@ -212,6 +212,112 @@
   font-size: 1.2rem;
 }
 
+.section-kicker {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: #526da8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.games-section,
+.screening-section {
+  margin-bottom: 2.4rem;
+}
+
+.games-section-heading,
+.screening-section-heading {
+  margin-bottom: 0.9rem;
+}
+
+.games-section-heading h2,
+.screening-section-heading h2 {
+  margin: 0;
+  color: #253d88;
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  font-weight: 900;
+}
+
+.games-section-heading p,
+.screening-section-heading p {
+  margin: 0.3rem 0 0;
+  color: #53627c;
+  font-size: 0.9rem;
+}
+
+.games-entry-card {
+  justify-content: flex-start;
+  min-height: 104px;
+  margin: 0;
+  padding: 1.2rem 1.5rem;
+  border-radius: 14px;
+  background: linear-gradient(100deg, #d8f0e6, #e8f7ee);
+  border-color: #b5dcc8;
+  box-shadow: 0 8px 20px rgba(42, 104, 76, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.games-entry-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(42, 104, 76, 0.18);
+}
+
+.games-entry-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 1.55rem;
+}
+
+.games-entry-copy { flex: 1; text-align: left; }
+.games-entry-card strong { text-align: left; font-size: 1.05rem; }
+.games-entry-card small { text-align: left; font-size: 0.8rem; }
+.games-entry-arrow { color: #26704c; font-size: 1.7rem; }
+
+.screening-section {
+  padding-top: 0.25rem;
+}
+
+.screening-section-heading {
+  padding: 1.1rem 1.25rem;
+  border-left: 4px solid #6074c5;
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, #eaf0ff 72%, var(--card));
+}
+
+.screening-section-heading h2 { color: #273d7d; }
+.screening-section-heading p { color: #53627c; }
+
+.pruebas-grid .prueba-card {
+  min-height: 250px;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(34, 43, 65, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pruebas-grid .prueba-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 13px 24px rgba(34, 43, 65, 0.16);
+}
+
+.pruebas-grid .prueba-content h2 {
+  color: #2b568f;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.pruebas-grid .prueba-descripcion {
+  min-height: 3.8rem;
+  font-size: 0.78rem;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -519,6 +625,102 @@
     grid-template-columns: 2.25rem minmax(0, 1fr);
   }
 
+
+/* Identidad compartida con la galería de juegos */
+.pruebas-page,
+.games-page {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 92%, #edf3ff), var(--bg));
+}
+
+.pruebas-container,
+.games-hero,
+.difficulty-filter,
+.games-grid,
+.games-grid-heading {
+  width: min(1100px, 100%);
+}
+
+.pruebas-header h1,
+.games-hero h1 {
+  color: #25344e;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  letter-spacing: -0.02em;
+  text-shadow: none;
+}
+
+.pruebas-header,
+.games-hero {
+  animation: fadeIn 0.55s ease both;
+}
+
+.games-entry-card,
+.difficulty-filter,
+.pruebas-grid .prueba-card,
+.games-grid .game-card,
+.info-card {
+  border-color: color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(35, 52, 78, 0.09);
+}
+
+.pruebas-grid .prueba-card,
+.games-grid .game-card {
+  background: color-mix(in srgb, var(--card) 92%, #edf3ff);
+}
+
+.pruebas-grid .prueba-card.blue,
+.games-grid .game-card.blue { background: color-mix(in srgb, var(--card) 88%, #a9c9ee); }
+.pruebas-grid .prueba-card.orange,
+.games-grid .game-card.gold { background: color-mix(in srgb, var(--card) 88%, #f5d88c); }
+.pruebas-grid .prueba-card.green,
+.games-grid .game-card.mint { background: color-mix(in srgb, var(--card) 88%, #a9dec4); }
+.pruebas-grid .prueba-card.purple,
+.games-grid .game-card.purple { background: color-mix(in srgb, var(--card) 88%, #cbb5e8); }
+.games-grid .game-card.coral { background: color-mix(in srgb, var(--card) 88%, #f0b4a4); }
+
+.pruebas-grid .prueba-card:hover,
+.games-grid .game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 28px rgba(35, 52, 78, 0.15);
+}
+
+.games-hero {
+  margin-top: 1rem;
+  padding: 2rem 2.25rem;
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card) 82%, #edf3ff);
+  box-shadow: 0 8px 22px rgba(35, 52, 78, 0.08);
+}
+
+.games-hero p,
+.tests-heading p,
+.games-section-heading p,
+.screening-section-heading p {
+  color: #53627c;
+}
+
+.difficulty-filter {
+  margin-top: 1.25rem;
+  background: color-mix(in srgb, var(--card) 88%, #edf3ff);
+}
+
+.games-grid-heading {
+  margin-top: 2.5rem;
+}
+
+.game-card img {
+  width: 132px;
+  height: 132px;
+  padding: 0.4rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.52);
+}
+
+@media (max-width: 760px) {
+  .games-hero { margin-top: 0; padding: 1.35rem; }
+  .games-hero img { width: 150px; height: 150px; }
+}
   .knowledge-filter-action {
     grid-column: 1 / -1;
     justify-content: center;

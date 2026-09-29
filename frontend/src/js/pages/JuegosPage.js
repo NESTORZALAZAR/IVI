@@ -61,10 +61,24 @@ export default function JuegosPage() {
           {edades.map((option) => <button className={age === option.value ? "selected" : ""} onClick={() => setAge(option.value)} key={option.value}>{option.label}</button>)}
         </div>
       </section>
+      <div className="games-grid-heading">
+        <div><span className="eyebrow">Colección IVI</span><h2>Elige un reto para empezar</h2></div>
+        <span className="games-count">{juegos.length} actividades disponibles</span>
+      </div>
       <section className="games-grid" aria-label="Juegos disponibles">
-        {juegos.map((item) => <Link className={`game-card ${item.color}`} to={`/juegos/${item.path}${queryString ? `?${queryString}` : ""}`} key={item.path}>
+        {juegos.map((item, index) => <Link className={`game-card ${item.color}`} to={`/juegos/${item.path}${queryString ? `?${queryString}` : ""}`} key={item.path}>
+          <span className="game-card-number">0{index + 1}</span>
           <img src={item.image} alt="" /><span className="game-tag">{item.tag}</span><h2>{item.title}</h2><p>{item.text}</p><span className="game-card-level">{age === "all" ? item.age : edades.find((option) => option.value === age).label} · {difficulty === "all" ? "3 niveles disponibles" : `${dificultades[Number(difficulty) + 1].label} seleccionado`}</span><span className="game-card-link">Jugar ahora <span aria-hidden="true">→</span></span>
         </Link>)}
+        <Link className="game-card menu-shortcut-card" to="/">
+          <span className="game-card-number">06</span>
+          <span className="menu-shortcut-icon" aria-hidden="true">⌂</span>
+          <span className="game-tag">Navegación</span>
+          <h2>Menú principal</h2>
+          <p>Regresa al inicio de IVI para elegir otra sección de la plataforma.</p>
+          <span className="game-card-level">Inicio · Acceso general</span>
+          <span className="game-card-link">Ir al menú <span aria-hidden="true">→</span></span>
+        </Link>
       </section>
       <p className="games-note">Estas actividades son orientativas y no sustituyen una evaluación profesional.</p>
     </main>
