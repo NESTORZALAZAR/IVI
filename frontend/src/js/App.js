@@ -119,12 +119,12 @@ function AppContent() {
           <Route path="/lector-documentos" element={<DocumentReaderPage />} />
           <Route path="/lector-textos" element={<TextReaderPage />} />
           
-          <Route path="/pruebas" element={<PruebasPage />} />
-          <Route path="/pruebas/lectura" element={<CuestionarioRiesgoPage tipo="lectura" />} />
-          <Route path="/pruebas/velocidad" element={<CuestionarioRiesgoPage tipo="velocidad" />} />
-          <Route path="/pruebas/comprension" element={<CuestionarioRiesgoPage tipo="comprension" />} />
-          <Route path="/pruebas/ortografia" element={<CuestionarioRiesgoPage tipo="ortografia" />} />
-          <Route path="/pruebas/alfabeto" element={<PruebaAlfabetoPage />} />
+          <Route path="/pruebas" element={<ProtectedRoute><PruebasPage /></ProtectedRoute>} />
+          <Route path="/pruebas/lectura" element={<ProtectedRoute><CuestionarioRiesgoPage tipo="lectura" /></ProtectedRoute>} />
+          <Route path="/pruebas/velocidad" element={<ProtectedRoute><CuestionarioRiesgoPage tipo="velocidad" /></ProtectedRoute>} />
+          <Route path="/pruebas/comprension" element={<ProtectedRoute><CuestionarioRiesgoPage tipo="comprension" /></ProtectedRoute>} />
+          <Route path="/pruebas/ortografia" element={<ProtectedRoute><CuestionarioRiesgoPage tipo="ortografia" /></ProtectedRoute>} />
+          <Route path="/pruebas/alfabeto" element={<ProtectedRoute><PruebaAlfabetoPage /></ProtectedRoute>} />
           <Route path="/resultados" element={<ResultadosPage />} />
           <Route path="/juegos" element={<JuegosPage />} />
           <Route path="/juegos/parejas" element={<JuegoParejasPage />} />

@@ -14,7 +14,7 @@ Todas las dependencias están instaladas y verificadas:
 
 ### Opción 1: Script Batch (Recomendado para Windows)
 ```batch
-run.bat
+\.\iniciar.ps1
 ```
 
 ### Opción 2: Ejecución Manual

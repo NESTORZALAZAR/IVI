@@ -6,6 +6,12 @@ El modelo separa la identidad comun, los datos especificos por tipo de usuario,
 el catalogo de pruebas, los resultados y el procesamiento de archivos. No se
 repiten datos de pacientes o profesionales en `Profile`.
 
+El administrador no se modela como una tabla independiente. `Admin` es un rol
+de `Profile`, junto con `doctor` y `paciente`; sus credenciales y datos de
+acceso se almacenan en `User`, y el rol se almacena en `Profile.role`. Las
+tablas internas de autenticacion, permisos y sesiones que Django administra
+automaticamente quedan fuera de este DER de dominio.
+
 ## 4.2 Tablas del dominio
 
 1. **User**: autenticacion provista por Django.
@@ -40,7 +46,7 @@ erDiagram
     PROFILE {
         int id PK
         int user_id FK,UK
-        string role
+        string role "admin | doctor | paciente"
     }
     PACIENTE {
         int id PK

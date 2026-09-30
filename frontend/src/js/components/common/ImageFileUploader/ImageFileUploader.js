@@ -53,6 +53,40 @@ function limpiarTexto(texto) {
     .join("\n");
 }
 
+function prepararImagenParaOCR(archivo, binarizar = false) {
+  return new Promise((resolve, reject) => {
+    const imagen = new Image();
+    const url = URL.createObjectURL(archivo);
+
+    imagen.onload = () => {
+      const escala = Math.min(2, Math.max(1, 1600 / Math.max(imagen.naturalWidth, imagen.naturalHeight)));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(imagen.naturalWidth * escala);
+      canvas.height = Math.round(imagen.naturalHeight * escala);
+      const contexto = canvas.getContext("2d", { willReadFrequently: true });
+      contexto.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+
+      const datos = contexto.getImageData(0, 0, canvas.width, canvas.height);
+      for (let indice = 0; indice < datos.data.length; indice += 4) {
+        const gris = 0.299 * datos.data[indice] + 0.587 * datos.data[indice + 1] + 0.114 * datos.data[indice + 2];
+        const contraste = Math.max(0, Math.min(255, (gris - 128) * 1.45 + 128));
+        const valor = binarizar ? (contraste < 175 ? 0 : 255) : contraste;
+        datos.data[indice] = valor;
+        datos.data[indice + 1] = valor;
+        datos.data[indice + 2] = valor;
+      }
+      contexto.putImageData(datos, 0, 0);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    imagen.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("No se pudo preparar la imagen"));
+    };
+    imagen.src = url;
+  });
+}
+
 async function getWorker() {
   if (tesseractWorker) return tesseractWorker;
   if (workerLoading) {
@@ -60,11 +94,20 @@ async function getWorker() {
   }
   workerLoading = true;
   const worker = await createWorker("spa+eng");
+  await worker.setParameters({
+    tessedit_pageseg_mode: "11",
+    preserve_interword_spaces: "1",
+  });
   tesseractWorker = worker;
   workerLoading = false;
   workerCallbacks.forEach((cb) => cb(worker));
   workerCallbacks = [];
   return worker;
+}
+
+async function reconocerTexto(worker, imagen, modo) {
+  await worker.setParameters({ tessedit_pageseg_mode: modo });
+  return worker.recognize(imagen);
 }
 
 export default function ImageFileUploader({ onFileProcessed }) {
@@ -111,8 +154,14 @@ export default function ImageFileUploader({ onFileProcessed }) {
 
     try {
       const worker = await getWorker();
-      setProgreso("Analizando imagen...");
-      const { data } = await worker.recognize(archivo);
+      setProgreso("Probando enfoque de texto...");
+      const imagenEnGrises = await prepararImagenParaOCR(archivo);
+      const imagenBinarizada = await prepararImagenParaOCR(archivo, true);
+        const resultadoDisperso = await reconocerTexto(worker, imagenEnGrises, "11");
+        const resultadoBloques = await reconocerTexto(worker, imagenBinarizada, "6");
+      const resultado = [resultadoDisperso, resultadoBloques]
+        .sort((primero, segundo) => (segundo.data.confidence || 0) - (primero.data.confidence || 0))[0];
+      const { data } = resultado;
       const texto = limpiarTexto(data.text.trim());
 
       setProgreso("");

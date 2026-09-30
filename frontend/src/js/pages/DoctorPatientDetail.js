@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import "../../css/pages/ResultadosPage.css";
 
@@ -11,12 +11,7 @@ export default function DoctorPatientDetail(){
 
   const token = localStorage.getItem('token');
 
-  useEffect(()=>{
-    if (!token) { navigate('/login'); return; }
-    fetchData();
-  }, [ci]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true); setError(''); setResults([]);
     try {
       const url = `http://127.0.0.1:8000/api/doctor/?ci=${encodeURIComponent(ci)}`;
@@ -26,19 +21,12 @@ export default function DoctorPatientDetail(){
       setResults(data);
     } catch(e){ setError('Error de conexión'); }
     setLoading(false);
-  }
+  }, [ci, token]);
 
-  const statsFor = (list) => {
-    const byGame = {};
-    list.forEach(r => {
-      const t = r.tipo_prueba || 'unknown';
-      if (!byGame[t]) byGame[t] = { count:0, sum:0, items:[] };
-      byGame[t].count += 1; byGame[t].sum += (r.puntaje||0); byGame[t].items.push(r);
-    });
-    const out = {};
-    Object.keys(byGame).forEach(k=>{ out[k] = { average: (byGame[k].sum/byGame[k].count)||0, count: byGame[k].count, items: byGame[k].items } });
-    return out;
-  }
+  useEffect(()=>{
+    if (!token) { navigate('/login'); return; }
+    fetchData();
+  }, [fetchData, navigate, token]);
 
   const total = results.length;
   const avg = total ? (results.reduce((s,r)=>s+(r.puntaje||0),0)/total) : 0;

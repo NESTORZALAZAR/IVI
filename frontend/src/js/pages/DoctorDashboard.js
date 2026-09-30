@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DoctorDashboard.css';
 
@@ -21,13 +21,20 @@ export default function DoctorDashboard(){
   const [officeResults, setOfficeResults] = useState([]);
 
   const token = localStorage.getItem('token');
-  const storedUser = localStorage.getItem('user');
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+  const fetchPreview = useCallback(async () => {
+    setError(''); setLoading(true); setResults([]);
+    try {
+      const res = await fetch('http://127.0.0.1:8000/api/doctor/', { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); setLoading(false); return; }
+      const data = await res.json();
+      setResults(data.map(p=>({ paciente_id: p.paciente_id, paciente_username: p.paciente_username, paciente_ci: p.paciente_ci, preview: p })));
+    } catch(e){ setError('Error de conexión'); }
+    setLoading(false);
+  }, [token]);
 
   useEffect(()=>{
     if (!token) { navigate('/login'); return; }
-    // parsedUser is read from localStorage and may be a new object each render;
-    // check role by reading stored string to avoid infinite re-renders.
     try {
       const su = localStorage.getItem('user');
       const pu = su ? JSON.parse(su) : null;
@@ -37,7 +44,7 @@ export default function DoctorDashboard(){
     }
     // fetch preview on mount
     fetchPreview();
-  }, [token, navigate]);
+  }, [token, navigate, fetchPreview]);
 
   const search = async () => {
     setError(''); setLoading(true); setResults([]);
@@ -63,18 +70,6 @@ export default function DoctorDashboard(){
         map[pid].resultados.push(r);
       });
       setResults(Object.values(map));
-    } catch(e){ setError('Error de conexión'); }
-    setLoading(false);
-  }
-
-  const fetchPreview = async () => {
-    setError(''); setLoading(true); setResults([]);
-    try {
-      const res = await fetch('http://127.0.0.1:8000/api/doctor/', { headers: { Authorization: `Bearer ${token}` } });
-      if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); setLoading(false); return; }
-      const data = await res.json();
-      // data is preview array of patients
-      setResults(data.map(p=>({ paciente_id: p.paciente_id, paciente_username: p.paciente_username, paciente_ci: p.paciente_ci, preview: p })));
     } catch(e){ setError('Error de conexión'); }
     setLoading(false);
   }

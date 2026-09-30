@@ -4,21 +4,15 @@
 
 IVI es una plataforma integral diseñada para apoyar a personas con dislexia, familias y profesionales. Ofrece información confiable, herramientas accesibles y juegos interactivos.
 
-## 🚀 Inicio Rápido (Automático)
+## 🚀 Inicio Rápido
 
-### Opción 1: Windows Batch (run.bat)
+### PowerShell (Windows)
 ```bash
-# Solo ejecuta el archivo
-run.bat
+# Inicia backend y frontend usando rutas relativas al proyecto
+\.\iniciar.ps1
 ```
 
-### Opción 2: PowerShell (run.ps1)
-```bash
-# En PowerShell
-.\run.ps1
-```
-
-Esto instalará dependencias y ejecutará ambas aplicaciones automáticamente.
+Las dependencias deben estar instaladas previamente. El script inicia ambas aplicaciones.
 
 ---
 
@@ -126,16 +120,10 @@ Toda la documentación está en `frontend/docs/`:
 - ✅ OCR con Tesseract (soporte multiidioma)
 - ✅ Módulos: Archivos, Lector, Tamizaje, Usuarios
 
-## 🤖 Scripts Disponibles
+## 🤖 Script Disponible
 
-### Windows Batch
 ```bash
-run.bat              # Ejecuta todo automáticamente
-```
-
-### PowerShell
-```bash
-.\run.ps1            # Ejecuta todo automáticamente
+\.\iniciar.ps1        # Ejecuta backend y frontend
 ```
 
 ## 🤝 Contribuir

@@ -41,7 +41,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-visual">
-          <img src="/images/logoNuevoSF.png" alt="Logo de IVI" />
+          <img className="ocr-ignore" src="/images/logoNuevoSF.png" alt="Logo de IVI" />
         </div>
       </section>
 

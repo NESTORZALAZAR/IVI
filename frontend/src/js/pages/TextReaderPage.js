@@ -1,59 +1,77 @@
-import { useState } from "react";
-import AudioPlayer from "../components/common/AudioPlayer/AudioPlayer";
+import { useEffect, useState } from "react";
+import ImageFileUploader from "../components/common/ImageFileUploader/ImageFileUploader";
 import "./TextReaderPage.css";
 
 export default function TextReaderPage() {
   const [processedData, setProcessedData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [inputText, setInputText] = useState("");
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [rate, setRate] = useState(1);
+  const [imageError, setImageError] = useState("");
+  const speechSupported = typeof window !== "undefined" && "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
 
-  const handleTextSubmit = async () => {
+  useEffect(() => () => {
+    if (speechSupported) window.speechSynthesis.cancel();
+  }, [speechSupported]);
+
+  const handleTextSubmit = () => {
     if (!inputText.trim()) {
       alert("Por favor ingresa algún texto");
       return;
     }
 
-    setIsLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/api/lector/extract-and-speak/", {
-        method: "POST",
-        headers: {
-          ...(token ? { "Authorization": `Bearer ${token}` } : {}),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: inputText
-        }),
-      });
+    if (!speechSupported) return;
+    window.speechSynthesis.cancel();
+    setProcessedData({ texto: inputText, caracteres: inputText.length });
+    setIsPaused(false);
+    setIsSpeaking(false);
+  };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Error: ${response.status}`);
-      }
+  const handleSpeak = () => {
+    if (!processedData?.texto || !speechSupported) return;
 
-      const data = await response.json();
-      
-      // Convertir el audio hex a blob
-      const hex = data.audio;
-      const bytes = new Uint8Array(hex.length / 2);
-      for (let i = 0; i < hex.length; i += 2) {
-        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-      }
-      const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(audioBlob);
-
-      setProcessedData({
-        audio: audioUrl,
-        texto: inputText,
-        caracteres: inputText.length
-      });
-    } catch (error) {
-      console.error("Error:", error);
-      alert(`Error al procesar el texto: ${error.message}`);
-    } finally {
-      setIsLoading(false);
+    if (isSpeaking && !isPaused) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      return;
     }
+
+    if (isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(processedData.texto);
+    utterance.lang = "es-ES";
+    utterance.rate = rate;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => { setIsSpeaking(false); setIsPaused(false); };
+    utterance.onerror = () => { setIsSpeaking(false); setIsPaused(false); };
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
+  };
+
+  const handleStop = () => {
+    if (!speechSupported) return;
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    setIsPaused(false);
+  };
+
+  const handleImageProcessed = ({ texto, caracteres }) => {
+    if (!texto?.trim()) {
+      setImageError("No se encontró texto legible. Carga una imagen que contenga palabras claras.");
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    setImageError("");
+    setInputText(texto);
+    setProcessedData({ texto, caracteres });
+    setIsSpeaking(false);
+    setIsPaused(false);
   };
 
   return (
@@ -72,10 +90,10 @@ export default function TextReaderPage() {
                 <h3>✏️ Escribe o Pega tu Texto</h3>
                 <button
                   onClick={handleTextSubmit}
-                  disabled={isLoading || !inputText.trim()}
+                  disabled={!inputText.trim()}
                   className="btn-submit"
                 >
-                  {isLoading ? "Procesando..." : "Escuchar Texto"}
+                  Preparar lectura
                 </button>
               </div>
               <div className="text-input-actions">
@@ -87,17 +105,36 @@ export default function TextReaderPage() {
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Ingresa aquí el texto que deseas escuchar..."
               className="text-input"
-              disabled={isLoading}
               rows="8"
             />
           </div>
 
+          <section className="image-reader-section" aria-labelledby="image-reader-title">
+            <div className="image-reader-heading">
+              <h2 id="image-reader-title">Leer una imagen con texto</h2>
+              <p>Carga una foto o captura con texto legible. El OCR extraerá las palabras y podrás escucharlas con la voz del navegador.</p>
+            </div>
+            <ImageFileUploader onFileProcessed={handleImageProcessed} />
+            {imageError && <p className="native-reader-warning" role="alert">{imageError}</p>}
+          </section>
+
           {processedData && (
-            <AudioPlayer
-              audioUrl={processedData.audio}
-              texto={processedData.texto}
-              caracteres={processedData.caracteres}
-            />
+            <div className="native-reader" aria-live="polite">
+              <div className="native-reader-header">
+                <h3>Lectura nativa del navegador</h3>
+                <p>Caracteres: <strong>{processedData.caracteres}</strong></p>
+              </div>
+              {!speechSupported && <p className="native-reader-warning">Este navegador no ofrece síntesis de voz.</p>}
+              <div className="native-reader-controls">
+                <button onClick={handleSpeak} disabled={!speechSupported} className="btn-submit">
+                  {isSpeaking && !isPaused ? "Pausar" : isPaused ? "Reanudar" : "Escuchar"}
+                </button>
+                <button onClick={handleStop} disabled={!isSpeaking} className="native-stop-button">Detener</button>
+                <label htmlFor="native-rate">Velocidad: {rate.toFixed(2)}x</label>
+                <input id="native-rate" type="range" min="0.5" max="2" step="0.1" value={rate} onChange={(event) => setRate(Number(event.target.value))} />
+              </div>
+              <p className="native-reader-preview">{processedData.texto}</p>
+            </div>
           )}
 
           {!processedData && !inputText && (

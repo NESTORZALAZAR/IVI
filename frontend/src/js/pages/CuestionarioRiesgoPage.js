@@ -23,7 +23,6 @@ const CUESTIONARIOS = {
 "¿Tiene dificultades para recordar el nombre correcto de objetos cotidianos, utilizando términos genéricos como ‘esa cosa’ o ‘el coso ese’?", 
 "¿Le resulta muy difícil reconocer o escribir las letras de su propio nombre en comparación con sus compañeros? ", 
 "Cuando intenta escribir o copiar palabras muy sencillas, ¿tiende a omitir letras o a escribirlas en un orden incorrecto? ",
-"¿Le resulta muy difícil reconocer o escribir las letras de su propio nombre en comparación con sus compañeros? ",
 
     ],
   },

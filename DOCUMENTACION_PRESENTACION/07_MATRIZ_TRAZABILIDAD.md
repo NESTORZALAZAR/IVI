@@ -12,7 +12,7 @@
 | RF-07 | CU-06 | `DoctorPatientDetail`, `ResultadosPage` | Historial y detalle de puntajes |
 | RF-08 | CU-07 | `AdminUsers` | Busqueda, filtros, paginacion y edicion |
 | RF-09 | CU-08 | `lector/views.py`, `ArchivoProcesado` | PDF, DOCX, TXT, JPG, PNG, GIF y BMP |
-| RF-10 | CU-08 | `pyttsx3`, `ConversionAudio`, `AudioPlayer`, Web Speech API | Lectura de texto y guia |
+| RF-10 | CU-08 | `SpeechSynthesis` del navegador, `pyttsx3` para documentos cuando corresponde | Lectura de texto y guia |
 | RF-11 | CU-09 | `AccessibilityContext`, `TopNav` | Fuente, tamano, espaciado y temas |
 | RF-12 | Todos | Aviso global en `TopNav` | Mensaje visible de alcance orientativo |
 

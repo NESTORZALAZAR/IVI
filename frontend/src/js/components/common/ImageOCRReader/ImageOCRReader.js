@@ -74,6 +74,7 @@ export default function ImageOCRReader() {
     const handleMouseOver = (e) => {
       const img = e.target.closest("img");
       if (!img) return;
+      if (img.classList.contains("ocr-ignore")) return;
 
       // Ignorar imágenes muy pequeñas (iconos)
       if (img.naturalWidth < 40 || img.naturalHeight < 40) return;
@@ -94,6 +95,7 @@ export default function ImageOCRReader() {
     const handleMouseOut = (e) => {
       const img = e.target.closest("img");
       if (!img) return;
+      if (img.classList.contains("ocr-ignore")) return;
       // No ocultar si el mouse va al propio popup
       if (e.relatedTarget && e.relatedTarget.closest(".ocr-popup")) return;
       scheduleHide();

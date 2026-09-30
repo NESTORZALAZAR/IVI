@@ -4,24 +4,26 @@ Este paquete resume la plataforma IVI para presentacion academica, tecnica y fun
 
 ## Orden recomendado
 
-1. [06_PLAN_TECNICO.md](06_PLAN_TECNICO.md) - Capitulo 6 para el borrador de tesis.
-2. [DIAGRAMAS_TESIS.md](DIAGRAMAS_TESIS.md) - Fuentes de las 13 figuras del capitulo 6.
-3. [01_ARQUITECTURA.md](01_ARQUITECTURA.md)
-4. [02_CASOS_DE_USO_NIVEL_0.md](02_CASOS_DE_USO_NIVEL_0.md)
-5. [03_CASOS_DE_USO_NIVEL_1.md](03_CASOS_DE_USO_NIVEL_1.md)
-6. [04_DER_MODELO_DATOS.md](04_DER_MODELO_DATOS.md)
-7. [05_REQUISITOS.md](05_REQUISITOS.md)
-8. [06_FLUJOS_PRINCIPALES.md](06_FLUJOS_PRINCIPALES.md)
-9. [07_MATRIZ_TRAZABILIDAD.md](07_MATRIZ_TRAZABILIDAD.md)
-10. [08_GUIA_DE_PRESENTACION.md](08_GUIA_DE_PRESENTACION.md)
-11. [11_PLAN_DE_PRUEBAS.md](11_PLAN_DE_PRUEBAS.md)
-12. [12_API.md](12_API.md)
-13. [13_SEGURIDAD_PRIVACIDAD.md](13_SEGURIDAD_PRIVACIDAD.md)
-14. [14_DICCIONARIO_DATOS.md](14_DICCIONARIO_DATOS.md)
-15. [15_MANUAL_USUARIO.md](15_MANUAL_USUARIO.md)
-16. [16_DESPLIEGUE.md](16_DESPLIEGUE.md)
-17. [17_ALCANCE_RIESGOS_CONCLUSIONES.md](17_ALCANCE_RIESGOS_CONCLUSIONES.md)
-18. [18_CATALOGO_DE_CASOS_DE_USO.md](18_CATALOGO_DE_CASOS_DE_USO.md)
+1. [01_ARQUITECTURA.md](01_ARQUITECTURA.md) - Arquitectura y capas.
+2. [02_CASOS_DE_USO_NIVEL_0.md](02_CASOS_DE_USO_NIVEL_0.md) - Contexto y actores.
+3. [03_CASOS_DE_USO_NIVEL_1.md](03_CASOS_DE_USO_NIVEL_1.md) - Flujos detallados.
+4. [04_DER_MODELO_DATOS.md](04_DER_MODELO_DATOS.md) - Modelo entidad-relacion.
+5. [05_REQUISITOS.md](05_REQUISITOS.md) - Requisitos funcionales y no funcionales.
+6. [06_FLUJOS_PRINCIPALES.md](06_FLUJOS_PRINCIPALES.md) - Flujos principales.
+7. [06_PLAN_TECNICO.md](06_PLAN_TECNICO.md) - Plan tecnico del capitulo 6.
+8. [07_MATRIZ_TRAZABILIDAD.md](07_MATRIZ_TRAZABILIDAD.md) - Cobertura de requisitos.
+9. [08_GUIA_DE_PRESENTACION.md](08_GUIA_DE_PRESENTACION.md) - Guion de exposicion.
+10. [09_ESTRUCTURA_ENTREGA.md](09_ESTRUCTURA_ENTREGA.md) - Estructura de la entrega.
+11. [10_LIMITACIONES_Y_MEJORAS.md](10_LIMITACIONES_Y_MEJORAS.md) - Limites y mejoras.
+12. [11_PLAN_DE_PRUEBAS.md](11_PLAN_DE_PRUEBAS.md) - Plan de pruebas.
+13. [12_API.md](12_API.md) - Contrato de la API.
+14. [13_SEGURIDAD_PRIVACIDAD.md](13_SEGURIDAD_PRIVACIDAD.md) - Seguridad y privacidad.
+15. [14_DICCIONARIO_DATOS.md](14_DICCIONARIO_DATOS.md) - Diccionario de datos.
+16. [15_MANUAL_USUARIO.md](15_MANUAL_USUARIO.md) - Manual de usuario.
+17. [16_DESPLIEGUE.md](16_DESPLIEGUE.md) - Despliegue.
+18. [17_ALCANCE_RIESGOS_CONCLUSIONES.md](17_ALCANCE_RIESGOS_CONCLUSIONES.md) - Cierre del proyecto.
+19. [18_CATALOGO_DE_CASOS_DE_USO.md](18_CATALOGO_DE_CASOS_DE_USO.md) - Catalogo consolidado.
+20. [DIAGRAMAS_TESIS.md](DIAGRAMAS_TESIS.md) - Fuentes Mermaid y figuras exportadas.
 
 ## Alcance
 
@@ -32,8 +34,8 @@ IVI es una plataforma web de apoyo y tamizaje dislexico. Integra:
 - Cinco juegos de memoria, silabas, letras, lectura y ortografia, mas un acceso al menu principal.
 - Registro de resultados para seguimiento.
 - Panel de doctor/profesional y administracion de usuarios.
-- Lectura de documentos y textos.
-- OCR para imagenes y conversion de texto a audio.
+- Lectura de documentos y textos; el lector de texto usa la API `SpeechSynthesis` del navegador.
+- OCR para imagenes; esta capacidad mantiene Tesseract porque no existe una API web nativa estandar para OCR.
 - Configuracion de fuente, tamano, espaciado y tema.
 
 ## Estado del modelo de datos

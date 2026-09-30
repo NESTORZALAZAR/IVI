@@ -49,7 +49,7 @@ flowchart LR
 - **Precondiciones:** ninguna.
 - **Disparador:** el visitante abre Inicio, Acerca de, Senales o Consejos.
 - **Flujo principal:** navegar por la informacion, seleccionar una seccion y leer el contenido.
-- **Alternativas:** si se solicita lectura asistida, usar el control de audio del navegador.
+- **Alternativas:** si se solicita lectura asistida, usar la API de sintesis de voz del navegador.
 - **Postcondicion:** el visitante recibe informacion orientativa.
 
 ### CU-02 Registrarse
