@@ -1,0 +1,21 @@
+﻿sequenceDiagram
+    actor U as Usuario
+    participant F as Frontend React
+    participant API as API Django
+    participant EXT as Tesseract / librerias
+    participant DB as SQLite
+    U->>F: Selecciona archivo o ingresa texto
+    F->>API: Envia archivo o contenido
+    API->>API: Valida tipo y tamano
+    alt PDF o DOCX
+        API->>EXT: Extrae texto del documento
+    else Imagen
+        API->>EXT: Ejecuta OCR con Tesseract
+    else TXT
+        API->>API: Lee el contenido
+    end
+    EXT-->>API: Devuelve texto extraido
+    API->>EXT: Genera audio con pyttsx3 cuando corresponde
+    API->>DB: Guarda ArchivoProcesado y ConversionAudio
+    API-->>F: Devuelve texto y audio
+    F-->>U: Presenta contenido accesible

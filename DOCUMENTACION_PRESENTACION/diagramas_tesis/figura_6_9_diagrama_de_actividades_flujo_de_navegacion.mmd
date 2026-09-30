@@ -1,0 +1,15 @@
+﻿flowchart TD
+    IN([Inicio]) --> LOGIN[Ingresar credenciales]
+    LOGIN --> OK{Credenciales validas?}
+    OK -- No --> ERROR[Mostrar error]
+    ERROR --> LOGIN
+    OK -- Si --> ROLE{Rol del usuario}
+    ROLE -- Paciente --> PAT[Panel de paciente]
+    ROLE -- Profesional --> PRO[Panel profesional]
+    ROLE -- Administrador --> ADM[Panel administrativo]
+    PAT --> ACTION[Ejecutar modulo autorizado]
+    PRO --> ACTION
+    ADM --> ACTION
+    ACTION --> OUT{Cerrar sesion?}
+    OUT -- No --> ACTION
+    OUT -- Si --> END([Fin])

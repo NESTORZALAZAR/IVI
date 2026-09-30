@@ -1,0 +1,17 @@
+﻿flowchart LR
+    U[Paciente / Familia] --> AUTH[1. Autenticacion]
+    P[Profesional] --> AUTH
+    A[Administrador] --> AUTH
+    AUTH --> EVAL[2. Evaluacion inicial]
+    AUTH --> CUEST[3. Cuestionarios]
+    AUTH --> JUEG[4. Juegos de tamizaje]
+    AUTH --> AYUDA[5. IVI te ayuda]
+    AUTH --> RES[6. Directorio de resultados]
+    AUTH --> REC[7. Centro de recursos]
+    EVAL --> DB[(Base de datos)]
+    CUEST --> DB
+    JUEG --> DB
+    RES <--> DB
+    AYUDA --> PROC[Procesamiento OCR / TTS]
+    PROC --> DOC[(Archivos procesados)]
+    REC --> CONT[Contenido de apoyo]

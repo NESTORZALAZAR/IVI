@@ -1,0 +1,26 @@
+﻿flowchart TB
+    subgraph CLIENTE[Cliente]
+        B[Navegador]
+        FE[SPA React]
+        ACC[Contexto de accesibilidad]
+    end
+    subgraph SERVIDOR[Servidor de aplicacion]
+        API[API REST Django]
+        AUTH[Autenticacion y roles]
+        DOM[Reglas de dominio]
+        PROC[OCR, documentos y audio]
+    end
+    subgraph DATOS[Persistencia]
+        DB[(SQLite)]
+        FILES[Archivos procesados]
+    end
+    B --> FE
+    FE --> ACC
+    FE -->|HTTP / JSON| API
+    API --> AUTH
+    API --> DOM
+    API --> PROC
+    AUTH --> DB
+    DOM --> DB
+    PROC --> DB
+    PROC --> FILES

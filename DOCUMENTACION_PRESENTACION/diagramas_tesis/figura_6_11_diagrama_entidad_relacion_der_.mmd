@@ -1,0 +1,72 @@
+﻿erDiagram
+    USER ||--o| PROFILE : posee
+    PROFILE ||--o| PACIENTE : tiene_datos
+    PROFILE ||--o| PROFESIONAL : tiene_datos
+    PACIENTE ||--o{ RESULTADO_PRUEBA : realiza
+    TIPO_PRUEBA ||--o{ RESULTADO_PRUEBA : clasifica
+    RESULTADO_PRUEBA ||--o{ RESPUESTA_RESULTADO : contiene
+    USER ||--o{ ARCHIVO_PROCESADO : carga
+    ARCHIVO_PROCESADO ||--o{ CONVERSION_AUDIO : genera
+    USER {
+        int id PK
+        string username UK
+        string email
+        string password
+    }
+    PROFILE {
+        int id PK
+        int user_id FK
+        string role
+    }
+    PACIENTE {
+        int id PK
+        int profile_id FK
+        string ci UK
+        int age
+        boolean is_office_patient
+    }
+    PROFESIONAL {
+        int id PK
+        int profile_id FK
+        string license_number UK
+        string specialty
+        string institution
+    }
+    TIPO_PRUEBA {
+        int id PK
+        string codigo UK
+        string nombre
+        string categoria
+        boolean activo
+    }
+    RESULTADO_PRUEBA {
+        int id PK
+        int paciente_id FK
+        int prueba_id FK
+        int puntaje
+        datetime fecha_prueba
+        json detalles
+        string estado
+    }
+    RESPUESTA_RESULTADO {
+        int id PK
+        int resultado_id FK
+        string clave
+        json respuesta
+        int puntaje
+    }
+    ARCHIVO_PROCESADO {
+        int id PK
+        int propietario_id FK
+        string nombre_original
+        string tipo_mime
+        text texto_extraido
+        datetime creado_en
+    }
+    CONVERSION_AUDIO {
+        int id PK
+        int archivo_id FK
+        decimal velocidad
+        string formato
+        datetime creado_en
+    }

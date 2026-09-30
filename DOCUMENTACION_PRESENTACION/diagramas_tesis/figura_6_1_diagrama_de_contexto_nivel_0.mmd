@@ -1,0 +1,5 @@
+﻿flowchart LR
+    PF[Paciente / Familia] <-->|tamizaje, resultados, lectura| IVI((Sistema IVI))
+    PR[Profesional] <-->|evaluacion, seguimiento| IVI
+    AD[Administrador] <-->|usuarios, resultados, recursos| IVI
+    IVI <-->|OCR y texto a voz| EXT[Servicios externos]

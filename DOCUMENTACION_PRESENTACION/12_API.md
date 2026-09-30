@@ -12,11 +12,16 @@ Base local: `http://127.0.0.1:8000/api/`
 {"email":"usuario@email.com","password":"secreto"}
 ```
 
-Devuelve token y perfil. Las peticiones protegidas usan:
+Devuelve un token propio y el perfil. Las peticiones protegidas usan:
 
 ```http
 Authorization: Bearer token_xxx
 ```
+
+Este mecanismo no corresponde a JWT ni a `TokenAuthentication` de Django REST
+Framework. El frontend conserva el token en el almacenamiento del navegador;
+para un despliegue productivo debe revisarse este mecanismo y protegerse la
+comunicacion mediante HTTPS.
 
 ### `POST /api/signup/`
 

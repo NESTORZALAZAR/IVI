@@ -1,0 +1,13 @@
+﻿flowchart LR
+    US[Usuario] --> PAC[Paciente]
+    US --> PRO[Profesional]
+    US --> ADM[Administrador]
+    PAC --> EVA[Evaluacion]
+    EVA --> CUE[Cuestionario]
+    EVA --> JUE[Juego]
+    EVA --> RES[Resultado]
+    US --> DOC[Documento]
+    DOC --> LEC[Lector accesible]
+    US --> DIR[Directorio]
+    DIR --> RES
+    US --> REC[Recurso]

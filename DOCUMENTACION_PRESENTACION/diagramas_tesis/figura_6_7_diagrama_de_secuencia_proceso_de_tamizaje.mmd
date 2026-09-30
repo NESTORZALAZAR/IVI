@@ -1,0 +1,14 @@
+﻿sequenceDiagram
+    actor U as Usuario
+    participant F as Frontend React
+    participant API as API Django
+    participant DB as SQLite
+    U->>F: Selecciona evaluacion o juego
+    F->>F: Presenta preguntas o actividad
+    U->>F: Responde y finaliza
+    F->>API: Envia tipo, puntaje y detalles
+    API->>API: Valida token, rol y datos
+    API->>DB: Guarda ResultadoPrueba
+    DB-->>API: Confirma persistencia
+    API-->>F: Devuelve resultado orientativo
+    F-->>U: Muestra puntaje y estado

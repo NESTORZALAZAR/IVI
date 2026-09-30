@@ -13,6 +13,15 @@ Si es tu primera vez con el sistema OCR:
 
 ## 📖 Documentación Completa
 
+### Para el borrador de tesis
+- **[06_PLAN_TECNICO.md](./DOCUMENTACION_PRESENTACION/06_PLAN_TECNICO.md)** - Capítulo 6: arquitectura, modelado, tecnologías, API y módulos del sistema.
+- **[DIAGRAMAS_TESIS.md](./DOCUMENTACION_PRESENTACION/DIAGRAMAS_TESIS.md)** - Fuentes Mermaid de las 13 figuras del capítulo 6.
+- **[01_ARQUITECTURA.md](./DOCUMENTACION_PRESENTACION/01_ARQUITECTURA.md)** - Arquitectura y capas de IVI.
+- **[04_DER_MODELO_DATOS.md](./DOCUMENTACION_PRESENTACION/04_DER_MODELO_DATOS.md)** - Modelo entidad-relación y reglas de integridad.
+- **[06_FLUJOS_PRINCIPALES.md](./DOCUMENTACION_PRESENTACION/06_FLUJOS_PRINCIPALES.md)** - Flujos de tamizaje, consultorio, OCR y accesibilidad.
+- **[12_API.md](./DOCUMENTACION_PRESENTACION/12_API.md)** - Contrato resumido de la API REST.
+- **[14_DICCIONARIO_DATOS.md](./DOCUMENTACION_PRESENTACION/14_DICCIONARIO_DATOS.md)** - Campos y entidades para anexos.
+
 ### Para Usuarios (No-técnicos)
 - **[RESUMEN_FINAL.md](./RESUMEN_FINAL.md)** - Qué cambió y cómo usar
 - **[SETUP_OCR_FINAL.md](./SETUP_OCR_FINAL.md)** - Guía amigable

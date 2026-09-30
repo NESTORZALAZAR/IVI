@@ -1,0 +1,7 @@
+﻿flowchart LR
+    U[Navegador del usuario] --> FE[Servidor frontend<br/>React / CRA]
+    FE --> API[Servidor de aplicaciones<br/>Django + DRF]
+    API --> DB[(Base de datos<br/>SQLite)]
+    API --> OCR[Servicio local<br/>Tesseract]
+    API --> TTS[Motor local<br/>pyttsx3]
+    API --> FS[Almacenamiento de archivos]

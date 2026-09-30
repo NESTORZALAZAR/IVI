@@ -44,6 +44,9 @@ flowchart LR
 - **Resultados:** consulta del historial del usuario.
 - **Doctor/profesional:** busqueda de pacientes, evaluacion en consultorio y detalle de resultados.
 - **Administrador:** gestion, filtros y mantenimiento de usuarios.
+- **Accesibilidad:** fuentes adaptadas, contraste, tamano, espaciado y tema.
+- **Centro de recursos:** articulos, videos, infografias y documentos de apoyo.
+- **Perfil:** consulta y gestion de datos personales y preferencias.
 
 ## 1.4 Tecnologias
 
@@ -59,7 +62,7 @@ flowchart LR
 ## 1.5 Seguridad y limites
 
 - Las rutas de administracion y doctor estan protegidas por rol.
-- Las peticiones autenticadas usan token almacenado en la sesion del navegador.
+- Las peticiones autenticadas usan un token propio enviado mediante `Authorization: Bearer`; el frontend lo conserva en el almacenamiento del navegador.
 - Los resultados validan tipo de prueba y puntaje de 0 a 100.
 - Los resultados se asocian a `Paciente`, no directamente a cualquier usuario.
 - El catalogo `TipoPrueba` evita repetir nombres y codigos en cada resultado.

@@ -1,0 +1,65 @@
+﻿classDiagram
+    class User {
+        +int id
+        +string username
+        +string email
+        +string password
+    }
+    class Profile {
+        +int id
+        +string role
+    }
+    class Paciente {
+        +int id
+        +string ci
+        +int age
+        +boolean is_office_patient
+    }
+    class Profesional {
+        +int id
+        +string license_number
+        +string specialty
+        +string institution
+    }
+    class TipoPrueba {
+        +int id
+        +string codigo
+        +string nombre
+        +string categoria
+        +boolean activo
+    }
+    class ResultadoPrueba {
+        +int id
+        +int puntaje
+        +datetime fecha_prueba
+        +int duracion_segundos
+        +json detalles
+        +string estado
+    }
+    class RespuestaResultado {
+        +int id
+        +string clave
+        +json respuesta
+        +int puntaje
+    }
+    class ArchivoProcesado {
+        +int id
+        +string nombre_original
+        +string tipo_mime
+        +text texto_extraido
+        +datetime creado_en
+    }
+    class ConversionAudio {
+        +int id
+        +decimal velocidad
+        +string formato
+        +datetime creado_en
+    }
+    User "1" --> "0..1" Profile
+    Profile "1" --> "0..1" Paciente
+    Profile "1" --> "0..1" Profesional
+    Paciente "1" --> "0..*" ResultadoPrueba
+    TipoPrueba "1" --> "0..*" ResultadoPrueba
+    ResultadoPrueba "1" --> "0..*" RespuestaResultado
+    User "1" --> "0..*" ArchivoProcesado
+    ArchivoProcesado "1" --> "0..*" ConversionAudio
