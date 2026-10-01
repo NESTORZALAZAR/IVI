@@ -7,17 +7,12 @@ export default function TopNav() {
   const [showWarning, setShowWarning] = useState(true);
   const navigate = useNavigate();
   const [showAccessibility, setShowAccessibility] = useState(false);
-  const [showLectores, setShowLectores] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
-  const dropdownRef = useRef(null);
   const adminRef = useRef(null);
 
   // Cerrar dropdowns al hacer clic fuera
   useEffect(() => {
     function handleClickOutside(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowLectores(false);
-      }
       if (adminRef.current && !adminRef.current.contains(e.target)) {
         setShowAdminMenu(false);
       }
@@ -41,7 +36,6 @@ export default function TopNav() {
   const isHome = location.pathname === "/";
   const isAbout = location.pathname === "/about";
   const isConsejos = location.pathname === "/consejos";
-  const isLectorDocs = location.pathname === "/lector-documentos";
   const isLectorText = location.pathname === "/lector-textos";
   const isPaciente = location.pathname === "/paciente";
 
@@ -117,36 +111,12 @@ export default function TopNav() {
             Consejos
           </Link>
 
-          {/* Menú desplegable: IVI te ayuda */}
-          <div className="nav-dropdown" ref={dropdownRef}>
-            <button
-              className={`nav-link accessibility-btn dropdown-btn ${showLectores || isLectorDocs || isLectorText ? 'active' : ''}`}
-              onClick={() => setShowLectores(prev => !prev)}
-              aria-haspopup="true"
-              aria-expanded={showLectores}
-            >
-              <span>Ivi te ayuda:</span>
-            </button>
-
-            {showLectores && (
-              <div className="dropdown-menu">
-                <Link
-                  to="/lector-documentos"
-                  className={`dropdown-link ${isLectorDocs ? 'active' : ''}`}
-                  onClick={() => setShowLectores(false)}
-                >
-                  📄 Lectura de Documentos
-                </Link>
-                <Link
-                  to="/lector-textos"
-                  className={`dropdown-link ${isLectorText ? 'active' : ''}`}
-                  onClick={() => setShowLectores(false)}
-                >
-                  ✏️ Lectura de Textos
-                </Link>
-              </div>
-            )}
-          </div>
+          <Link
+            to="/lector-textos"
+            className={`nav-link accessibility-btn dropdown-btn ${isLectorText ? 'active' : ''}`}
+          >
+            <span>Ivi te ayuda:</span>
+          </Link>
 
           </div>
 
