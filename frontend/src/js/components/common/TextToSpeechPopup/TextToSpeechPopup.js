@@ -1,34 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { generateAudioFromText } from "../../../services/audioService";
 import "./TextToSpeechPopup.css";
 
 // ─── Detección de capacidades del navegador ────────────────────────────────
 const isSpeechSupported = () =>
   typeof window !== "undefined" &&
-  "speechSynthesis" in window &&
-  "SpeechSynthesisUtterance" in window;
-
-// Safari no implementa pause/resume correctamente
-const isSafari = () =>
-  /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-// Firefox en Android tiene soporte muy limitado
-const isFirefoxAndroid = () =>
-  /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
-
-// Obtener la mejor voz en español disponible (con fallback)
-const getBestSpanishVoice = () => {
-  const voices = window.speechSynthesis.getVoices();
-  if (!voices.length) return null;
-
-  // Prioridad: es-ES local > es-* local > es-ES online > es-* online > cualquiera
-  return (
-    voices.find((v) => v.lang === "es-ES" && v.localService) ||
-    voices.find((v) => v.lang.startsWith("es") && v.localService) ||
-    voices.find((v) => v.lang === "es-ES") ||
-    voices.find((v) => v.lang.startsWith("es")) ||
-    null
-  );
-};
+  typeof window.Audio === "function";
 
 // ─── Componente ───────────────────────────────────────────────────────────
 export default function TextToSpeechPopup() {
@@ -36,24 +13,11 @@ export default function TextToSpeechPopup() {
   const [speaking, setSpeaking] = useState(false);
   const [paused, setPaused] = useState(false);
   const [unsupported, setUnsupported] = useState(false);
-  const utteranceRef = useRef(null);
-  // Safari no soporta pause/resume — lo deshabilitamos
-  const canPause = !isSafari() && !isFirefoxAndroid();
-  // Chrome tiene un bug conocido: speechSynthesis se detiene en textos largos
-  const isChromium = () =>
-    /Chrome|Chromium|OPR|Edg/.test(navigator.userAgent) && !isSafari();
+  const audioRef = useRef(null);
+  const audioUrlRef = useRef(null);
+  const canPause = true;
   const keepAliveRef = useRef(null);
-
-  // ── Workaround para el bug de Chrome que pausa sola la síntesis ──────────
-  const startKeepAlive = useCallback(() => {
-    if (!isChromium()) return;
-    keepAliveRef.current = setInterval(() => {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-        window.speechSynthesis.pause();
-        window.speechSynthesis.resume();
-      }
-    }, 10000);
-  }, []);
+  const speakTimeoutRef = useRef(null);
 
   const stopKeepAlive = useCallback(() => {
     if (keepAliveRef.current) {
@@ -66,10 +30,13 @@ export default function TextToSpeechPopup() {
     setPopup({ visible: false, x: 0, y: 0, text: "" });
     setSpeaking(false);
     setPaused(false);
-    stopKeepAlive();
-    if (isSpeechSupported() && window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
+    if (speakTimeoutRef.current) {
+      clearTimeout(speakTimeoutRef.current);
+      speakTimeoutRef.current = null;
     }
+    audioRef.current?.pause();
+    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    stopKeepAlive();
   }, [stopKeepAlive]);
 
   // Verificar soporte al montar
@@ -78,6 +45,15 @@ export default function TextToSpeechPopup() {
       setUnsupported(true);
     }
   }, []);
+
+  useEffect(() => {
+    audioRef.current?.pause();
+    audioRef.current = null;
+    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    audioUrlRef.current = null;
+    setSpeaking(false);
+    setPaused(false);
+  }, [popup.text]);
 
   // ── Listeners de selección de texto ─────────────────────────────────────
   useEffect(() => {
@@ -131,8 +107,6 @@ export default function TextToSpeechPopup() {
       setPopup((prev) => {
         if (prev.visible) {
           stopKeepAlive();
-          if (isSpeechSupported() && window.speechSynthesis.speaking)
-            window.speechSynthesis.cancel();
           setSpeaking(false);
           setPaused(false);
           return { ...prev, visible: false };
@@ -152,87 +126,44 @@ export default function TextToSpeechPopup() {
   }, [unsupported, stopKeepAlive]);
 
   // ── Lógica de síntesis ───────────────────────────────────────────────────
-  const handleSpeak = () => {
+  const handleSpeak = async () => {
     if (!popup.text || !isSpeechSupported()) return;
 
-    // Pausar (solo en navegadores que lo soportan)
-    if (speaking && !paused && canPause) {
-      window.speechSynthesis.pause();
+    if (speaking && !paused) {
+      audioRef.current?.pause();
       setPaused(true);
-      stopKeepAlive();
       return;
     }
 
-    // Reanudar
-    if (paused && canPause) {
-      window.speechSynthesis.resume();
+    if (paused) {
+      await audioRef.current?.play();
       setPaused(false);
-      startKeepAlive();
       return;
     }
 
-    // Si Safari está "hablando" (no puede pausar), detener y relanzar
-    if (speaking && !canPause) {
-      window.speechSynthesis.cancel();
+    try {
+      if (!audioRef.current) {
+        const url = await generateAudioFromText(popup.text);
+        audioUrlRef.current = url;
+        audioRef.current = new Audio(url);
+        audioRef.current.onended = () => {
+          setSpeaking(false);
+          setPaused(false);
+        };
+      }
+      await audioRef.current.play();
+      setSpeaking(true);
+      setPaused(false);
+    } catch (error) {
+      console.warn("[TTS] Error al generar audio:", error);
       setSpeaking(false);
       setPaused(false);
-      stopKeepAlive();
-      return;
-    }
-
-    // Cancelar síntesis anterior
-    window.speechSynthesis.cancel();
-    stopKeepAlive();
-
-    const utterance = new SpeechSynthesisUtterance(popup.text);
-    utterance.lang = "es-ES";
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-
-    // Esperar a que las voces carguen (necesario en algunos navegadores)
-    const assignVoiceAndSpeak = () => {
-      const voice = getBestSpanishVoice();
-      if (voice) utterance.voice = voice;
-
-      utterance.onstart = () => {
-        setSpeaking(true);
-        startKeepAlive();
-      };
-      utterance.onend = () => {
-        setSpeaking(false);
-        setPaused(false);
-        stopKeepAlive();
-      };
-      utterance.onerror = (evt) => {
-        // "interrupted" no es un error real (ocurre al cancelar manualmente)
-        if (evt.error !== "interrupted" && evt.error !== "canceled") {
-          console.warn("[TTS] Error:", evt.error);
-        }
-        setSpeaking(false);
-        setPaused(false);
-        stopKeepAlive();
-      };
-
-      utteranceRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
-    };
-
-    // Firefox y algunos navegadores necesitan que las voces estén listas
-    if (window.speechSynthesis.getVoices().length > 0) {
-      assignVoiceAndSpeak();
-    } else {
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.onvoiceschanged = null;
-        assignVoiceAndSpeak();
-      };
-      // Fallback: si onvoiceschanged no dispara (Safari iOS)
-      setTimeout(assignVoiceAndSpeak, 250);
     }
   };
 
   const handleStop = (e) => {
     e.stopPropagation();
-    window.speechSynthesis.cancel();
+    audioRef.current?.pause();
     setSpeaking(false);
     setPaused(false);
     stopKeepAlive();

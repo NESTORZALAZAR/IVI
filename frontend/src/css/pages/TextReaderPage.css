@@ -7,8 +7,13 @@
   justify-content: center;
 }
 
+.text-reader-page > .reader-container {
+  width: min(1250px, calc(100vw - 4rem));
+  max-width: 1250px;
+}
+
 .reader-container {
-  max-width: 700px;
+  max-width: 1250px;
   width: 100%;
   margin: 0 auto;
 }
@@ -43,6 +48,7 @@
   border: 2px solid #d4af37;
   border-radius: 12px;
   padding: 25px;
+  padding-bottom: 0.85rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -50,8 +56,37 @@
 .text-input-section h3 {
   margin: 0 0 15px 0;
   color: #333;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   text-align: center;
+  white-space: nowrap !important;
+  flex: 0 0 auto;
+}
+
+.text-input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+.text-input-title-group {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.text-input-title-group h3 {
+  flex: 0 1 auto;
+  margin: 0;
+}
+
+.text-input-actions {
+  flex: 0 0 auto;
 }
 
 .text-input {
@@ -166,10 +201,10 @@
 
 .native-reader {
   background: white;
-  border: 2px solid #d4af37;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 25px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--ivi-shadow-soft);
 }
 
 .native-reader-header {
@@ -190,6 +225,19 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1.25rem;
+}
+.text-reader-page .reader-audio-controls {
+  margin-left: 0.25rem;
+}
+
+.image-reader-result {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+.image-reader-result .native-reader-preview {
+  margin-bottom: 0;
 }
 
 .native-stop-button {
@@ -256,6 +304,10 @@
     min-height: auto;
   }
 
+  .text-reader-page > .reader-container {
+    width: 100%;
+  }
+
   .reader-header h1 {
     font-size: 1.8rem;
   }
@@ -280,5 +332,25 @@
 
   .reader-container {
     max-width: 100%;
+  }
+
+  .text-input-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .text-input-title-group {
+    width: 100%;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .text-input-title-group h3 {
+    white-space: normal;
+  }
+
+  .text-input-actions {
+    width: 100%;
+    text-align: right;
   }
 }

@@ -57,6 +57,11 @@
   animation: ivi-slide-up 0.55s ease both;
 }
 
+.consejos-intro > div {
+  flex: 1;
+  text-align: center;
+}
+
 .eyebrow,
 .card-kicker,
 .reality-label {
@@ -91,6 +96,11 @@
   color: color-mix(in srgb, var(--text) 82%, transparent);
   font-size: 0.95rem !important;
   line-height: 1.65 !important;
+}
+
+.intro-copy {
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .audio-note {
@@ -144,10 +154,20 @@
 }
 
 .feature-mark { flex: 0 0 auto; }
+.consejos-feature > div:last-child {
+  flex: 1;
+  text-align: center;
+}
 .consejos-feature h2 { font-size: 1.25rem !important; }
 
+.consejos-feature p {
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .consejos-section { margin-top: 4rem; animation: ivi-slide-up 0.55s 0.14s ease both; }
-.section-heading { margin-bottom: 1.35rem; }
+.section-heading { margin-bottom: 1.35rem; text-align: center; }
+.section-heading > p:last-child { margin-right: auto; margin-left: auto; }
 .compact-heading { margin-bottom: 1.5rem; }
 
 .myths-grid,

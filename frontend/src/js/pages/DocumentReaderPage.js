@@ -1,11 +1,13 @@
 import { useState } from "react";
 import FileUploader from "../components/common/FileUploader/FileUploader";
 import AudioPlayer from "../components/common/AudioPlayer/AudioPlayer";
+import AudioGuideButton from "../components/common/AudioGuideButton/AudioGuideButton";
 import "./DocumentReaderPage.css";
 
 export default function DocumentReaderPage() {
   const [processedData, setProcessedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [rate, setRate] = useState(1);
 
   const handleFileProcessed = (data) => {
     setProcessedData(data);
@@ -37,6 +39,11 @@ export default function DocumentReaderPage() {
                 texto={processedData.texto}
                 caracteres={processedData.caracteres}
               />
+              <div className="reader-audio-controls">
+                <AudioGuideButton text={processedData.texto} rate={rate} label="Escuchar texto" />
+                <label htmlFor="document-rate">Velocidad: {rate.toFixed(2)}x</label>
+                <input id="document-rate" type="range" min="0.5" max="2" step="0.1" value={rate} onChange={(event) => setRate(Number(event.target.value))} />
+              </div>
             </section>
           )}
 

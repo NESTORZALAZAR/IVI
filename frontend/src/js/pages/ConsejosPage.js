@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import AudioGuideButton from "../components/common/AudioGuideButton/AudioGuideButton";
 import "../../css/pages/ConsejosPage.css";
 
 const myths = [
@@ -68,29 +68,7 @@ const tools = [
 ];
 
 export default function ConsejosPage() {
-  const [isSpeaking, setIsSpeaking] = useState(false);
-
-  useEffect(() => () => window.speechSynthesis?.cancel(), []);
-
   const guideText = "Consejos y orientación sobre dislexia. Estrategias claras para estudiar, trabajar y acompañar con menos sobrecarga y más confianza. Pensar diferente también es una fortaleza. Las adaptaciones hacen visible el talento.";
-
-  const handleGuideAudio = () => {
-    if (!("speechSynthesis" in window)) return;
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(guideText);
-    utterance.lang = "es-ES";
-    utterance.rate = 0.95;
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  };
 
   return (
     <main className="consejos-page">
@@ -109,16 +87,7 @@ export default function ConsejosPage() {
               Estrategias claras para estudiar, trabajar y acompañar con menos sobrecarga y más confianza.
             </p>
           </div>
-          <button
-            type="button"
-            className={`audio-note ${isSpeaking ? "is-speaking" : ""}`}
-            onClick={handleGuideAudio}
-            aria-pressed={isSpeaking}
-            aria-label={isSpeaking ? "Detener lectura de la guía" : "Escuchar esta guía"}
-          >
-            <span aria-hidden="true">{isSpeaking ? "■" : "◖"}</span>
-            <div><strong>{isSpeaking ? "Detener lectura" : "Escuchar esta guía"}</strong><small>{isSpeaking ? "La guía se está leyendo" : "Lectura clara y pausada"}</small></div>
-          </button>
+          <AudioGuideButton text={guideText} />
         </header>
 
         <section className="consejos-feature" aria-labelledby="feature-title">
@@ -195,10 +164,6 @@ export default function ConsejosPage() {
           <Link className="consejos-button" to="/pruebas">Comenzar pruebas <span aria-hidden="true">→</span></Link>
         </section>
       </div>
-      <footer className="consejos-footer">
-        <span>© 2026 Plataforma IVI · Entorno inclusivo para la evaluación y apoyo a la dislexia.</span>
-        <span>Guía de accesibilidad&nbsp;&nbsp; · &nbsp;&nbsp;Soporte y ayuda</span>
-      </footer>
     </main>
   );
 }

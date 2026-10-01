@@ -1,0 +1,19 @@
+.app-footer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  padding: 1.5rem max(1.5rem, calc((100% - 1120px) / 2));
+  border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  color: color-mix(in srgb, var(--text) 70%, transparent);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .app-footer {
+    flex-direction: column;
+    padding: 1.25rem 0.75rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../css/pages/HomePage.css";
 
 export default function HomePage() {
@@ -60,16 +60,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="home-footer">
-        <Link to="/" className="footer-brand">IVI</Link>
-        <nav className="footer-links" aria-label="Enlaces del pie de página">
-          <Link to="/privacidad">Privacidad</Link>
-          <Link to="/terminos">Términos</Link>
-          <Link to="/contacto">Contacto</Link>
-          <Link to="/soporte">Soporte</Link>
-        </nav>
-        <span className="footer-copy">© 2026 IVI Platform. Diseñado para la accesibilidad cognitiva.</span>
-      </footer>
     </main>
   );
 }

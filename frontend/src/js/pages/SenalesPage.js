@@ -113,10 +113,6 @@ export default function SenalesPage() {
           <Link to="/consejos">Ver consejos prácticos <span aria-hidden="true">→</span></Link>
         </section>
       </div>
-      <footer className="senales-footer">
-        <span>© 2026 Plataforma IVI · Entorno inclusivo para la evaluación y apoyo a la dislexia.</span>
-        <span>Guía de accesibilidad&nbsp;&nbsp; · &nbsp;&nbsp;Soporte y ayuda</span>
-      </footer>
     </main>
   );
 }

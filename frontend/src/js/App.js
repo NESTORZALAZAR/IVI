@@ -30,6 +30,7 @@ import DoctorPatientDetail from "./pages/DoctorPatientDetail";
 
 // 🗺️ Layout & Componentes Globales
 import TopNav from "./components/layouts/TopNav/TopNav";
+import AppFooter from "./components/layouts/AppFooter";
 import TextToSpeechPopup from "./components/common/TextToSpeechPopup/TextToSpeechPopup";
 import ImageOCRReader from "./components/common/ImageOCRReader/ImageOCRReader";
 import "../css/App.css";
@@ -180,6 +181,7 @@ function AppContent() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <AppFooter />
       </AppLayout>
     </Router>
   );

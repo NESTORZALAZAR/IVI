@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { generateAudioFromText } from "../../../services/audioService";
 import "./ImageOCRReader.css";
 
 // Carga Tesseract de forma lazy para no bloquear el inicio
@@ -30,23 +31,6 @@ async function getWorker() {
 }
 
 // ─── Síntesis de voz ─────────────────────────────────────────────────────────
-function speakText(text) {
-  if (!("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "es-ES";
-  utterance.rate = 0.95;
-
-  const voices = window.speechSynthesis.getVoices();
-  const spanishVoice =
-    voices.find((v) => v.lang === "es-ES" && v.localService) ||
-    voices.find((v) => v.lang.startsWith("es"));
-  if (spanishVoice) utterance.voice = spanishVoice;
-
-  window.speechSynthesis.speak(utterance);
-}
-
 // ─── Componente ──────────────────────────────────────────────────────────────
 export default function ImageOCRReader() {
   const [btn, setBtn] = useState({ visible: false, x: 0, y: 0, img: null });
@@ -55,6 +39,7 @@ export default function ImageOCRReader() {
   const [speaking, setSpeaking] = useState(false);
   const hideTimer = useRef(null);
   const currentImg = useRef(null);
+  const audioRef = useRef(null);
 
   const clearHideTimer = () => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
@@ -116,7 +101,7 @@ export default function ImageOCRReader() {
 
     // Si ya tenemos texto, solo volver a leer
     if (status === "done" && resultText) {
-      speakText(resultText);
+      audioRef.current?.play();
       setSpeaking(true);
       return;
     }
@@ -145,7 +130,10 @@ export default function ImageOCRReader() {
 
       setResultText(text);
       setStatus("done");
-      speakText(text);
+      const audioUrl = await generateAudioFromText(text);
+      audioRef.current = new Audio(audioUrl);
+      audioRef.current.onended = () => setSpeaking(false);
+      await audioRef.current.play();
       setSpeaking(true);
 
     } catch (err) {
@@ -156,7 +144,8 @@ export default function ImageOCRReader() {
 
   const handleStop = (e) => {
     e.stopPropagation();
-    window.speechSynthesis.cancel();
+    audioRef.current?.pause();
+    if (audioRef.current) audioRef.current.currentTime = 0;
     setSpeaking(false);
   };
 
