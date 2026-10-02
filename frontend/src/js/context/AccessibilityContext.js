@@ -15,8 +15,10 @@ const VALID_FONTS = [
 
 // Temas unificados: incluyen fondo y color de texto
 const VALID_THEMES = ["white", "sepia", "cream", "dark"];
+const SETTINGS_VERSION = 2;
 
 const DEFAULT_SETTINGS = {
+  settingsVersion: SETTINGS_VERSION,
   font: "Lexend",       // mejor para dislexia
   fontSize: 18,
   spacing: 1.7,
@@ -36,7 +38,7 @@ export function AccessibilityProvider({ children }) {
           ...prev,
           font: VALID_FONTS.includes(saved.font) ? saved.font : prev.font,
           fontSize:
-            saved.fontSize >= 14 && saved.fontSize <= 32
+            saved.settingsVersion === SETTINGS_VERSION && saved.fontSize >= 14 && saved.fontSize <= 32
               ? saved.fontSize
               : prev.fontSize,
           spacing:

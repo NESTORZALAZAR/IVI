@@ -4,9 +4,6 @@ import "../../css/pages/PruebasPage.css";
 export default function PruebasPage() {
   const navigate = useNavigate();
   const officePatient = JSON.parse(localStorage.getItem("ivi_office_patient") || "null");
-  const storedUser = JSON.parse(localStorage.getItem("user") || localStorage.getItem("ivi_user") || "null");
-  const patientAge = officePatient?.age ?? localStorage.getItem("ivi_test_age") ?? storedUser?.age;
-  const canTakeKnowledgeFilter = Number.isFinite(Number(patientAge)) && Number(patientAge) >= 7;
 
   return (
     <div className="pruebas-page">
@@ -16,8 +13,7 @@ export default function PruebasPage() {
           <h1>Módulos de Tamizaje y Evaluación</h1>
         </div>
 
-        {canTakeKnowledgeFilter && (
-          <section className="knowledge-filter-section">
+        <section className="knowledge-filter-section">
             <div className="knowledge-filter-heading">
               <div className="knowledge-filter-title-row">
                 <span className="knowledge-filter-kicker">Evaluación inicial</span>
@@ -38,8 +34,7 @@ export default function PruebasPage() {
               </div>
               <span className="knowledge-filter-action">Iniciar Evaluación <b>›</b></span>
             </Link>
-          </section>
-        )}
+        </section>
 
         <section className="games-section" aria-labelledby="games-section-title">
           <div className="games-section-heading">

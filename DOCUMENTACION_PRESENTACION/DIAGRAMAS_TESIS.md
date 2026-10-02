@@ -1,6 +1,6 @@
 # Diagramas de tesis de IVI
 
-Este documento contiene las 13 fuentes Mermaid correspondientes al Plan Tecnico. Cada bloque puede renderizarse desde Markdown compatible con Mermaid o exportarse como SVG/PNG para incorporarlo a la tesis.
+Este documento contiene las 14 fuentes Mermaid correspondientes al Plan Tecnico. Cada bloque puede renderizarse desde Markdown compatible con Mermaid o exportarse como SVG/PNG para incorporarlo a la tesis.
 
 ## Figura 6.1. Diagrama de contexto. Nivel 0
 
@@ -351,6 +351,44 @@ flowchart LR
     API --> FS[Almacenamiento de archivos]
 ```
 
+## Figura 6.14. Diagrama de arquitectura de red
+
+```mermaid
+flowchart TB
+    USU[Usuario / navegador]
+
+    subgraph RED[Red local de desarrollo]
+        ROUTER[Router / red local]
+
+        subgraph HOST[Equipo servidor IVI]
+            WEB[Frontend React<br/>Servidor web :3000<br/>HTTP]
+            API[Backend Django REST<br/>:8000<br/>HTTP / JSON]
+            DB[(SQLite<br/>Persistencia local)]
+            FILES[(Archivos procesados<br/>Almacenamiento local)]
+            OCR[Tesseract<br/>OCR local]
+            TTS[pyttsx3<br/>Texto a voz local]
+        end
+    end
+
+    USU -->|HTTP :3000| ROUTER
+    ROUTER --> WEB
+    WEB -->|HTTP / JSON| API
+    API --> DB
+    API --> FILES
+    API --> OCR
+    API --> TTS
+
+    classDef client fill:#e8f1ff,stroke:#4169a1,color:#17233d
+    classDef network fill:#fff4d6,stroke:#bd8b00,color:#4b3900
+    classDef service fill:#e6f5ed,stroke:#3c8c61,color:#173d28
+    classDef data fill:#f2e8ff,stroke:#8055aa,color:#352047
+
+    class USU client
+    class ROUTER network
+    class WEB,API,OCR,TTS service
+    class DB,FILES data
+```
+
 ## Uso en la tesis
 
 - Insertar cada diagrama como una figura independiente con el titulo indicado.
@@ -376,3 +414,4 @@ Las versiones SVG listas para insertar en la tesis se encuentran en [diagramas_t
 11. [Figura 6.11 - Diagrama entidad-relacion](diagramas_tesis/figura_6_11_diagrama_entidad_relacion_der_.svg)
 12. [Figura 6.12 - Arquitectura general](diagramas_tesis/figura_6_12_diagrama_de_arquitectura_general.svg)
 13. [Figura 6.13 - Diagrama de despliegue](diagramas_tesis/figura_6_13_diagrama_de_despliegue.svg)
+14. [Figura 6.14 - Arquitectura de red](diagramas_tesis/figura_6_14_diagrama_de_arquitectura_de_red.svg)
