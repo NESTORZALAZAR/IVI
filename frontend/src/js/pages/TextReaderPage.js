@@ -1,15 +1,19 @@
 import { useState } from "react";
+import FileUploader from "../components/common/FileUploader/FileUploader";
 import ImageFileUploader from "../components/common/ImageFileUploader/ImageFileUploader";
 import AudioGuideButton from "../components/common/AudioGuideButton/AudioGuideButton";
 import "./TextReaderPage.css";
 
 export default function TextReaderPage() {
   const [textData, setTextData] = useState(null);
+  const [pdfData, setPdfData] = useState(null);
   const [imageData, setImageData] = useState(null);
   const [inputText, setInputText] = useState("");
   const [textRate, setTextRate] = useState(1);
   const [imageRate, setImageRate] = useState(1);
   const [imageError, setImageError] = useState("");
+  const [pdfError, setPdfError] = useState("");
+  const [pdfRate, setPdfRate] = useState(1);
   const speechSupported = typeof window !== "undefined" && "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
 
   const handleImageProcessed = ({ texto, caracteres }) => {
@@ -21,6 +25,17 @@ export default function TextReaderPage() {
     window.speechSynthesis.cancel();
     setImageError("");
     setImageData({ texto, caracteres });
+  };
+
+  const handlePdfProcessed = ({ texto, caracteres }) => {
+    if (!texto?.trim()) {
+      setPdfError("No se encontró texto en el PDF. Carga un documento con texto seleccionable.");
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    setPdfError("");
+    setPdfData({ texto, caracteres });
   };
 
   return (
@@ -68,6 +83,25 @@ export default function TextReaderPage() {
               <p className="native-reader-preview">{textData.texto}</p>
             </div>
           )}
+
+          <section className="pdf-reader-section" aria-labelledby="pdf-reader-title">
+            <div className="image-reader-heading">
+              <h2 id="pdf-reader-title">Leer un PDF</h2>
+              <p>Sube un PDF con texto seleccionable. Extraeremos su contenido para que puedas escucharlo.</p>
+            </div>
+            <FileUploader onFileProcessed={handlePdfProcessed} pdfOnly />
+            {pdfError && <p className="native-reader-warning" role="alert">{pdfError}</p>}
+            {pdfData && (
+              <div className="image-reader-result" aria-live="polite">
+                <div className="reader-audio-row">
+                  <AudioGuideButton text={pdfData.texto} rate={pdfRate} label="Escuchar PDF" />
+                  <label htmlFor="pdf-rate">Velocidad: {pdfRate.toFixed(2)}x</label>
+                  <input id="pdf-rate" type="range" min="0.5" max="2" step="0.1" value={pdfRate} onChange={(event) => setPdfRate(Number(event.target.value))} />
+                </div>
+                <p className="native-reader-preview">{pdfData.texto}</p>
+              </div>
+            )}
+          </section>
 
           <section className="image-reader-section" aria-labelledby="image-reader-title">
             <div className="image-reader-heading">

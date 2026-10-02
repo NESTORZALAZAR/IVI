@@ -77,6 +77,7 @@ La autenticacion utiliza un token propio enviado mediante `Authorization: Bearer
 
 - **Figura 6.12. Diagrama de arquitectura general.** Muestra el monolito modular, el frontend desacoplado, la API y SQLite.
 - **Figura 6.13. Diagrama de despliegue.** Presenta navegador, servidor de aplicaciones, base de datos SQLite y servicios externos como Tesseract.
+- **Figura 6.14. Diagrama de arquitectura de red.** Detalla la comunicacion HTTP entre el navegador, el frontend React y la API Django, junto con la red local, los puertos de desarrollo y los servicios locales de OCR, audio y persistencia.
 - **Tabla 6.1. Endpoints principales.** Resume metodo HTTP, ruta, rol requerido, entrada y respuesta.
 
 El contrato ampliado de endpoints se encuentra en [12_API.md](12_API.md).

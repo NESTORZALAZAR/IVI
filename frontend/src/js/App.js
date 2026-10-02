@@ -9,7 +9,6 @@ import HomePage from "./pages/NewHomePage";
 import AboutPage from "./pages/AboutPage";
 import ConsejosPage from "./pages/ConsejosPage";
 import SenalesPage from "./pages/SenalesPage";
-import DocumentReaderPage from "./pages/DocumentReaderPage";
 import TextReaderPage from "./pages/TextReaderPage";
 
 // 📚 Páginas de Pruebas y Resultados
@@ -85,6 +84,18 @@ function AppLayout({ children }) {
         font-size: var(--app-font-size) !important;
         line-height: var(--app-line-height) !important;
       }
+
+      #root .pruebas-page .pruebas-header h1 {
+        font-size: clamp(32px, 4vw, 48px) !important;
+      }
+
+      #root .pruebas-page .games-section-heading h2 {
+        font-size: clamp(24px, 2.8vw, 34px) !important;
+      }
+
+      #root .pruebas-page .games-section-heading .section-kicker {
+        font-size: clamp(16px, 1.8vw, 22px) !important;
+      }
     `;
     document.head.appendChild(style);
 
@@ -117,7 +128,6 @@ function AppContent() {
           <Route path="/consejos" element={<ConsejosPage />} />
           <Route path="/senales" element={<SenalesPage />} />
           
-          <Route path="/lector-documentos" element={<DocumentReaderPage />} />
           <Route path="/lector-textos" element={<TextReaderPage />} />
           
           <Route path="/pruebas" element={<ProtectedRoute><PruebasPage /></ProtectedRoute>} />

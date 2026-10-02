@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./FileUploader.css";
 
-export default function FileUploader({ onFileProcessed, isLoading, compact = false }) {
+export default function FileUploader({ onFileProcessed, isLoading, compact = false, pdfOnly = false }) {
   const [dragActive, setDragActive] = useState(false);
 
   const handleDrag = (e) => {
@@ -32,13 +32,17 @@ export default function FileUploader({ onFileProcessed, isLoading, compact = fal
 
   const procesarArchivo = async (archivo) => {
     // Validar extensión
-    const extensionesValidas = [".pdf", ".docx", ".txt", ".jpg", ".jpeg", ".png", ".gif", ".bmp"];
+    const extensionesValidas = pdfOnly
+      ? [".pdf"]
+      : [".pdf", ".docx", ".txt", ".jpg", ".jpeg", ".png", ".gif", ".bmp"];
     const esValido = extensionesValidas.some((ext) =>
       archivo.name.toLowerCase().endsWith(ext)
     );
 
     if (!esValido) {
-      alert("Por favor carga un archivo PDF, DOCX, TXT, JPG, PNG, GIF o BMP");
+      alert(pdfOnly
+        ? "Por favor carga un archivo PDF"
+        : "Por favor carga un archivo PDF, DOCX, TXT, JPG, PNG, GIF o BMP");
       return;
     }
 
@@ -110,14 +114,14 @@ export default function FileUploader({ onFileProcessed, isLoading, compact = fal
       >
         <div className="upload-content">
           {!compact && <div className="upload-icon">📄</div>}
-          <h3>{compact ? "Selecciona o arrastra otro archivo" : "Selecciona o arrastra tu archivo aquí"}</h3>
+          <h3>{compact ? "Selecciona o arrastra otro archivo" : pdfOnly ? "Carga tu PDF con texto" : "Selecciona o arrastra tu archivo aquí"}</h3>
           {!compact && (
-            <p className="file-types">Tamaño máximo: 10MB</p>
+            <p className="file-types">{pdfOnly ? "PDF · Tamaño máximo: 10MB" : "Tamaño máximo: 10MB"}</p>
           )}
           <input
             id="document-file-input"
             type="file"
-            accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.gif,.bmp,image/*"
+            accept={pdfOnly ? ".pdf,application/pdf" : ".pdf,.docx,.txt,.jpg,.jpeg,.png,.gif,.bmp,image/*"}
             onChange={handleChange}
             className="file-input"
             disabled={isLoading}
