@@ -1,0 +1,76 @@
+@startuml 06_ARQUITECTURA_REDES
+
+title Arquitectura de redes y telecomunicaciones - Plataforma IVI
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultTextAlignment center
+skinparam packageStyle rectangle
+skinparam ArrowColor #34495E
+skinparam ArrowThickness 1.5
+skinparam packageBorderColor #34495E
+skinparam rectangle {
+    BackgroundColor #FFFFFF
+    BorderColor #34495E
+    RoundCorner 12
+}
+skinparam database {
+    BackgroundColor #FFFFFF
+    BorderColor #34495E
+}
+skinparam note {
+    BackgroundColor #FFF8DC
+    BorderColor #C9A227
+}
+
+legend right
+    |= Nivel | Color |
+    | Cliente | <back:#DCEEFF> Azul claro </back> |
+    | Comunicación | <back:#E8F5E9> Verde claro </back> |
+    | Servidor | <back:#FCE4EC> Rosa claro </back> |
+endlegend
+
+package "1. NIVEL CLIENTE" #DCEEFF {
+    rectangle "Usuario" as USER
+    rectangle "Navegador web" as BROWSER
+    rectangle "Frontend SPA\nReact + React Router\nCRA / build estatico" as FRONTEND
+    rectangle "Almacenamiento del navegador\nToken de sesion" as STORAGE
+
+    USER --> BROWSER : Interaccion
+    BROWSER --> FRONTEND : Carga de la aplicacion
+    FRONTEND --> STORAGE : Guarda token
+}
+
+package "2. NIVEL DE COMUNICACION" #E8F5E9 {
+    rectangle "HTTPS / HTTP\nJSON + REST" as HTTP
+    rectangle "CORS\ndjango-cors-headers" as CORS
+    rectangle "Autenticacion\nAuthorization: Bearer" as AUTH_NET
+
+    FRONTEND --> HTTP : Solicitudes API
+    HTTP --> CORS : Verificacion de origen
+    CORS --> AUTH_NET : Peticion autorizada
+}
+
+package "3. NIVEL SERVIDOR" #FCE4EC {
+    rectangle "Servidor de aplicaciones\nDjango + Django REST Framework" as BACKEND
+    rectangle "API /api/\nUsuarios, tamizaje, resultados\nArchivos y perfiles" as API
+    rectangle "Logica de negocio\nRoles y validacion" as DOMAIN
+    rectangle "Procesamiento local\nTesseract OCR + pyttsx3" as PROCESSING
+    database "SQLite\nDjango ORM" as DB
+    rectangle "Despliegue\nGunicorn / Waitress\nNginx, Apache o CDN" as DEPLOY
+
+    AUTH_NET --> BACKEND : HTTPS / JSON
+    BACKEND --> API : Enrutamiento
+    API --> DOMAIN : Reglas de negocio
+    API --> PROCESSING : Documentos y audio
+    DOMAIN --> DB : Persistencia
+    PROCESSING --> DB : Metadatos y resultados
+    BACKEND --> DEPLOY : Servicio en produccion
+}
+
+note bottom of HTTP
+    Desarrollo: Frontend http://localhost:3000\n    Backend http://localhost:8000
+end note
+
+@enduml
