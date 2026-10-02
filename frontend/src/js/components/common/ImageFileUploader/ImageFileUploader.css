@@ -7,7 +7,7 @@
   border-radius: 12px;
   padding: 3rem;
   text-align: center;
-  background-color: #fff;
+  background-color: var(--card);
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -15,12 +15,12 @@
 
 .image-file-uploader .upload-area:hover {
   border-color: #c4a574;
-  background-color: #fff;
+  background-color: var(--card);
 }
 
 .image-file-uploader .upload-area.active {
   border-color: #c4a574;
-  background-color: #fff;
+  background-color: var(--card);
   transform: scale(1.02);
 }
 

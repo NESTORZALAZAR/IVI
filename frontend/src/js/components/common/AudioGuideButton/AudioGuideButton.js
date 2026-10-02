@@ -13,10 +13,22 @@ export default function AudioGuideButton({ text, rate = 0.95, onStart, label = "
     if (audioRef.current) audioRef.current.playbackRate = rate;
   }, [rate]);
 
-  useEffect(() => () => {
+  useEffect(() => {
     audioRef.current?.pause();
     if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-  }, []);
+    audioRef.current = null;
+    audioUrlRef.current = null;
+    setIsSpeaking(false);
+    setIsLoading(false);
+    setError("");
+
+    return () => {
+      audioRef.current?.pause();
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      audioRef.current = null;
+      audioUrlRef.current = null;
+    };
+  }, [text]);
 
   const createAudio = async () => {
     const url = await generateAudioFromText(text);
