@@ -72,28 +72,44 @@ REACT_APP_API_URL=/api npm run build
 
 En Windows, use Waitress o un servicio equivalente en lugar de Gunicorn.
 
-### Despliegue gratuito con Render y Neon
+### Despliegue gratuito con Hugging Face, GitHub Pages y Neon
 
-El repositorio incluye [render.yaml](../render.yaml), un `Dockerfile` con Tesseract
-y un servicio React estático. Para usarlo:
+La configuración gratuita separa la aplicación en tres servicios:
 
-1. Crear una cuenta gratuita en Render y conectar el repositorio de GitHub.
-2. Crear una base PostgreSQL gratuita en Neon. Copiar su `DATABASE_URL` (la cadena
-   de conexión debe comenzar por `postgresql://`).
-3. En Render elegir **New > Blueprint**, seleccionar este repositorio y confirmar
-   los servicios `ivi-api` e `ivi-web`.
-4. En el servicio `ivi-api`, agregar el valor de Neon en la variable secreta
-   `DATABASE_URL` y desplegar.
-5. Si Render asigna nombres distintos a los servicios, actualizar las URLs
-   `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `CSRF_TRUSTED_ORIGINS` y
-   `REACT_APP_API_URL` con los dominios mostrados por Render.
-6. Probar `https://ivi-api.onrender.com/api/status/` y después abrir el dominio
-   del sitio `ivi-web`.
+- **Hugging Face Docker Space**: ejecuta Django, Tesseract y Gunicorn en
+  `https://<usuario>-<space>.hf.space`.
+- **Neon**: conserva los datos en PostgreSQL mediante `DATABASE_URL`.
+- **GitHub Pages**: publica React en
+  `https://nestorzalazar.github.io/IVI/`.
 
-El plan gratuito de Render puede dormir el backend tras unos minutos sin tráfico,
-por lo que la primera petición puede tardar. Neon también puede suspender el
-proyecto por inactividad. Es adecuado para demostraciones, no para datos clínicos
-reales sin copias de seguridad, almacenamiento persistente y un plan con SLA.
+La URL de GitHub Pages no cambia cuando el backend se reinicia. El plan gratuito
+del Space puede pausar el contenedor después de inactividad, por lo que la primera
+petición posterior puede tardar. Los archivos escritos dentro del contenedor son
+efímeros; la base de datos debe permanecer en Neon y los archivos subidos
+requieren un almacenamiento externo si deben sobrevivir a reinicios.
+
+#### Backend Django
+
+1. Crear un Docker Space nuevo en Hugging Face.
+2. Subir el contenido de `backend/` del repositorio, incluyendo su
+   `Dockerfile`, `entrypoint.sh` y `README.md`.
+3. En **Settings > Variables and secrets**, configurar `DATABASE_URL` usando la
+   cadena pooled de Neon para las consultas de la aplicación.
+4. Configurar `DJANGO_SECRET_KEY` con un secreto nuevo y no reutilizado.
+5. Reemplazar `<usuario>` y `<space>` en `DJANGO_ALLOWED_HOSTS`.
+6. Configurar `CORS_ALLOWED_ORIGINS` y `CSRF_TRUSTED_ORIGINS` con
+   `https://nestorzalazar.github.io`.
+
+#### Frontend React
+
+El archivo `.github/workflows/deploy-pages.yml` compila y publica el frontend.
+
+1. En GitHub activar **Settings > Pages > Source: GitHub Actions**.
+2. Crear una variable de repositorio llamada `BACKEND_API_URL` con el valor
+   `https://<usuario>-<space>.hf.space/api`.
+3. Hacer push a `main` o ejecutar el workflow manualmente.
+4. Probar primero `https://<usuario>-<space>.hf.space/api/status/` y después
+   `https://nestorzalazar.github.io/IVI/`.
 
 Para conservar los datos actuales de SQLite antes de migrar:
 
@@ -102,7 +118,7 @@ cd backend
 python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission --indent 2 > data.json
 ```
 
-Después de configurar `DATABASE_URL` en Render, cargar el archivo desde una tarea
+Después de configurar `DATABASE_URL` en el Space, cargar el archivo desde una tarea
 segura o consola administrativa:
 
 ```bash
