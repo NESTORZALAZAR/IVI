@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/pages/PruebaPage.css";
@@ -28,7 +29,7 @@ export default function PruebaAlfabetoPage() {
     try {
       const token = localStorage.getItem("token");
       const targetUser = JSON.parse(localStorage.getItem("ivi_office_patient") || "null");
-      const response = await fetch("http://localhost:8000/api/resultados/", {
+      const response = await fetch(apiUrl('/resultados/'), {
         method: "POST",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +10,7 @@ export default function AdminResults() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) { navigate('/login'); return; }
-    fetch('http://localhost:8000/api/admin/results/', { headers: { Authorization: `Bearer ${token}` } })
+    fetch(apiUrl('/admin/results/'), { headers: { Authorization: `Bearer ${token}` } })
       .then(async res => {
         if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); return; }
         const data = await res.json(); setResults(data.results || data);

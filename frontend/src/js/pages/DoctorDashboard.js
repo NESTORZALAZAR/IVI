@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DoctorDashboard.css';
@@ -25,7 +26,7 @@ export default function DoctorDashboard(){
   const fetchPreview = useCallback(async () => {
     setError(''); setLoading(true); setResults([]);
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/doctor/', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(apiUrl('/doctor/' ), { headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); setLoading(false); return; }
       const data = await res.json();
       setResults(data.map(p=>({ paciente_id: p.paciente_id, paciente_username: p.paciente_username, paciente_ci: p.paciente_ci, preview: p })));
@@ -50,7 +51,7 @@ export default function DoctorDashboard(){
     setError(''); setLoading(true); setResults([]);
     if (!token) { setError('No autenticado'); setLoading(false); return; }
     try {
-    let url = `http://127.0.0.1:8000/api/doctor/?`;
+    let url = apiUrl('/doctor/?');
     if (ci) url += `ci=${encodeURIComponent(ci)}`;
     else if (query) url += `name=${encodeURIComponent(query)}`;
     if (tipoPrueba) url += `&tipo_prueba=${encodeURIComponent(tipoPrueba)}`;
@@ -90,7 +91,7 @@ export default function DoctorDashboard(){
       return;
     }
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/doctor/consultorio/', {
+      const response = await fetch(apiUrl('/doctor/consultorio/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ name: officeName, ci: officeCi, age: testAge })
@@ -125,7 +126,7 @@ export default function DoctorDashboard(){
   const loadOfficeResults = async () => {
     setShowOfficeResults(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/doctor/?office=1', { headers: { Authorization: `Bearer ${token}` } });
+      const response = await fetch(apiUrl('/doctor/?office=1'), { headers: { Authorization: `Bearer ${token}` } });
       if (!response.ok) return;
       const data = await response.json();
       setOfficeResults(data.map(p => ({ paciente_id: p.paciente_id, paciente_username: p.paciente_username, paciente_ci: p.paciente_ci, preview: p })));

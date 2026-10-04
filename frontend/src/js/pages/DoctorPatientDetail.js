@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import "../../css/pages/ResultadosPage.css";
@@ -14,7 +15,7 @@ export default function DoctorPatientDetail(){
   const fetchData = useCallback(async () => {
     setLoading(true); setError(''); setResults([]);
     try {
-      const url = `http://127.0.0.1:8000/api/doctor/?ci=${encodeURIComponent(ci)}`;
+      const url = `${apiUrl(`/doctor/?ci=${encodeURIComponent(ci)}`)}`;
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); setLoading(false); return; }
       const data = await res.json();

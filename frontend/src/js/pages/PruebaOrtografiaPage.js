@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/pages/PruebaPage.css";
@@ -112,7 +113,7 @@ export default function PruebaOrtografiaPage() {
     setGuardando(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/api/resultados/", {
+      const response = await fetch(apiUrl('/resultados/'), {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

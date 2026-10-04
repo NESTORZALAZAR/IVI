@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../../css/pages/SignupPage.css";
@@ -40,7 +41,7 @@ export default function SignupPage() {
     const t = setTimeout(async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/check-username/?username=${encodeURIComponent(username)}`,
+          apiUrl(`/check-username/?username=${encodeURIComponent(username)}`),
           { signal: controller.signal }
         );
         if (!res.ok) return;
@@ -72,7 +73,7 @@ export default function SignupPage() {
     const t = setTimeout(async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/check-email/?email=${encodeURIComponent(email)}`,
+          apiUrl(`/check-email/?email=${encodeURIComponent(email)}`),
           { signal: controller.signal }
         );
         if (!res.ok) return;
@@ -175,7 +176,7 @@ export default function SignupPage() {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/signup/", {
+      const response = await fetch(apiUrl("/signup/"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

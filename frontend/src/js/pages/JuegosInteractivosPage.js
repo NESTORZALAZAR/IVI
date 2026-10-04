@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import cerebro from "../../images/juegos/cerebro.svg";
@@ -25,7 +26,7 @@ const guardarResultadoJuego = async (tipoPrueba, puntaje, duracionSegundos, deta
   if (!token) return;
 
   const paciente = JSON.parse(localStorage.getItem("ivi_office_patient") || "null");
-  await fetch("http://localhost:8000/api/resultados/", {
+  await fetch(apiUrl('/resultados/'), {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,

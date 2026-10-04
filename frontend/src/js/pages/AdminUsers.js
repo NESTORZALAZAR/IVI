@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminUsers.css';
@@ -33,7 +34,7 @@ export default function AdminUsers() {
     if (dateTo) qs += `&date_joined_to=${encodeURIComponent(dateTo)}`;
     if (isStaffFilter!=='') qs += `&is_staff=${encodeURIComponent(isStaffFilter)}`;
     if (isSuperuserFilter!=='') qs += `&is_superuser=${encodeURIComponent(isSuperuserFilter)}`;
-    fetch(`http://localhost:8000/api/admin/users/${qs}`, {
+    fetch(apiUrl(`/admin/users/${qs}`), {
       headers: { Authorization: `Bearer ${token}` }
     }).then(async res => {
       if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error'); return; }
@@ -66,13 +67,13 @@ export default function AdminUsers() {
     try {
       let res;
       if (editing.isNew) {
-        res = await fetch(`http://localhost:8000/api/admin/users/`, {
+        res = await fetch(apiUrl('/admin/users/'), {
           method: 'POST',
           headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ username: editing.username, password: editing.password, role: editing.role, ci: editing.ci, license_number: editing.license_number, specialty: editing.specialty, institution: editing.institution, first_name: editing.first_name, last_name: editing.last_name, email: editing.email })
         });
       } else {
-        res = await fetch(`http://localhost:8000/api/admin/users/${editing.id}/`, {
+        res = await fetch(apiUrl(`/admin/users/${editing.id}/`), {
           method: 'PUT',
           headers: { 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ role: editing.role, ci: editing.ci, license_number: editing.license_number, specialty: editing.specialty, institution: editing.institution, first_name: editing.first_name, last_name: editing.last_name, email: editing.email, password: editing.password })
@@ -104,7 +105,7 @@ export default function AdminUsers() {
     if (!editing) return;
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:8000/api/admin/users/${editing.id}/`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(apiUrl(`/admin/users/${editing.id}/`), { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) { const d = await res.json().catch(()=>({})); setError(d.error||'Error eliminando'); }
       else { setToast({ type: 'success', message: 'Usuario eliminado' }); setEditing(null); load(page); }
     } catch(e){ setError('Error de conexión') }

@@ -1,3 +1,4 @@
+import { apiUrl } from "../services/api";
 import { useState, useEffect } from "react";
 import "../../css/pages/ResultadosPage.css";
 
@@ -19,7 +20,7 @@ export default function ResultadosPage() {
         return;
       }
 
-      const response = await fetch("http://localhost:8000/api/resultados/", {
+      const response = await fetch(apiUrl('/resultados/'), {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,

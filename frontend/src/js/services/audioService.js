@@ -1,5 +1,6 @@
+import { apiUrl } from "./api";
 export async function generateAudioFromText(text) {
-  const response = await fetch("http://localhost:8000/api/lector/extract-and-speak/", {
+  const response = await fetch(apiUrl("/lector/extract-and-speak/"), {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({ text: text.trim() }),

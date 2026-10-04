@@ -1,3 +1,4 @@
+import { apiUrl } from "../../../services/api";
 import { useState } from "react";
 import "./TextFileUploader.css";
 
@@ -50,10 +51,7 @@ export default function TextFileUploader({ onFileProcessed, isLoading: externalL
     formData.append("file", archivo);
 
     try {
-      // Intentar con localhost, sino con 127.0.0.1
-      const backendUrl = window.location.hostname === 'localhost' 
-        ? 'http://localhost:8000/api/lector/extract-and-speak/'
-        : 'http://127.0.0.1:8000/api/lector/extract-and-speak/';
+      const backendUrl = apiUrl("/lector/extract-and-speak/");
 
       const respuesta = await fetch(backendUrl, {
         method: "POST",
