@@ -111,6 +111,63 @@ El archivo `.github/workflows/deploy-pages.yml` compila y publica el frontend.
 4. Probar primero `https://<usuario>-<space>.hf.space/api/status/` y después
    `https://nestorzalazar.github.io/IVI/`.
 
+### Alternativa gratuita: PythonAnywhere
+
+Si Hugging Face solicita un plan de pago para Docker, PythonAnywhere puede
+ejecutar Django con una URL fija `https://<usuario>.pythonanywhere.com`. El
+archivo de ejemplo [pythonanywhere_wsgi.example.py](../backend/pythonanywhere_wsgi.example.py)
+contiene la configuración WSGI que debe copiarse en la pestaña **Web**.
+
+1. Crear una cuenta gratuita en PythonAnywhere y abrir una **Bash console**.
+2. Clonar el repositorio y crear un virtualenv con la versión de Python
+   disponible en la cuenta:
+
+   ```bash
+   git clone https://github.com/NESTORZALAZAR/IVI.git
+   cd IVI/backend
+   mkvirtualenv --python=/usr/bin/python3.10 ivi-venv
+   pip install -r requirements.txt
+   ```
+
+3. Crear `backend/.env` en PythonAnywhere. Nunca subirlo a GitHub:
+
+   ```dotenv
+   DJANGO_SECRET_KEY=una-clave-larga-y-aleatoria
+   DJANGO_DEBUG=False
+   DJANGO_ALLOWED_HOSTS=<usuario>.pythonanywhere.com
+   CORS_ALLOWED_ORIGINS=https://nestorzalazar.github.io
+   CSRF_TRUSTED_ORIGINS=https://nestorzalazar.github.io
+   SECURE_SSL_REDIRECT=True
+   DATABASE_URL=postgresql://...
+   ```
+
+4. Ejecutar desde `backend`:
+
+   ```bash
+   set -a; source .env; set +a
+   python manage.py migrate
+   python manage.py collectstatic --noinput
+   ```
+
+5. En **Web > Add a new web app**, seleccionar **Manual configuration**,
+   elegir la misma versión de Python y asignar el virtualenv `ivi-venv`.
+6. Configurar **Source code** y **Working directory** como
+   `/home/<usuario>/IVI/backend`.
+7. Copiar `pythonanywhere_wsgi.example.py` en el WSGI de la pestaña Web y
+   reemplazar `PA_USERNAME`.
+8. Agregar una regla de archivos estáticos:
+   `/static/` → `/home/<usuario>/IVI/backend/staticfiles/`.
+9. Recargar la aplicación y probar:
+   `https://<usuario>.pythonanywhere.com/api/status/`.
+10. Crear la variable de repositorio `BACKEND_API_URL` en GitHub con
+    `https://<usuario>.pythonanywhere.com/api` para publicar React.
+
+El plan gratuito de PythonAnywhere no incluye la instalación del programa
+Tesseract del sistema. La API permanece disponible, pero las funciones de OCR
+que dependen de `pytesseract` y la síntesis de voz con `pyttsx3` requieren una
+prueba específica en esa cuenta. La aplicación no debe depender del disco local
+para conservar datos; PostgreSQL en Neon debe ser la fuente persistente.
+
 Para conservar los datos actuales de SQLite antes de migrar:
 
 ```powershell
