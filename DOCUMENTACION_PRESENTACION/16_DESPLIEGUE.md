@@ -162,11 +162,14 @@ contiene la configuración WSGI que debe copiarse en la pestaña **Web**.
 10. Crear la variable de repositorio `BACKEND_API_URL` en GitHub con
     `https://<usuario>.pythonanywhere.com/api` para publicar React.
 
-El plan gratuito de PythonAnywhere no incluye la instalación del programa
-Tesseract del sistema. La API permanece disponible, pero las funciones de OCR
-que dependen de `pytesseract` y la síntesis de voz con `pyttsx3` requieren una
-prueba específica en esa cuenta. La aplicación no debe depender del disco local
-para conservar datos; PostgreSQL en Neon debe ser la fuente persistente.
+La lectura en voz alta del frontend utiliza la API de síntesis de voz del
+navegador, por lo que no depende de `pyttsx3` ni de componentes de audio del
+servidor. El OCR de imágenes también se ejecuta en el navegador con
+`tesseract.js`. Los archivos PDF, DOCX y TXT se extraen en Django. La versión
+actual usa SQLite en PythonAnywhere por la restricción de conexiones externas
+del plan gratuito; es adecuada para pruebas y pocos usuarios, pero se
+recomienda migrar a PostgreSQL con almacenamiento persistente antes de un uso
+con muchos usuarios.
 
 Para conservar los datos actuales de SQLite antes de migrar:
 
@@ -189,7 +192,7 @@ No subir `data.json` al repositorio si contiene usuarios o información personal
 - [ ] Secretos fuera del repositorio.
 - [ ] HTTPS activo.
 - [ ] CORS restringido.
-- [ ] Tesseract instalado en el servidor.
+- [ ] Probar OCR en el navegador con una imagen clara.
 - [ ] Migraciones aplicadas.
 - [ ] Verificar que el catalogo de `TipoPrueba` contenga los ocho tipos iniciales.
 - [ ] Revisar permisos y politica de retencion para archivos procesados y audio.
