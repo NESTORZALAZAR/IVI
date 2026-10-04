@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { generateAudioFromText } from "../../../services/audioService";
 import "./TextToSpeechPopup.css";
 
 // ─── Detección de capacidades del navegador ────────────────────────────────
 const isSpeechSupported = () =>
   typeof window !== "undefined" &&
-  typeof window.Audio === "function";
+  "speechSynthesis" in window &&
+  "SpeechSynthesisUtterance" in window;
 
 // ─── Componente ───────────────────────────────────────────────────────────
 export default function TextToSpeechPopup() {
@@ -13,8 +13,6 @@ export default function TextToSpeechPopup() {
   const [speaking, setSpeaking] = useState(false);
   const [paused, setPaused] = useState(false);
   const [unsupported, setUnsupported] = useState(false);
-  const audioRef = useRef(null);
-  const audioUrlRef = useRef(null);
   const canPause = true;
   const keepAliveRef = useRef(null);
   const speakTimeoutRef = useRef(null);
@@ -34,8 +32,7 @@ export default function TextToSpeechPopup() {
       clearTimeout(speakTimeoutRef.current);
       speakTimeoutRef.current = null;
     }
-    audioRef.current?.pause();
-    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    window.speechSynthesis.cancel();
     stopKeepAlive();
   }, [stopKeepAlive]);
 
@@ -47,10 +44,7 @@ export default function TextToSpeechPopup() {
   }, []);
 
   useEffect(() => {
-    audioRef.current?.pause();
-    audioRef.current = null;
-    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-    audioUrlRef.current = null;
+    window.speechSynthesis.cancel();
     setSpeaking(false);
     setPaused(false);
   }, [popup.text]);
@@ -130,28 +124,30 @@ export default function TextToSpeechPopup() {
     if (!popup.text || !isSpeechSupported()) return;
 
     if (speaking && !paused) {
-      audioRef.current?.pause();
+      window.speechSynthesis.pause();
       setPaused(true);
       return;
     }
 
     if (paused) {
-      await audioRef.current?.play();
+      window.speechSynthesis.resume();
       setPaused(false);
       return;
     }
 
     try {
-      if (!audioRef.current) {
-        const url = await generateAudioFromText(popup.text);
-        audioUrlRef.current = url;
-        audioRef.current = new Audio(url);
-        audioRef.current.onended = () => {
-          setSpeaking(false);
-          setPaused(false);
-        };
-      }
-      await audioRef.current.play();
+      const utterance = new SpeechSynthesisUtterance(popup.text);
+      utterance.lang = "es-ES";
+      utterance.onend = () => {
+        setSpeaking(false);
+        setPaused(false);
+      };
+      utterance.onerror = () => {
+        setSpeaking(false);
+        setPaused(false);
+      };
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
       setSpeaking(true);
       setPaused(false);
     } catch (error) {
@@ -163,7 +159,7 @@ export default function TextToSpeechPopup() {
 
   const handleStop = (e) => {
     e.stopPropagation();
-    audioRef.current?.pause();
+    window.speechSynthesis.cancel();
     setSpeaking(false);
     setPaused(false);
     stopKeepAlive();

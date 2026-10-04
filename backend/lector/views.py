@@ -92,28 +92,20 @@ def extract_and_speak(request):
     
     try:
         # Generar audio (TTS)
+        audio_data = b''
         try:
             audio_path = generate_speech(text)
-        except Exception as e:
-            return Response(
-                {'error': 'Servicio TTS no disponible', 'detail': str(e)},
-                status=status.HTTP_503_SERVICE_UNAVAILABLE
-            )
-
-        # Leer el archivo de audio
-        with open(audio_path, 'rb') as audio_file:
-            audio_data = audio_file.read()
-
-        # Limpiar archivo temporal de forma segura
-        try:
+            with open(audio_path, 'rb') as audio_file:
+                audio_data = audio_file.read()
             os.remove(audio_path)
         except Exception:
+            # La lectura principal se realiza en el navegador; el MP3 es opcional.
             pass
 
         return Response({
             'text': text,
             'audio': audio_data.hex(),
-            'message': 'Texto extraído y audio generado correctamente'
+            'message': 'Texto extraído correctamente'
         })
     except Exception as e:
         return Response(

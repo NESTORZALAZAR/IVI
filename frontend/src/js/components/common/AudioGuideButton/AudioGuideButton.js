@@ -1,68 +1,51 @@
 import { useEffect, useRef, useState } from "react";
-import { generateAudioFromText } from "../../../services/audioService";
 import "./AudioGuideButton.css";
 
 export default function AudioGuideButton({ text, rate = 0.95, onStart, label = "Escuchar esta guía" }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const audioRef = useRef(null);
-  const audioUrlRef = useRef(null);
+  const utteranceRef = useRef(null);
 
   useEffect(() => {
-    if (audioRef.current) audioRef.current.playbackRate = rate;
-  }, [rate]);
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  }, [rate, text]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    audioRef.current?.pause();
-    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-    audioRef.current = null;
-    audioUrlRef.current = null;
+  useEffect(() => () => {
+    window.speechSynthesis.cancel();
     setIsSpeaking(false);
-    setIsLoading(false);
-    setError("");
-
-    return () => {
-      audioRef.current?.pause();
-      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-      audioRef.current = null;
-      audioUrlRef.current = null;
-    };
-  }, [text]);
-
-  const createAudio = async () => {
-    const url = await generateAudioFromText(text);
-    audioUrlRef.current = url;
-    const audio = new Audio(url);
-    audio.playbackRate = rate;
-    audio.onended = () => setIsSpeaking(false);
-    audio.onerror = () => setError("No se pudo reproducir el audio");
-    audioRef.current = audio;
-  };
+  }, []);
 
   const handleAudio = async () => {
-    if (!text?.trim() || isLoading) return;
+    if (!text?.trim()) return;
 
     if (isSpeaking) {
-      audioRef.current?.pause();
-      if (audioRef.current) audioRef.current.currentTime = 0;
+      window.speechSynthesis.cancel();
       setIsSpeaking(false);
       return;
     }
 
     onStart?.();
     setError("");
-    setIsLoading(true);
-    try {
-      if (!audioRef.current) await createAudio();
-      audioRef.current.playbackRate = rate;
-      await audioRef.current.play();
-      setIsSpeaking(true);
-    } catch (audioError) {
-      setError(audioError.message);
-    } finally {
-      setIsLoading(false);
+    if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+      setError("Este navegador no ofrece lectura en voz alta");
+      return;
     }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "es-ES";
+    utterance.rate = rate;
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => {
+      setError("No se pudo reproducir la lectura");
+      setIsSpeaking(false);
+    };
+    utteranceRef.current = utterance;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
   };
 
   return (
@@ -70,14 +53,14 @@ export default function AudioGuideButton({ text, rate = 0.95, onStart, label = "
       type="button"
       className={`audio-note ${isSpeaking ? "is-speaking" : ""}`}
       onClick={handleAudio}
-      disabled={isLoading || !text?.trim()}
+      disabled={!text?.trim()}
       aria-pressed={isSpeaking}
-      aria-busy={isLoading}
-      aria-label={isLoading ? "Generando audio" : isSpeaking ? "Detener lectura" : label}
+      aria-busy="false"
+      aria-label={isSpeaking ? "Detener lectura" : label}
       title={error || label}
     >
       <span aria-hidden="true">{isSpeaking ? "■" : "◖"}</span>
-      <strong>{isLoading ? "Generando audio..." : isSpeaking ? "Detener lectura" : label}</strong>
+      <strong>{isSpeaking ? "Detener lectura" : label}</strong>
     </button>
   );
 }
