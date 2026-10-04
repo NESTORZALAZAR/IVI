@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../../css/pages/HomePage.css";
+import logo from "../../images/logoNuevoSF.png";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-visual">
-          <img className="ocr-ignore" src="/images/logoNuevoSF.png" alt="Logo de IVI" />
+          <img className="ocr-ignore" src={logo} alt="Logo de IVI" />
         </div>
       </section>
 

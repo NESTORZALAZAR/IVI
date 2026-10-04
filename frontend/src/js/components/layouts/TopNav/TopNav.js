@@ -1,6 +1,7 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AccessibilityContext } from "../../../context/AccessibilityContext";
+import logo from "../../../../images/logoNuevoSF.png";
 import "./TopNav.css";
 
 export default function TopNav() {
@@ -78,7 +79,7 @@ export default function TopNav() {
             <Link to="/" className="brand-link">
               <img
                 className="brand-logo"
-                src="/images/logoNuevoSF.png"
+                src={logo}
                 alt="IVI"
               />
               <div className="brand-text">
