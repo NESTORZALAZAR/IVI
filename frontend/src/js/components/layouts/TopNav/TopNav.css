@@ -11,7 +11,12 @@
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
   box-shadow: var(--ivi-shadow-soft, 0 2px 8px rgba(0, 0, 0, 0.15)), inset 0 1px 0 color-mix(in srgb, #ffffff 12%, transparent);
-  transition: background 0.3s var(--ivi-ease, ease), border-color 0.3s var(--ivi-ease, ease), box-shadow 0.3s var(--ivi-ease, ease);
+  transition: transform 0.28s var(--ivi-ease, ease), background 0.3s var(--ivi-ease, ease), border-color 0.3s var(--ivi-ease, ease), box-shadow 0.3s var(--ivi-ease, ease);
+  will-change: transform;
+}
+
+.topnav--hidden {
+  transform: translateY(-105%);
 }
 
 [data-theme="dark"] .topnav {
@@ -585,23 +590,23 @@
 /* === Responsive Layout === */
 @media (max-width: 768px) {
   .topnav-container {
-    flex-direction: column;
-    gap: 1.25rem;
-    padding: 1.15rem 1.25rem;
+    flex-direction: row;
+    gap: 0.65rem;
+    padding: 0.65rem 0.85rem;
   }
 
   .topnav-brand {
-    text-align: center;
+    text-align: left;
   }
 
   .brand-link {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: row;
+    text-align: left;
   }
 
   .brand-text {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .topnav-menu {
@@ -644,6 +649,27 @@
 
   .topnav-menu {
     gap: 0.5rem;
+  }
+
+  .topnav-container {
+    align-items: flex-start;
+  }
+
+  .topnav-brand h1 {
+    font-size: 1.25rem;
+  }
+
+  .topnav-primary,
+  .topnav-actions {
+    width: 100%;
+  }
+
+  .topnav-primary {
+    justify-content: space-between;
+  }
+
+  .topnav-actions {
+    justify-content: flex-start;
   }
 
   .nav-link,
@@ -904,11 +930,20 @@
   .topnav-primary,
   .topnav-actions {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
   }
 
   .topnav-primary {
-    gap: 0.75rem;
+    gap: 0.55rem;
+  }
+
+  .topnav-primary .topnav-menu {
+    width: auto;
+    flex: 1 1 auto;
+  }
+
+  .topnav-actions .topnav-menu {
+    width: 100%;
   }
 }

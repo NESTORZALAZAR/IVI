@@ -6,6 +6,7 @@ import "./TopNav.css";
 
 export default function TopNav() {
   const [showWarning, setShowWarning] = useState(true);
+  const [isHidden, setIsHidden] = useState(false);
   const navigate = useNavigate();
   const [showAccessibility, setShowAccessibility] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
@@ -20,6 +21,21 @@ export default function TopNav() {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    let previousScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollingDown = currentScrollY > previousScrollY;
+
+      setIsHidden(currentScrollY > 72 && scrollingDown);
+      previousScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const {
@@ -55,7 +71,7 @@ export default function TopNav() {
   };
 
   return (
-    <nav className="topnav" role="navigation" aria-label="Navegación principal">
+    <nav className={`topnav${isHidden ? " topnav--hidden" : ""}`} role="navigation" aria-label="Navegación principal">
       {/* Badge flotante de advertencia */}
       {showWarning && (
         <div className="floating-warning-badge" role="status" aria-live="polite">
