@@ -25,8 +25,16 @@ export default function TopNav() {
 
   useEffect(() => {
     let previousScrollY = window.scrollY;
+    const mobileQuery = window.matchMedia("(max-width: 768px)");
 
     const handleScroll = () => {
+      // En móvil la navegación se comporta como un encabezado normal: queda
+      // arriba en la página y no acompaña el desplazamiento del contenido.
+      if (mobileQuery.matches) {
+        setIsHidden(false);
+        return;
+      }
+
       const currentScrollY = window.scrollY;
       const scrollingDown = currentScrollY > previousScrollY;
 
@@ -34,8 +42,19 @@ export default function TopNav() {
       previousScrollY = currentScrollY;
     };
 
+    const handleViewportChange = () => {
+      previousScrollY = window.scrollY;
+      if (mobileQuery.matches) setIsHidden(false);
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    mobileQuery.addEventListener("change", handleViewportChange);
+    handleViewportChange();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      mobileQuery.removeEventListener("change", handleViewportChange);
+    };
   }, []);
 
   const {

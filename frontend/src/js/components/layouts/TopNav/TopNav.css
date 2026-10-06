@@ -589,6 +589,12 @@
 
 /* === Responsive Layout === */
 @media (max-width: 768px) {
+  /* En móvil la barra solo pertenece al encabezado inicial; al bajar no
+     permanece pegada a la pantalla y deja más espacio para el contenido. */
+  .topnav {
+    position: static;
+  }
+
   .topnav-container {
     flex-direction: row;
     gap: 0.65rem;
