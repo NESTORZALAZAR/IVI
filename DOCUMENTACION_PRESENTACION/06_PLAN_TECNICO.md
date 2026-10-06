@@ -51,15 +51,15 @@ IVI utiliza una arquitectura monolitica modular con un frontend desacoplado. El 
 | Frontend | JavaScript, React 19.2.3 | Interfaz y navegacion |
 | Ruteo | React Router 7.13.0 | Rutas publicas y protegidas |
 | Build | Create React App, react-scripts 5.0.1 | Desarrollo y compilacion |
-| Base de datos | SQLite y Django ORM | Persistencia local |
-| Procesamiento | Pillow, PyPDF2, python-docx, pytesseract, Tesseract y pyttsx3 | Imagenes, documentos, OCR y audio |
+| Base de datos | PostgreSQL en produccion (Neon), SQLite como fallback local y Django ORM | Persistencia |
+| Procesamiento | Tesseract.js y SpeechSynthesis en el frontend; Pillow, PyPDF2, python-docx, pytesseract, Tesseract y pyttsx3 en el backend | Imagenes, documentos, OCR y audio |
 | Control de versiones | Git | Gestion del codigo fuente |
 
 BLIP y las bibliotecas de Hugging Face deben describirse como dependencias opcionales, salvo que se incorporen formalmente a `backend/requirements.txt` y se validen durante la instalacion.
 
 ### 6.2.2 Gestion de la base de datos
 
-La persistencia utiliza SQLite mediante el ORM de Django. Las entidades principales son `User`, `Profile`, `Paciente`, `Profesional`, `TipoPrueba`, `ResultadoPrueba`, `RespuestaResultado`, `ArchivoProcesado` y `ConversionAudio`.
+La persistencia de produccion utiliza PostgreSQL mediante `DATABASE_URL` y el ORM de Django; en desarrollo local se utiliza SQLite como fallback. Las entidades principales son `User`, `Profile`, `Paciente`, `Profesional`, `TipoPrueba`, `ResultadoPrueba`, `RespuestaResultado`, `ArchivoProcesado` y `ConversionAudio`.
 
 **Figuras que se deben incluir:**
 
@@ -69,15 +69,15 @@ El detalle de entidades y reglas de integridad se encuentra en [04_DER_MODELO_DA
 
 ### 6.2.3 Arquitectura API REST
 
-La API REST utiliza HTTP y JSON para comunicar el frontend con el backend. Las rutas se agrupan bajo `/api/`, `/api/lector/`, resultados, usuarios, administracion y procesamiento de archivos.
+La API REST utiliza HTTPS y JSON para comunicar el frontend publicado en GitHub Pages con el backend Django desplegado en un contenedor Docker sobre Hugging Face Spaces. En desarrollo se utilizan los puertos locales 3000 y 8000. Las rutas se agrupan bajo `/api/`, `/api/lector/`, resultados, usuarios, administracion y procesamiento de archivos.
 
 La autenticacion utiliza un token propio enviado mediante `Authorization: Bearer`. En la implementacion actual el token se conserva en el almacenamiento del navegador; por tanto, debe describirse como una solucion de desarrollo y evaluarse para un despliegue productivo.
 
 **Figuras y tablas que se deben incluir:**
 
 - **Figura 6.12. Diagrama de arquitectura general.** Muestra el monolito modular, el frontend desacoplado, la API y SQLite.
-- **Figura 6.13. Diagrama de despliegue.** Presenta navegador, servidor de aplicaciones, base de datos SQLite y servicios externos como Tesseract.
-- **Figura 6.14. Diagrama de arquitectura de red.** Detalla la comunicacion HTTP entre el navegador, el frontend React y la API Django, junto con la red local, los puertos de desarrollo y los servicios locales de OCR, audio y persistencia.
+- **Figura 6.13. Diagrama de despliegue.** Presenta navegador, frontend en GitHub Pages, backend Django en Hugging Face Spaces, PostgreSQL en Neon y los servicios de procesamiento OCR/audio.
+- **Figura 6.14. Diagrama de arquitectura de red.** Detalla la comunicacion HTTPS entre el navegador, el frontend React y la API Django, junto con los despliegues de produccion, los puertos de desarrollo y los servicios de OCR/audio en cliente y servidor.
 - **Tabla 6.1. Endpoints principales.** Resume metodo HTTP, ruta, rol requerido, entrada y respuesta.
 
 El contrato ampliado de endpoints se encuentra en [12_API.md](12_API.md).
