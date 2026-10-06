@@ -113,7 +113,7 @@ function AppLayout({ children }) {
 
 function AppContent() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <AppLayout>
         <TopNav />
 
