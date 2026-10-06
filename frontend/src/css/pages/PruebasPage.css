@@ -7,6 +7,58 @@
   padding: 2rem;
 }
 
+[data-theme="dark"] .pruebas-page {
+  background: var(--bg);
+}
+
+[data-theme="dark"] .pruebas-page .pruebas-header h1,
+[data-theme="dark"] .pruebas-page .games-section-heading h2,
+[data-theme="dark"] .pruebas-page .games-section-heading p,
+[data-theme="dark"] .pruebas-page .section-kicker,
+[data-theme="dark"] .pruebas-page .knowledge-filter-heading p,
+[data-theme="dark"] .pruebas-page .screening-game-card strong,
+[data-theme="dark"] .pruebas-page .screening-game-card p,
+[data-theme="dark"] .pruebas-page .info-card h3,
+[data-theme="dark"] .pruebas-page .info-card li {
+  color: #f4eee2;
+}
+
+[data-theme="dark"] .pruebas-page .games-section-heading h2 {
+  color: #9bb8ff;
+}
+
+[data-theme="dark"] .pruebas-page .games-entry-card {
+  background: color-mix(in srgb, var(--card) 88%, #3b8d68);
+  border-color: #4e9e7b;
+  color: #f4eee2;
+}
+
+[data-theme="dark"] .pruebas-page .games-entry-card small {
+  color: #d2dfdc;
+}
+
+[data-theme="dark"] .pruebas-page .knowledge-filter-section,
+[data-theme="dark"] .pruebas-page .info-card,
+[data-theme="dark"] .pruebas-page .screening-game-card {
+  background: var(--card);
+  border-color: #716d55;
+  color: #f4eee2;
+}
+
+[data-theme="dark"] .pruebas-page .prueba-card {
+  background: #262626;
+}
+
+[data-theme="dark"] .pruebas-page .prueba-content h2 {
+  color: #9bb8ff;
+}
+
+[data-theme="dark"] .pruebas-page .prueba-descripcion,
+[data-theme="dark"] .pruebas-page .prueba-duracion,
+[data-theme="dark"] .pruebas-page .knowledge-filter-card span {
+  color: #f4eee2;
+}
+
 .pruebas-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -280,6 +332,76 @@
 .games-entry-card small { text-align: left; font-size: 0.8rem; }
 .games-entry-arrow { color: #26704c; font-size: 1.7rem; }
 
+.screening-games-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.screening-game-card {
+  display: flex;
+  min-width: 0;
+  min-height: 238px;
+  flex-direction: column;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--ivi-shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.screening-game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ivi-shadow-elevated);
+}
+
+.screening-game-card img {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 0.7rem;
+  padding: 0.35rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 76%, #ffffff);
+  object-fit: contain;
+}
+
+.screening-game-tag {
+  color: var(--primary);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.screening-game-card strong {
+  margin-top: 0.35rem;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.screening-game-card p {
+  margin: 0.45rem 0;
+  color: var(--text);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.screening-game-link {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.65rem;
+  border-top: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .screening-section {
   padding-top: 0.25rem;
 }
@@ -349,6 +471,20 @@
 
   .knowledge-filter-section {
     padding: 1.5rem;
+  }
+
+  .screening-games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .pruebas-page {
+    padding: 1rem;
+  }
+
+  .screening-games-grid {
+    grid-template-columns: 1fr;
   }
 }
 

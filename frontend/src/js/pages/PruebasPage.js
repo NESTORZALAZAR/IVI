@@ -1,5 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
+import cerebro from "../../images/juegos/cerebro.svg";
+import juego from "../../images/juegos/juego.svg";
+import libros from "../../images/juegos/libros.svg";
 import "../../css/pages/PruebasPage.css";
+
+const juegos = [
+  { path: "parejas", title: "Parejas escondidas", text: "Encuentra cada pareja y entrena tu memoria visual.", image: cerebro, color: "mint", tag: "Memoria" },
+  { path: "silabas", title: "El tren de sílabas", text: "Ordena las sílabas y arma palabras paso a paso.", image: libros, color: "gold", tag: "Conciencia fonológica" },
+  { path: "letras", title: "Lluvia de letras", text: "Atrapa los objetivos y filtra las letras distractoras.", image: juego, color: "coral", tag: "Atención" },
+  { path: "velocidad", title: "Velocidad de lectura", text: "Procesa palabras y mejora tu fluidez lectora.", image: juego, color: "blue", tag: "Fluidez lectora" },
+  { path: "ortografia", title: "Reto de ortografía", text: "Elige la forma correcta de escribir cada palabra.", image: libros, color: "purple", tag: "Ortografía" }
+];
 
 export default function PruebasPage() {
   const navigate = useNavigate();
@@ -48,6 +59,17 @@ export default function PruebasPage() {
             <span className="games-entry-copy"><strong>Entrar a la sala de juegos</strong><small>5 actividades · 5 a 15 años · Fácil, medio y difícil</small></span>
             <span className="games-entry-arrow" aria-hidden="true">→</span>
           </Link>
+          <div className="screening-games-grid" aria-label="Juegos disponibles">
+            {juegos.map((item) => (
+              <Link className={`screening-game-card ${item.color}`} to={`/juegos/${item.path}`} key={item.path}>
+                <img src={item.image} alt="" />
+                <span className="screening-game-tag">{item.tag}</span>
+                <strong>{item.title}</strong>
+                <p>{item.text}</p>
+                <span className="screening-game-link">Jugar ahora <span aria-hidden="true">→</span></span>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <div className="pruebas-info">
