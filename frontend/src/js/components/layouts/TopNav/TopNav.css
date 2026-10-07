@@ -1054,10 +1054,10 @@
 }
 
 /* En teléfonos: marca arriba, navegación en una sola fila y acciones debajo. */
-@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
+@media (max-width: 768px) {
   .topnav-container {
     display: grid;
-    grid-template-columns: repeat(4, max-content);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     justify-content: start;
     align-items: center;
     column-gap: 0.45rem;
@@ -1082,7 +1082,7 @@
     grid-row: 2;
     justify-self: start;
     padding: 0.4rem 0.45rem;
-    font-size: clamp(0.66rem, 3.3vw, 0.88rem);
+    font-size: clamp(0.66rem, 3.3vw, 0.88rem) !important;
   }
 
   .topnav-primary .primary-menu > .nav-link:nth-child(1) { grid-column: 1; }
@@ -1126,8 +1126,8 @@
     margin-left: 0 !important;
   }
 
-  .topnav-actions .login-btn { grid-column: 1; grid-row: 4; justify-self: start; }
-  .topnav-actions .signup-btn { grid-column: 2; grid-row: 4; justify-self: start; }
+  .topnav-actions .login-btn { grid-column: 1 / span 2; grid-row: 4; justify-self: start; }
+  .topnav-actions .signup-btn { grid-column: 3 / span 2; grid-row: 4; justify-self: start; }
 
   .topnav-actions .actions-menu > a[href="/paciente"],
   .topnav-actions .actions-menu > a[href="/doctor"],
