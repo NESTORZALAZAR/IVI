@@ -41,14 +41,8 @@ export default function LoginPage() {
       // Determinar el rol real devuelto por la API o el seleccionado
       const userRole = data.user?.role || selectedRole;
 
-      // Abrir pestaña para Admin si aplica
       if (userRole === "admin") {
-        try {
-          window.open("/admin/", "_blank");
-        } catch (e) {
-          // Ignorar si window no está disponible
-        }
-        navigate("/admin");
+        navigate("/admin/users");
       } else if (userRole === "professional" || userRole === "doctor") {
         navigate("/doctor");
       } else {
