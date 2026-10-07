@@ -150,7 +150,7 @@ export default function TopNav() {
 
           {isLoggedIn && (
             <button
-              className="nav-link logout-btn"
+              className="nav-link logout-btn mobile-logout-btn"
               onClick={handleLogout}
               aria-label="Cerrar sesión"
             >
@@ -237,6 +237,14 @@ export default function TopNav() {
                   )}
                 </div>
               )}
+
+              <button
+                className="nav-link logout-btn desktop-logout-btn"
+                onClick={handleLogout}
+                aria-label="Cerrar sesión"
+              >
+                Salir
+              </button>
 
             </>
           )}

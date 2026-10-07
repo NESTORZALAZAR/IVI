@@ -1056,7 +1056,8 @@
 .primary-links-row,
 .primary-tools-row { display: contents; }
 
-.mobile-global-accessibility-trigger { display: none; }
+.mobile-global-accessibility-trigger { display: none !important; }
+.mobile-logout-btn { display: none !important; }
 
 /* En teléfonos, agrupa los enlaces por función y alinea las filas a la izquierda. */
 @media (max-width: 768px) {
@@ -1106,6 +1107,7 @@
   }
 
   .primary-links-row .logout-btn { margin-left: 0 !important; }
+  .primary-links-row .mobile-logout-btn { display: inline-flex !important; }
 
   .primary-tools-row .global-accessibility-trigger {
     display: inline-flex !important;
@@ -1114,6 +1116,7 @@
   }
 
   .desktop-global-accessibility-trigger { display: none !important; }
+  .topnav-actions .desktop-logout-btn { display: none !important; }
 
   .topnav-actions {
     width: 100%;
