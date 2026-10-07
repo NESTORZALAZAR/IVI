@@ -289,3 +289,31 @@
     justify-content: space-between;
   }
 }
+
+/* Los tres encabezados del lector comparten la misma jerarquía visual. */
+.text-reader-page .pdf-reader-section,
+.text-reader-page .image-reader-section {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.text-reader-page .pdf-reader-section .image-reader-heading,
+.text-reader-page .image-reader-section .image-reader-heading {
+  margin: 1.75rem 0 1rem;
+}
+
+.text-reader-page .image-reader-heading h2 {
+  margin: 0 0 .55rem;
+  color: var(--text);
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.text-reader-page .image-reader-heading p {
+  margin: 0 auto;
+  max-width: 680px;
+  color: color-mix(in srgb, var(--text) 74%, transparent);
+  font-size: .95rem;
+}

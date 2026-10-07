@@ -209,11 +209,11 @@ class Profesional(models.Model):
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    else:
-        try:
-            instance.profile.save()
-        except Exception:
-            # En caso de que el profile no exista por alguna razón, crear uno
-            Profile.objects.get_or_create(user=instance)
+    profile, _ = Profile.objects.get_or_create(
+        user=instance,
+        defaults={'role': 'admin' if instance.is_superuser else 'paciente'},
+    )
+    # Django superusers also need the IVI role to access admin routes.
+    if instance.is_superuser and profile.role != 'admin':
+        profile.role = 'admin'
+        profile.save(update_fields=['role'])

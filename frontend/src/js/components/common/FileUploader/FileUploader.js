@@ -2,7 +2,7 @@ import { apiUrl } from "../../../services/api";
 import { useState } from "react";
 import "./FileUploader.css";
 
-export default function FileUploader({ onFileProcessed, isLoading, compact = false, pdfOnly = false }) {
+export default function FileUploader({ onFileProcessed, isLoading, compact = false, pdfOnly = false, documentsOnly = false }) {
   const [dragActive, setDragActive] = useState(false);
 
   const handleDrag = (e) => {
@@ -35,7 +35,9 @@ export default function FileUploader({ onFileProcessed, isLoading, compact = fal
     // Validar extensión
     const extensionesValidas = pdfOnly
       ? [".pdf"]
-      : [".pdf", ".docx", ".txt", ".jpg", ".jpeg", ".png", ".gif", ".bmp"];
+      : documentsOnly
+        ? [".pdf", ".docx", ".txt"]
+        : [".pdf", ".docx", ".txt", ".jpg", ".jpeg", ".png", ".gif", ".bmp"];
     const esValido = extensionesValidas.some((ext) =>
       archivo.name.toLowerCase().endsWith(ext)
     );
@@ -43,7 +45,9 @@ export default function FileUploader({ onFileProcessed, isLoading, compact = fal
     if (!esValido) {
       alert(pdfOnly
         ? "Por favor carga un archivo PDF"
-        : "Por favor carga un archivo PDF, DOCX, TXT, JPG, PNG, GIF o BMP");
+        : documentsOnly
+          ? "Por favor carga un archivo PDF, DOCX o TXT"
+          : "Por favor carga un archivo PDF, DOCX, TXT, JPG, PNG, GIF o BMP");
       return;
     }
 
@@ -112,14 +116,14 @@ export default function FileUploader({ onFileProcessed, isLoading, compact = fal
       >
         <div className="upload-content">
           {!compact && <div className="upload-icon">📄</div>}
-          <h3>{compact ? "Selecciona o arrastra otro archivo" : pdfOnly ? "Carga tu PDF con texto" : "Selecciona o arrastra tu archivo aquí"}</h3>
+          <h3>{compact ? "Selecciona o arrastra otro archivo" : pdfOnly ? "Carga tu PDF con texto" : documentsOnly ? "Carga tu documento de texto" : "Selecciona o arrastra tu archivo aquí"}</h3>
           {!compact && (
-            <p className="file-types">{pdfOnly ? "PDF · Tamaño máximo: 10MB" : "Tamaño máximo: 10MB"}</p>
+            <p className="file-types">{pdfOnly ? "PDF · Tamaño máximo: 10MB" : documentsOnly ? "PDF, DOCX o TXT · Tamaño máximo: 10MB" : "Tamaño máximo: 10MB"}</p>
           )}
           <input
             id="document-file-input"
             type="file"
-            accept={pdfOnly ? ".pdf,application/pdf" : ".pdf,.docx,.txt,.jpg,.jpeg,.png,.gif,.bmp,image/*"}
+            accept={pdfOnly ? ".pdf,application/pdf" : documentsOnly ? ".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" : ".pdf,.docx,.txt,.jpg,.jpeg,.png,.gif,.bmp,image/*"}
             onChange={handleChange}
             className="file-input"
             disabled={isLoading}

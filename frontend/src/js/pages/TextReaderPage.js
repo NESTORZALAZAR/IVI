@@ -86,10 +86,10 @@ export default function TextReaderPage() {
 
           <section className="pdf-reader-section" aria-labelledby="pdf-reader-title">
             <div className="image-reader-heading">
-              <h2 id="pdf-reader-title">Leer un PDF</h2>
-              <p>Sube un PDF con texto seleccionable. Extraeremos su contenido para que puedas escucharlo.</p>
+              <h2 id="pdf-reader-title">Leer un documento</h2>
+              <p>Sube un PDF, DOCX o TXT y extraeremos su contenido para que puedas escucharlo.</p>
             </div>
-            <FileUploader onFileProcessed={handlePdfProcessed} pdfOnly />
+            <FileUploader onFileProcessed={handlePdfProcessed} documentsOnly />
             {pdfError && <p className="native-reader-warning" role="alert">{pdfError}</p>}
             {pdfData && (
               <div className="image-reader-result" aria-live="polite">

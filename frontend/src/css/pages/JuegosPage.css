@@ -30,7 +30,7 @@
 .games-grid-heading h2 { margin: 0.25rem 0 0; color: var(--text); font-size: clamp(1.35rem, 3vw, 1.9rem); }
 .games-count { padding: 0.45rem 0.75rem; border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border)); border-radius: 999px; color: var(--primary); background: color-mix(in srgb, var(--primary) 7%, var(--card)); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
 
-.games-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2rem; }
+.games-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
 .game-card { display: flex; position: relative; flex-direction: column; min-height: 365px; padding: 1.5rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--ivi-radius-lg); color: var(--text); text-decoration: none; box-shadow: var(--ivi-shadow-soft); transition: transform .2s, box-shadow .2s; }
 .game-card:hover { transform: translateY(-5px); box-shadow: var(--ivi-shadow-elevated); }
 .game-card.mint { background: color-mix(in srgb, var(--card) 82%, #8dc8a8); }
@@ -173,6 +173,20 @@
 
 @media (min-width: 761px) and (max-width: 1050px) {
   .games-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* El encabezado de la sala queda abierto, sin una tarjeta envolvente. */
+.games-page .games-hero {
+  margin-top: 0 !important;
+  padding: 1.5rem 0 2rem !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 760px) {
+  .games-grid { grid-template-columns: 1fr; }
 }
 
 /* Cuestionarios por edad */
