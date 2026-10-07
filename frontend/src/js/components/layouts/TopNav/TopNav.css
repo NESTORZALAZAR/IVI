@@ -1022,3 +1022,33 @@
     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.32);
   }
 }
+
+/* Los navegadores móviles pueden cambiar el ancho CSS al hacer zoom. Estas
+   reglas dependen del tipo de dispositivo, no solo del ancho de pantalla. */
+@media (hover: none) and (pointer: coarse) {
+  .topnav-container {
+    width: 100%;
+    max-width: none;
+    padding: 0.7rem 0.85rem 0.8rem;
+  }
+
+  .topnav-primary,
+  .topnav-actions {
+    width: 100%;
+  }
+
+  .topnav-primary .topnav-menu,
+  .topnav-actions .topnav-menu {
+    flex-wrap: wrap;
+    width: 100%;
+    overflow-x: visible;
+    gap: 0.4rem;
+  }
+
+  .topnav-menu .nav-link,
+  .global-accessibility-trigger {
+    flex: 0 1 auto;
+    min-height: 2.25rem;
+    white-space: nowrap;
+  }
+}

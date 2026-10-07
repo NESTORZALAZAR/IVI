@@ -239,6 +239,35 @@
   .feature-card { min-height: 0; }
 }
 
+/* Conserva una sola columna en teléfonos incluso si el zoom altera el ancho
+   CSS que reporta el navegador. */
+@media (hover: none) and (pointer: coarse) {
+  .home-page {
+    width: 100%;
+    max-width: none;
+    padding: 1.25rem 1rem 0;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    min-height: 0;
+    padding: 1.35rem;
+    text-align: center;
+  }
+
+  .hero-copy {
+    width: 100%;
+    max-width: none;
+    text-align: center;
+  }
+
+  .hero-description { margin-right: auto; margin-left: auto; }
+  .hero-buttons { justify-content: center; }
+  .hero-visual { justify-self: center; order: -1; width: min(100%, 360px); }
+  .features { grid-template-columns: 1fr; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .feature-card:hover, .btn-comenza:hover, .btn-resultados:hover { transform: none; }
 }

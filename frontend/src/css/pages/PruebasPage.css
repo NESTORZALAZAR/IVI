@@ -760,6 +760,7 @@
   .knowledge-filter-card {
     grid-template-columns: 2.25rem minmax(0, 1fr);
   }
+}
 
 
 /* Identidad compartida con la galería de juegos */
@@ -939,6 +940,8 @@
   .screening-questionnaires-grid { grid-template-columns: 1fr; }
   .screening-questionnaire-card { min-height: 0; }
 }
+
+@media (max-width: 560px) {
   .knowledge-filter-action {
     grid-column: 1 / -1;
     justify-content: center;
