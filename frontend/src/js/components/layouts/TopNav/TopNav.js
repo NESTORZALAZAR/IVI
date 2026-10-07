@@ -224,9 +224,6 @@ export default function TopNav() {
                   </button>
                   {showAdminMenu && (
                     <div className="dropdown-menu admin-menu">
-                      <Link className="dropdown-link" to="/admin" onClick={() => setShowAdminMenu(false)}>
-                        Panel Admin
-                      </Link>
                       <Link className="dropdown-link" to="/admin/users" onClick={() => setShowAdminMenu(false)}>
                         Usuarios
                       </Link>
