@@ -185,6 +185,16 @@
   box-shadow: none !important;
 }
 
+.games-page .games-hero .eyebrow,
+.games-page .games-hero p {
+  font-size: 1.2em !important;
+}
+
+.games-page .games-hero h1 {
+  font-size: 1.4em !important;
+  line-height: 1.2 !important;
+}
+
 @media (max-width: 760px) {
   .games-grid { grid-template-columns: 1fr; }
 }
