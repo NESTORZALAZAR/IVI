@@ -1057,7 +1057,7 @@
 @media (max-width: 768px) and (hover: none) and (pointer: coarse) {
   .topnav-container {
     display: grid;
-    grid-template-columns: repeat(3, max-content);
+    grid-template-columns: repeat(4, max-content);
     justify-content: start;
     align-items: center;
     column-gap: 0.45rem;
@@ -1081,8 +1081,8 @@
   .topnav-primary .primary-menu > .nav-link:nth-child(-n + 3) {
     grid-row: 2;
     justify-self: start;
-    padding: 0.4rem 0.55rem;
-    font-size: clamp(0.7rem, 3.3vw, 0.88rem);
+    padding: 0.4rem 0.45rem;
+    font-size: clamp(0.66rem, 3.3vw, 0.88rem);
   }
 
   .topnav-primary .primary-menu > .nav-link:nth-child(1) { grid-column: 1; }
@@ -1090,40 +1090,50 @@
   .topnav-primary .primary-menu > .nav-link:nth-child(3) { grid-column: 3; }
 
   .topnav-primary .primary-menu > .nav-link:nth-child(4) {
-    grid-column: 1 / -1;
     grid-row: 3;
+    grid-column: 1;
     justify-self: start;
     padding: 0.4rem 0.65rem;
   }
 
   .topnav-actions {
-    grid-column: 1 / -1;
-    grid-row: 4;
-    width: 100%;
-    margin: 0;
-    padding-top: 0.35rem;
-    border-top: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+    display: contents;
   }
 
   .topnav-actions .actions-menu {
-    display: flex !important;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    gap: 0.5rem;
-    overflow: visible;
+    display: contents !important;
   }
 
   .topnav-actions .actions-menu > .nav-link,
   .topnav-actions .global-accessibility-trigger {
-    flex: 0 0 auto;
     min-height: 2.25rem;
     padding: 0.4rem 0.65rem !important;
     font-size: clamp(0.72rem, 3.4vw, 0.88rem) !important;
   }
 
+  .topnav-actions .logout-btn {
+    grid-column: 4;
+    grid-row: 2;
+    justify-self: start;
+    padding-inline: 0.4rem !important;
+    font-size: clamp(0.66rem, 3.3vw, 0.88rem) !important;
+  }
+
   .topnav-actions .global-accessibility-trigger {
+    grid-column: 2 / span 2;
+    grid-row: 3;
+    justify-self: start;
     margin-left: 0 !important;
+  }
+
+  .topnav-actions .login-btn { grid-column: 1; grid-row: 4; justify-self: start; }
+  .topnav-actions .signup-btn { grid-column: 2; grid-row: 4; justify-self: start; }
+
+  .topnav-actions .actions-menu > a[href="/paciente"],
+  .topnav-actions .actions-menu > a[href="/doctor"],
+  .topnav-actions .admin-dropdown {
+    grid-column: 1;
+    grid-row: 4;
+    justify-self: start;
   }
 }
