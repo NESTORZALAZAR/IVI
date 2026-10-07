@@ -1,77 +1,86 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import cerebro from "../../images/juegos/cerebro.svg";
+import juego from "../../images/juegos/juego.svg";
+import libros from "../../images/juegos/libros.svg";
 import "../../css/pages/JuegosPage.css";
 
-const cuestionarios = [
-  {
-    path: "lectura",
-    age: "5 a 7 años",
-    level: "Inicial",
-    title: "Infancia temprana",
-    description: "Cuestionario de indicadores tempranos relacionados con lenguaje y aprendizaje.",
-    icon: "▣",
-    color: "blue"
-  },
-  {
-    path: "velocidad",
-    age: "8 a 10 años",
-    level: "Básica",
-    title: "Desarrollo lector",
-    description: "Cuestionario sobre fluidez, precisión y hábitos de lectura.",
-    icon: "⚡",
-    color: "orange"
-  },
-  {
-    path: "comprension",
-    age: "11 a 14 años",
-    level: "Intermedia",
-    title: "Preadolescencia",
-    description: "Cuestionario sobre comprensión, organización y desempeño académico.",
-    icon: "💡",
-    color: "green"
-  },
-  {
-    path: "ortografia",
-    age: "15 años en adelante",
-    level: "Avanzada",
-    title: "Adolescentes y adultos",
-    description: "Cuestionario sobre lectura y escritura en el estudio, trabajo y vida cotidiana.",
-    icon: "✍️",
-    color: "purple"
-  }
+const juegos = [
+  { path: "parejas", title: "Parejas escondidas", text: "Entrena la memoria de trabajo visuoespacial encontrando cada pareja.", image: cerebro, color: "mint", tag: "Memoria", age: "5-15 años" },
+  { path: "silabas", title: "El tren de sílabas", text: "Ordena las sílabas y arma palabras paso a paso.", image: libros, color: "gold", tag: "Conciencia fonológica", age: "5-15 años" },
+  { path: "letras", title: "Lluvia de letras", text: "Atrapa los objetivos y filtra las letras distractoras.", image: juego, color: "coral", tag: "Atención", age: "7-15 años" },
+  { path: "velocidad", title: "Velocidad de lectura", text: "Lee palabras y registra cuántas puedes procesar por minuto.", image: juego, color: "blue", tag: "Fluidez lectora", age: "8-15 años" },
+  { path: "ortografia", title: "Reto de ortografía", text: "Elige la forma correcta de escribir cada palabra.", image: libros, color: "purple", tag: "Ortografía", age: "8-15 años" }
 ];
 
+const dificultades = [
+  { value: "all", label: "Todos" },
+  { value: "0", label: "Fácil" },
+  { value: "1", label: "Medio" },
+  { value: "2", label: "Difícil" }
+];
+const edades = [
+  { value: "all", label: "Todas las edades" },
+  { value: "5-7", label: "5-7 años" },
+  { value: "8-10", label: "8-10 años" },
+  { value: "11-15", label: "11-15 años" },
+  { value: "15+", label: "15+ años" }
+];
+
+const getStoredAge = () => {
+  const officePatient = JSON.parse(localStorage.getItem("ivi_office_patient") || "null");
+  const storedUser = JSON.parse(localStorage.getItem("user") || localStorage.getItem("ivi_user") || "null");
+  const age = Number(officePatient?.age ?? storedUser?.age ?? 0);
+  if (age >= 5 && age <= 7) return "5-7";
+  if (age >= 8 && age <= 10) return "8-10";
+  if (age >= 11 && age <= 15) return "11-15";
+  if (age > 15) return "15+";
+  return "all";
+};
+
 export default function JuegosPage() {
+  const [difficulty, setDifficulty] = useState("all");
+  const [age, setAge] = useState(getStoredAge);
+  const query = new URLSearchParams();
+  if (difficulty !== "all") query.set("dificultad", difficulty);
+  if (age !== "all") query.set("edad", age);
+  const queryString = query.toString();
+
   return (
-    <main className="games-page questionnaires-page">
-      <header className="games-hero questionnaires-hero">
-        <div>
-          <span className="eyebrow">Tamizaje orientativo</span>
-          <h1>Cuestionarios por edad</h1>
-          <p>Selecciona el rango de edad para realizar el cuestionario más adecuado.</p>
-        </div>
+    <main className="games-page">
+      <header className="games-hero">
+        <div><span className="eyebrow">Módulo lúdico</span><h1>Juegos de tamizaje</h1><p>Actividades breves para explorar memoria, conciencia fonológica y atención. Completa los niveles a tu ritmo.</p></div>
+        <img src={juego} alt="Ilustración de un juego" />
       </header>
-
-      <section className="questionnaires-grid" aria-label="Cuestionarios disponibles por edad">
-        {cuestionarios.map((cuestionario) => (
-          <Link
-            className={`questionnaire-card ${cuestionario.color}`}
-            to={`/pruebas/${cuestionario.path}`}
-            key={cuestionario.path}
-          >
-            <span className="questionnaire-icon" aria-hidden="true">{cuestionario.icon}</span>
-            <h2>{cuestionario.title}</h2>
-            <p>{cuestionario.description}</p>
-            <div className="questionnaire-meta">
-              <span>{cuestionario.age}</span>
-              <span>{cuestionario.level}</span>
-            </div>
-            <span className="questionnaire-duration">◷ 5–10 min</span>
-            <span className="questionnaire-action">Comenzar cuestionario <span aria-hidden="true">→</span></span>
-          </Link>
-        ))}
+      <section className="difficulty-filter" aria-labelledby="difficulty-title">
+        <div><span className="eyebrow">Personaliza el reto</span><h2 id="difficulty-title">Elige edad y dificultad</h2></div>
+        <div className="difficulty-options" role="group" aria-label="Filtrar por dificultad">
+          {dificultades.map((option) => <button className={difficulty === option.value ? "selected" : ""} onClick={() => setDifficulty(option.value)} key={option.value}>{option.label}</button>)}
+        </div>
+        <div className="age-options" role="group" aria-label="Filtrar por edad">
+          {edades.map((option) => <button className={age === option.value ? "selected" : ""} onClick={() => setAge(option.value)} key={option.value}>{option.label}</button>)}
+        </div>
       </section>
-
-      <p className="games-note">Los resultados son orientativos y no reemplazan una evaluación profesional.</p>
+      <div className="games-grid-heading">
+        <div><span className="eyebrow">Colección IVI</span><h2>Elige un reto para empezar</h2></div>
+        <span className="games-count">{juegos.length} actividades disponibles</span>
+      </div>
+      <section className="games-grid" aria-label="Juegos disponibles">
+        {juegos.map((item, index) => <Link className={`game-card ${item.color}`} to={`/juegos/${item.path}${queryString ? `?${queryString}` : ""}`} key={item.path}>
+          <span className="game-card-number">0{index + 1}</span>
+          <img src={item.image} alt="" /><span className="game-tag">{item.tag}</span><h2>{item.title}</h2><p>{item.text}</p><span className="game-card-level">{age === "all" ? item.age : edades.find((option) => option.value === age).label} · {difficulty === "all" ? "3 niveles disponibles" : `${dificultades[Number(difficulty) + 1].label} seleccionado`}</span><span className="game-card-link">Jugar ahora <span aria-hidden="true">→</span></span>
+        </Link>)}
+        <Link className="game-card menu-shortcut-card" to="/">
+          <span className="game-card-number">06</span>
+          <span className="menu-shortcut-icon" aria-hidden="true">⌂</span>
+          <span className="game-tag">Navegación</span>
+          <h2>Menú principal</h2>
+          <p>Regresa al inicio de IVI para elegir otra sección de la plataforma.</p>
+          <span className="game-card-level">Inicio · Acceso general</span>
+          <span className="game-card-link">Ir al menú <span aria-hidden="true">→</span></span>
+        </Link>
+      </section>
+      <p className="games-note">Estas actividades son orientativas y no sustituyen una evaluación profesional.</p>
     </main>
   );
 }
