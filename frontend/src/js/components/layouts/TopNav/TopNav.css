@@ -953,3 +953,72 @@
     width: 100%;
   }
 }
+
+/* Mobile navigation: compact, visually separated and horizontally scrollable
+   so every action remains available without crowding the page. */
+@media (max-width: 768px) {
+  .topnav {
+    background: color-mix(in srgb, var(--card) 92%, var(--primary) 8%);
+    border-top: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
+    box-shadow: 0 3px 12px color-mix(in srgb, #000000 10%, transparent);
+  }
+
+  .topnav-container {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.7rem 1rem 0.8rem;
+  }
+
+  .topnav-primary {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .topnav-brand h1 {
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+  }
+
+  .topnav-primary .topnav-menu,
+  .topnav-actions .topnav-menu {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 0.45rem;
+    padding: 0.1rem 0;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .topnav-primary .topnav-menu::-webkit-scrollbar,
+  .topnav-actions .topnav-menu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topnav-menu .nav-link {
+    flex: 0 0 auto;
+    min-height: 2.25rem;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  .topnav-actions {
+    padding-top: 0.55rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+  }
+
+  .global-accessibility-trigger {
+    min-height: 2.25rem;
+    padding: 0.45rem 0.7rem !important;
+    font-size: 0.82rem !important;
+  }
+
+  [data-theme="dark"] .topnav {
+    background: color-mix(in srgb, var(--card) 88%, var(--primary) 12%);
+    border-bottom-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.32);
+  }
+}
