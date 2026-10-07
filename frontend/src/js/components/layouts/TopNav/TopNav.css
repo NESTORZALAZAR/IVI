@@ -1115,6 +1115,11 @@
     padding-inline: 0.5rem !important;
   }
 
+  .topnav-menu .primary-tools-row .accessibility-btn {
+    border: 1px solid color-mix(in srgb, var(--border) 60%, transparent) !important;
+    border-radius: var(--ivi-radius-md, 8px) !important;
+  }
+
   .desktop-global-accessibility-trigger { display: none !important; }
   .topnav-actions .desktop-logout-btn { display: none !important; }
 

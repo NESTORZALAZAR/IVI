@@ -164,7 +164,7 @@ export default function TopNav() {
             to="/lector-textos"
             className={`nav-link accessibility-btn dropdown-btn ${isLectorText ? 'active' : ''}`}
           >
-            <span>Ivi te ayuda:</span>
+            <span>Ivi te ayuda</span>
           </Link>
 
           <button
