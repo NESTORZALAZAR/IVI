@@ -126,6 +126,7 @@ export default function TopNav() {
 
           {/* Menú principal */}
           <div className="topnav-menu primary-menu">
+          <div className="primary-links-row">
           <Link 
             to="/" 
             className={`nav-link ${isHome ? 'active' : ''}`}
@@ -147,12 +148,36 @@ export default function TopNav() {
             Consejos
           </Link>
 
+          {isLoggedIn && (
+            <button
+              className="nav-link logout-btn"
+              onClick={handleLogout}
+              aria-label="Cerrar sesión"
+            >
+              Salir
+            </button>
+          )}
+          </div>
+
+          <div className="primary-tools-row">
           <Link
             to="/lector-textos"
             className={`nav-link accessibility-btn dropdown-btn ${isLectorText ? 'active' : ''}`}
           >
             <span>Ivi te ayuda:</span>
           </Link>
+
+          <button
+            type="button"
+            className="nav-link global-accessibility-trigger mobile-global-accessibility-trigger"
+            onClick={() => setShowAccessibility(prev => !prev)}
+            aria-label="Personalizar vista"
+            aria-expanded={showAccessibility}
+          >
+            <span aria-hidden="true" className="access-icon">◔</span>
+            <span className="access-text">Personalizar vista</span>
+          </button>
+          </div>
 
           </div>
 
@@ -213,20 +238,13 @@ export default function TopNav() {
                 </div>
               )}
 
-              <button 
-                className="nav-link logout-btn" 
-                onClick={handleLogout}
-                aria-label="Cerrar sesión"
-              >
-                Salir
-              </button>
             </>
           )}
 
           {/* 🌟 BOTÓN GLOBAL DE PERSONALIZAR VISTA (UBICADO A LA DERECHA DEL TODO) */}
           <button
             type="button"
-            className="nav-link global-accessibility-trigger"
+            className="nav-link global-accessibility-trigger desktop-global-accessibility-trigger"
             onClick={() => setShowAccessibility(prev => !prev)}
             aria-label="Personalizar vista"
             aria-expanded={showAccessibility}
